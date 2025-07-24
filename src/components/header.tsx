@@ -8,7 +8,7 @@ export default function Header() {
       <div className={styles.settingsIcon}>
         <span>⚙️</span>
       </div>
-      <h1 className={styles.pageTitle}>Ana Sayfa</h1>
+      <h1 className={styles.pageTitle}>Hoş geldin</h1>
       <div className={styles.profileContainer}>
         <ProfileIcon
           width={40}

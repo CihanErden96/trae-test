@@ -11,8 +11,6 @@ export const PeoplesIcon: React.FC<IconProps> = ({
 
 }) => (
   <svg 
-    width="currentWidth" 
-    height="currentHeight" 
     viewBox="0 0 40 26" 
     fill="none" 
     xmlns="http://www.w3.org/2000/svg"
