@@ -1,0 +1,141 @@
+.cardContainer {
+  width: 100%;
+}
+
+.card {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow);
+  padding: 5px;
+  width: 100%;
+  min-height: 150px;
+  position: relative;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: relative;
+  height: 130px;
+}
+
+.cardLabel {
+  color: var(--background);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.cardLabelPositioned {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.circularProgress {
+  width: 100px;
+  height: 100px;
+  display: flex;
+}
+
+.circularProgressPositioned {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.circularProgressText {
+  fill: var(--background);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.addButton {
+  background-color: var(--primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--background);
+}
+
+.addButtonPositioned {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.allButton {
+  background-color: var(--primary-light);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #FFF8E1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  height: min-content;
+  width: min-content;
+}
+
+.allButtonPositioned {
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.progressContainer {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  color: var(--background);
+}
+
+.progressBarLabel {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #FFF8E1;
+  margin-bottom: 5px;
+}
+
+.progressWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progressBar {
+  background-color: var(--primary-light);
+  border-radius: 20px;
+  height: 9px;
+  width: 120px;
+}
+
+.progressBarSized {
+  width: 120px;
+}
+
+.progressFill {
+  background-color: var(--background);
+  border-radius: 20px;
+  height: 100%;
+}
+
+.progressFillPercentage {
+  width: 70%;
+}
+
+.progressText {
+  color: var(--background);
+  font-size: 14px;
+}

@@ -1,0 +1,29 @@
+.footer {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-footer);
+  box-shadow: var(--shadow-up);
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.navIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+  background-color: var(--primary);
+  transform: translateY(-30px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: var(--background);
+}
+
+.navIcon svg {
+  width: 60%;
+  height: 60%; 
+}

@@ -1,0 +1,34 @@
+.header {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-header);
+  box-shadow: var(--shadow);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 31px;
+}
+
+.settingsIcon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  border-radius: 50%;
+}
+
+.pageTitle {
+  color: var(--background);
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profileContainer {
+  margin-left: auto;
+}
+
+.profileImage {
+  border-radius: 50%;
+}
