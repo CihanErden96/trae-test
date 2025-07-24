@@ -27,8 +27,24 @@
 
 .profileContainer {
   margin-left: auto;
+  width: 40px; 
+  height:40px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  background-color: var(--primary);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: var(--background); 
+
 }
+
+
 
 .profileImage {
   border-radius: 50%;
+  width: 60%;
+  height: 60%; 
 }

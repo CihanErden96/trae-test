@@ -24,25 +24,21 @@
   color: var(--background);
   font-weight: 700;
   font-size: 20px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
-.cardLabelPositioned {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-}
 
 .circularProgress {
   width: 100px;
   height: 100px;
   display: flex;
-}
-
-.circularProgressPositioned {
   position: absolute;
   top: 0px;
   right: 0px;
 }
+
 
 .circularProgressText {
   fill: var(--background);
@@ -56,19 +52,17 @@
   box-shadow: var(--shadow);
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: start;
   width: 32px;
   height: 32px;
   font-size: 24px;
   font-weight: 700;
   color: var(--background);
-}
-
-.addButtonPositioned {
   position: absolute;
-  bottom: 5px;
+  bottom: 0px;
   right: 5px;
 }
+
 
 .allButton {
   background-color: var(--primary-light);
@@ -77,26 +71,24 @@
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-weight: 700;
   font-size: 16px;
-  color: #FFF8E1;
+  color: var(--background);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px 10px;
   height: min-content;
   width: min-content;
-}
-
-.allButtonPositioned {
   position: absolute;
   left: 0px;
   top: 50%;
   transform: translateY(-50%);
 }
 
+
 .progressContainer {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
+  bottom: 0px;
+  left: 0px;
   color: var(--background);
 }
 
@@ -110,8 +102,9 @@
 
 .progressWrapper {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items:self-end;
+  bottom: 0px;
+  left: 0px;
 }
 
 .progressBar {
@@ -119,23 +112,16 @@
   border-radius: 20px;
   height: 9px;
   width: 120px;
+  position: relative;
+
 }
 
-.progressBarSized {
-  width: 120px;
-}
 
 .progressFill {
   background-color: var(--background);
   border-radius: 20px;
   height: 100%;
+  width: 60%;
 }
 
-.progressFillPercentage {
-  width: 70%;
-}
 
-.progressText {
-  color: var(--background);
-  font-size: 14px;
-}

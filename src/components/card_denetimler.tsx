@@ -7,12 +7,12 @@ export default function CardDenetimler() {
       <div className={styles.card}>
         <div className={styles.cardContent}>
           {/* Card Label - Sol Üst */}
-          <div className={`${styles.cardLabel} ${styles.cardLabelPositioned}`}>
+          <div className={`${styles.cardLabel}`}>
             Denetimler
           </div>
           
           {/* Circular Progress - Sağ Üst */}
-          <div className={`${styles.circularProgress} ${styles.circularProgressPositioned}`}>
+          <div className={`${styles.circularProgress}`}>
             <svg width="100" height="100" viewBox="0 0 100 100">
               <circle
                 cx="50"
@@ -47,12 +47,12 @@ export default function CardDenetimler() {
           </div>
           
           {/* Add Button - Sağ Alt */}
-          <div className={`${styles.addButton} ${styles.addButtonPositioned}`}>
+          <div className={`${styles.addButton}`}>
             +
           </div>
           
           {/* All Button - Sol Orta */}
-          <div className={`${styles.allButton} ${styles.allButtonPositioned}`}>
+          <div className={`${styles.allButton}`}>
             Tümü
           </div>
           
@@ -60,10 +60,9 @@ export default function CardDenetimler() {
           <div className={styles.progressContainer}>
             <div className={styles.progressBarLabel}>Güncel</div>
             <div className={styles.progressWrapper}>
-              <div className={`${styles.progressBar} ${styles.progressBarSized}`}>
-                <div className={`${styles.progressFill} ${styles.progressFillPercentage}`}></div>
+              <div className={`${styles.progressBar}`}>
+                <div className={`${styles.progressFill} `}></div>
               </div>
-              <span className={styles.progressText}>70%</span>
             </div>
           </div>
         </div>
