@@ -1,26 +1,255 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #FFF8E1;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primary: rgba(227, 28, 36, 0.99);
+  --primary-light: rgba(255, 248, 225, 0.5);
+  --accent: #7776D1;
+  --shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  --shadow-up: 0px -4px 4px 0px rgba(0, 0, 0, 0.25);
+  --border-radius-card: 10px 50px 20px 10px;
+  --border-radius-header: 0px 0px 15px 15px;
+  --border-radius-footer: 15px 15px 0px 0px;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-header);
+  box-shadow: var(--shadow);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 31px;
+}
+
+.body {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.footer {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-footer);
+  box-shadow: var(--shadow-up);
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.card {
+  background-color: var(--primary);
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow);
+  padding: 5px;
+  width: 100%;
+  min-height: 150px;
+  position: relative;
+}
+
+.card-label {
+  color: var(--background);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.progress-bar {
+  background-color: var(--primary-light);
+  border-radius: 20px;
+  height: 9px;
+  width: 120px;
+}
+
+.progress-fill {
+  background-color: var(--background);
+  border-radius: 20px;
+  height: 100%;
+}
+
+.circular-progress {
+  width: 100px;
+  height: 100px;
+  display: flex;
+}
+
+.add-button {
+  background-color: var(--primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  width: 32px;
+  height: 32px;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.all-button {
+  background-color: var(--primary-light);
+  border-radius: 5px;
+  box-shadow: var(--shadow);
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #FFF8E1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 10px;
+  height: min-content;
+  width: min-content;
+}
+
+.nav-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+  background-color: var(--primary);
+  transform: translateY(-30px);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  color: var(--background);
+}
+
+.nav-icon svg {
+  width: 60%;
+  height: 60%; 
+}
+
+.settings-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background);
+  border-radius: 50%;
+}
+
+/* Page.tsx için yeni CSS sınıfları */
+.page-title {
+  color: var(--background);;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.profile-container {
+  margin-left: auto;
+}
+
+.profile-image {
+  border-radius: 50%;
+}
+
+.card-container {
+  width: 100%;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: relative;
+  height: 130px;
+}
+
+.card-label-positioned {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.circular-progress-positioned {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.circular-progress-text {
+  fill: var(--background);;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.add-button-positioned {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  color: var(--background);;
+}
+
+.progress-container {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  color: var(--background);;
+}
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-bar-sized {
+  width: 120px;
+}
+
+.progress-fill-percentage {
+  width: 70%;
+}
+
+.progress-text {
+  color: var(--background);
+  font-size: 14px;
+}
+
+.all-button-positioned {
+  position: absolute;
+  left: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.progress-bar-label {
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #FFF8E1;
+  margin-bottom: 5px;
 }
