@@ -21,7 +21,7 @@
 }
 
 .cardLabel {
-  color: var(--background);
+  color: var(--foreground);
   font-weight: 700;
   font-size: 20px;
   position: absolute;
@@ -37,29 +37,31 @@
   position: absolute;
   top: 0px;
   right: 0px;
+  stroke: var(--primary-light);
+  color:var(--foreground);
 }
 
 
 .circularProgressText {
-  fill: var(--background);
+  fill: var(--foreground);
   font-size: 20px;
   font-weight: 700;
 }
 
 .addButton {
-  background-color: var(--primary);
+  background-color: var(--primary-light);
   border-radius: 16px;
   box-shadow: var(--shadow);
   display: flex;
   justify-content: center;
-  align-items: start;
+  align-items: center;
   width: 32px;
   height: 32px;
   font-size: 24px;
   font-weight: 700;
-  color: var(--background);
-  position: absolute;
-  bottom: 0px;
+  color: var(--foreground);
+  position:absolute;
+  top : 105px;
   right: 5px;
 }
 
@@ -68,10 +70,10 @@
   background-color: var(--primary-light);
   border-radius: 5px;
   box-shadow: var(--shadow);
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-family: var(--font-family);
   font-weight: 700;
   font-size: 16px;
-  color: var(--background);
+  color: var(--foreground);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -93,10 +95,10 @@
 }
 
 .progressBarLabel {
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-family: var(--font-family);
   font-weight: 700;
   font-size: 15px;
-  color: #FFF8E1;
+  color: var(--foreground);
   margin-bottom: 5px;
 }
 
@@ -118,7 +120,7 @@
 
 
 .progressFill {
-  background-color: var(--background);
+  background-color: var(--foreground);
   border-radius: 20px;
   height: 100%;
   width: 60%;

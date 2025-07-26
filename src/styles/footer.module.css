@@ -27,3 +27,68 @@
   width: 60%;
   height: 60%; 
 }
+
+/* Questions Button Styles */
+.questionsButton {
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.questionsButton:hover {
+  transform: translateY(-32px) scale(1.05);
+  box-shadow: var(--shadow), 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.questionsButton:active {
+  transform: translateY(-28px) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+.questionsButton:focus {
+  outline: none;
+  box-shadow: var(--shadow), 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Ripple Effect */
+.ripple {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: rippleAnimation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleAnimation {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Touch feedback for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .questionsButton:hover {
+    transform: translateY(-30px) scale(1);
+  }
+  
+  .questionsButton:active {
+    transform: translateY(-28px) scale(0.95);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}

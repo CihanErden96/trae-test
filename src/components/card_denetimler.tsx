@@ -19,7 +19,7 @@ export default function CardDenetimler() {
                 cy="50"
                 r="40"
                 fill="none"
-                stroke="rgba(255, 248, 225, 0.5)"
+                stroke="currentStroke"
                 strokeWidth="10"
               />
               <circle
@@ -27,7 +27,7 @@ export default function CardDenetimler() {
                 cy="50"
                 r="40"
                 fill="none"
-                stroke="#FFF8E1"
+                stroke="currentColor"
                 strokeWidth="10"
                 strokeDasharray="251.3"
                 strokeDashoffset="75.4"
