@@ -35,12 +35,33 @@
   border-bottom: 1px solid var(--popup-border);
   background: var(--popup-header-gradient);
   color: var(--popup-header-text);
+  position: relative;
+}
+
+.headerLeft {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.totalAllScore {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--popup-header-text);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
 }
 
 .title {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
+  flex: 1;
+  text-align: center;
 }
 
 .question {
@@ -124,6 +145,12 @@
   flex: 1;
 }
 
+.categoryStats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .questionCount {
   font-size: 0.875rem;
   color: var(--popup-header-text);
@@ -131,6 +158,16 @@
   background: var(--popup-button-hover);
   padding: 2px 8px;
   border-radius: 12px;
+}
+
+.totalScore {
+  font-size: 0.875rem;
+  color: var(--popup-header-text);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .categoryContent {
@@ -398,6 +435,30 @@
   border-top: 1px solid var(--popup-border);
 }
 
+.rightActions {
+  display: flex;
+  gap: 12px;
+}
+
+.deleteButton {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: #dc2626;
+  color: white;
+  width: 100%;
+}
+
+.deleteButton:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
 .cancelButton,
 .saveButton {
   padding: 12px 24px;
@@ -407,7 +468,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-  width: 100%;
+  flex: 1;
 }
 
 .cancelButton {
@@ -446,6 +507,15 @@
   
   .header {
     padding: 16px 20px;
+  }
+  
+  .headerLeft {
+    left: 20px;
+  }
+  
+  .totalAllScore {
+    font-size: 0.75rem;
+    padding: 3px 8px;
   }
   
   .title {
@@ -497,8 +567,17 @@
     font-size: 0.9rem;
   }
   
+  .categoryStats {
+    gap: 6px;
+  }
+  
   .questionCount {
     font-size: 0.75rem;
+  }
+  
+  .totalScore {
+    font-size: 0.75rem;
+    padding: 1px 6px;
   }
   
   .categoryContent {
@@ -515,6 +594,18 @@
   
   .formGroup {
     margin-bottom: 20px;
+  }
+  
+  .rightActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .deleteButton,
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+    flex: none;
   }
 }
 

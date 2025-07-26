@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from '../styles/popup.module.css';
 
 interface Question {
@@ -19,6 +19,8 @@ interface QuestionsPopupProps {
 const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
+  const [isEditQuestionOpen, setIsEditQuestionOpen] = useState(false);
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [newQuestion, setNewQuestion] = useState({
     category: '',
     question: '',
@@ -26,7 +28,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     score: ''
   });
 
-  const questions: Question[] = [
+  const [questions, setQuestions] = useState<Question[]>([
     {
       id: 1,
       question: "Gereksiz malzemeleri nasıl ayıklayabilirim?",
@@ -60,7 +62,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
       question: "Temizlik standartları nasıl uygulanır?",
       description: "Günlük, haftalık ve aylık temizlik rutinleri. Temizlik kontrol listeleri ve sorumluluk alanlarının belirlenmesi.",
       category: "Temizle",
-      score: 85
+      score: 10
     },
     {
       id: 6,
@@ -74,7 +76,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
       question: "Standartları nasıl oluşturup uygularım?",
       description: "İş prosedürlerinin standartlaştırılması, görsel talimatların hazırlanması ve çalışan eğitimi süreçleri.",
       category: "Standartlaştır",
-      score: 90
+      score: 10
     },
     {
       id: 8,
@@ -97,7 +99,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
       category: "Sürdür",
       score: 10
     }
-  ];
+  ]);
 
   // Soruları kategorilere göre gruplandır
   const groupedQuestions = questions.reduce((groups, question) => {
@@ -123,8 +125,51 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const handleQuestionClick = (question: Question) => {
-    console.log('Seçilen soru:', question);
-    // Burada soruya tıklandığında yapılacak işlemler
+    setEditingQuestion(question);
+    setNewQuestion({
+      category: question.category,
+      question: question.question,
+      description: question.description,
+      score: question.score.toString()
+    });
+    setIsEditQuestionOpen(true);
+  };
+
+  const handleCloseEditQuestion = () => {
+    setIsEditQuestionOpen(false);
+    setEditingQuestion(null);
+    setNewQuestion({
+      category: '',
+      question: '',
+      description: '',
+      score: ''
+    });
+  };
+
+  const handleDeleteQuestion = () => {
+    if (editingQuestion) {
+      setQuestions(prevQuestions => 
+        prevQuestions.filter(q => q.id !== editingQuestion.id)
+      );
+      handleCloseEditQuestion();
+    }
+  };
+
+  const handleUpdateQuestion = () => {
+    if (newQuestion.category && newQuestion.question && newQuestion.description && newQuestion.score && editingQuestion) {
+      const updatedQuestion: Question = {
+        ...editingQuestion,
+        category: newQuestion.category,
+        question: newQuestion.question,
+        description: newQuestion.description,
+        score: parseInt(newQuestion.score)
+      };
+      
+      setQuestions(prevQuestions => 
+        prevQuestions.map(q => q.id === editingQuestion.id ? updatedQuestion : q)
+      );
+      handleCloseEditQuestion();
+    }
   };
 
   const handleAddQuestion = () => {
@@ -143,8 +188,16 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   const handleSaveQuestion = () => {
     if (newQuestion.category && newQuestion.question && newQuestion.description && newQuestion.score) {
-      console.log('Yeni soru kaydediliyor:', newQuestion);
-      // Burada yeni soruyu kaydetme işlemi yapılacak
+      const newId = Math.max(...questions.map(q => q.id)) + 1;
+      const questionToAdd: Question = {
+        id: newId,
+        category: newQuestion.category,
+        question: newQuestion.question,
+        description: newQuestion.description,
+        score: parseInt(newQuestion.score)
+      };
+      
+      setQuestions(prevQuestions => [...prevQuestions, questionToAdd]);
       handleCloseAddQuestion();
     }
   };
@@ -156,11 +209,22 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     }));
   };
 
+  // Textarea auto resize fonksiyonu
   const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const textarea = e.target;
     textarea.style.height = 'auto';
-    textarea.style.height = Math.max(40, textarea.scrollHeight) + 'px';
+    textarea.style.height = `${Math.max(textarea.scrollHeight, 40)}px`;
   };
+
+  // Textarea'ları auto resize için useEffect
+  useEffect(() => {
+    const textareas = document.querySelectorAll(`.${styles.formTextarea}`);
+    textareas.forEach((textarea) => {
+      const element = textarea as HTMLTextAreaElement;
+      element.style.height = 'auto';
+      element.style.height = `${Math.max(element.scrollHeight, 40)}px`;
+    });
+  }, [newQuestion.question, newQuestion.description, isAddQuestionOpen, isEditQuestionOpen]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -170,11 +234,17 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  // Tüm soruların toplam puanını hesapla
+  const totalAllScore = questions.reduce((sum, question) => sum + question.score, 0);
+
   return (
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.popup}>
         <div className={styles.header}>
-          <h2 className={styles.question}>5S Soruları</h2>
+          <div className={styles.headerLeft}>
+            <span className={styles.totalAllScore}>{totalAllScore}</span>
+          </div>
+          <h2 className={styles.title}>5S Soruları</h2>
           <button 
             className={styles.closeButton}
             onClick={onClose}
@@ -186,40 +256,48 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
         
         <div className={styles.content}>
           <div className={styles.questionsList}>
-            {Object.entries(groupedQuestions).map(([category, categoryQuestions]) => (
-              <div key={category} className={styles.categoryGroup}>
-                <div 
-                  className={styles.categoryHeader}
-                  onClick={() => toggleCategory(category)}
-                >
-                  <div className={styles.categoryTitle}>
-                    <span className={styles.categoryIcon}>
-                      {expandedCategories.has(category) ? '▼' : '▶'}
-                    </span>
-                    <h3 className={styles.categoryName}>{category}</h3>
-                    <span className={styles.questionCount}>({categoryQuestions.length})</span>
-                  </div>
-                </div>
-                
-                {expandedCategories.has(category) && (
-                  <div className={styles.categoryContent}>
-                    {categoryQuestions.map((question) => (
-                      <div 
-                        key={question.id}
-                        className={styles.questionItem}
-                        onClick={() => handleQuestionClick(question)}
-                      >
-                        <div className={styles.questionHeader}>
-                          <h3 className={styles.questionquestion}>{question.question}</h3>
-                          <div className={styles.questionScore}>{question.score}</div>
-                        </div>
-                        <p className={styles.questionDescription}>{question.description}</p>
+            {Object.entries(groupedQuestions).map(([category, categoryQuestions]) => {
+              // Kategori içindeki soruların puan toplamını hesapla
+              const totalScore = categoryQuestions.reduce((sum, question) => sum + question.score, 0);
+              
+              return (
+                <div key={category} className={styles.categoryGroup}>
+                  <div 
+                    className={styles.categoryHeader}
+                    onClick={() => toggleCategory(category)}
+                  >
+                    <div className={styles.categoryTitle}>
+                      <span className={styles.categoryIcon}>
+                        {expandedCategories.has(category) ? '▼' : '▶'}
+                      </span>
+                      <h3 className={styles.categoryName}>{category}</h3>
+                      <div className={styles.categoryStats}>
+                        <span className={styles.totalScore}>{totalScore}</span>
+                        <span className={styles.questionCount}>({categoryQuestions.length})</span>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                )}
-              </div>
-            ))}
+                  
+                  {expandedCategories.has(category) && (
+                    <div className={styles.categoryContent}>
+                      {categoryQuestions.map((question) => (
+                        <div 
+                          key={question.id}
+                          className={styles.questionItem}
+                          onClick={() => handleQuestionClick(question)}
+                        >
+                          <div className={styles.questionHeader}>
+                            <h3 className={styles.questionquestion}>{question.question}</h3>
+                            <div className={styles.questionScore}>{question.score}</div>
+                          </div>
+                          <p className={styles.questionDescription}>{question.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
             
             <div className={styles.addQuestionItem} onClick={handleAddQuestion}>
               <div className={styles.addQuestionContent}>
@@ -233,6 +311,111 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       </div>
+
+      {/* Soru Düzenleme Popup'ı */}
+      {isEditQuestionOpen && (
+        <div className={styles.overlay} onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            handleCloseEditQuestion();
+          }
+        }}>
+          <div className={styles.popup}>
+            <div className={styles.header}>
+              <h2 className={styles.title}>Soru Düzenle</h2>
+              <button 
+                className={styles.closeButton}
+                onClick={handleCloseEditQuestion}
+                aria-label="Kapat"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className={styles.content}>
+              <div className={styles.addQuestionForm}>
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Kategori</label>
+                  <select 
+                    className={styles.formSelect}
+                    value={newQuestion.category}
+                    onChange={(e) => handleInputChange('category', e.target.value)}
+                  >
+                    <option value="">Kategori seçin...</option>
+                    {availableCategories.map((category) => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Soru</label>
+                  <textarea 
+                    className={styles.formTextarea}
+                    placeholder="Sorunuzu yazın..."
+                    value={newQuestion.question}
+                    onChange={(e) => {
+                      handleInputChange('question', e.target.value);
+                      handleTextareaResize(e);
+                    }}
+                    rows={1}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Açıklama</label>
+                  <textarea 
+                    className={styles.formTextarea}
+                    placeholder="Soru açıklamasını yazın..."
+                    value={newQuestion.description}
+                    onChange={(e) => {
+                      handleInputChange('description', e.target.value);
+                      handleTextareaResize(e);
+                    }}
+                    rows={1}
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Puan</label>
+                  <input 
+                    type="number"
+                    className={styles.formInput}
+                    placeholder="Puan girin (0-100)"
+                    value={newQuestion.score}
+                    onChange={(e) => handleInputChange('score', e.target.value)}
+                    min="0"
+                    max="100"
+                  />
+                </div>
+
+                <div className={styles.formActions}>
+                  <button 
+                    className={styles.deleteButton}
+                    onClick={handleDeleteQuestion}
+                  >
+                    Sil
+                  </button>
+                  <div className={styles.rightActions}>
+                    <button 
+                      className={styles.cancelButton}
+                      onClick={handleCloseEditQuestion}
+                    >
+                      İptal
+                    </button>
+                    <button 
+                      className={styles.saveButton}
+                      onClick={handleUpdateQuestion}
+                      disabled={!newQuestion.category || !newQuestion.question || !newQuestion.description || !newQuestion.score}
+                    >
+                      Güncelle
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Yeni Soru Ekleme Popup'ı */}
       {isAddQuestionOpen && (
