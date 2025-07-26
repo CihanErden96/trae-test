@@ -4,8 +4,8 @@
   "description": "Trae Test Progressive Web App",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#FFF8E1",
+  "theme_color": "#E31C24",
   "orientation": "portrait",
   "icons": [
     {
