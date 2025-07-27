@@ -38,5 +38,5 @@
   height: 100vh;
   height: 100dvh;
   box-sizing: border-box;
-  z-index: 50;
+  z-index: 1;
 }

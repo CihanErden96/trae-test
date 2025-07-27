@@ -23,7 +23,7 @@
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
   /* Popup'ların header ve footer'ın önünde kalması için yüksek z-index */
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .popup {
