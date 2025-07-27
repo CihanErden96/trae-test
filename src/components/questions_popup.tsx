@@ -21,6 +21,8 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   const [isAddQuestionOpen, setIsAddQuestionOpen] = useState(false);
   const [isEditQuestionOpen, setIsEditQuestionOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<Question | null>(null);
   const [newQuestion, setNewQuestion] = useState({
     category: '',
     question: '',
@@ -148,11 +150,25 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   const handleDeleteQuestion = () => {
     if (editingQuestion) {
+      setQuestionToDelete(editingQuestion);
+      setShowDeleteConfirmation(true);
+    }
+  };
+
+  const confirmDeleteQuestion = () => {
+    if (questionToDelete) {
       setQuestions(prevQuestions => 
-        prevQuestions.filter(q => q.id !== editingQuestion.id)
+        prevQuestions.filter(q => q.id !== questionToDelete.id)
       );
+      setShowDeleteConfirmation(false);
+      setQuestionToDelete(null);
       handleCloseEditQuestion();
     }
+  };
+
+  const cancelDeleteQuestion = () => {
+    setShowDeleteConfirmation(false);
+    setQuestionToDelete(null);
   };
 
   const handleUpdateQuestion = () => {
@@ -506,6 +522,47 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                     disabled={!newQuestion.category || !newQuestion.question || !newQuestion.description || !newQuestion.score}
                   >
                     Kaydet
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Silme Onayı Popup'ı */}
+      {showDeleteConfirmation && questionToDelete && (
+        <div className={styles.overlay} onClick={cancelDeleteQuestion}>
+          <div 
+            className={`${styles.popup} ${styles.confirmationPopup}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.header}>
+              <h2 className={styles.title}>Emin misiniz?</h2>
+              <button className={styles.closeButton} onClick={cancelDeleteQuestion}>
+                ×
+              </button>
+            </div>
+            <div className={styles.content}>
+              <div className={styles.confirmationContent}>
+                <p className={styles.confirmationMessage}>
+                  <strong>"{questionToDelete.question}"</strong> sorusunu silmek istediğinizden emin misiniz?
+                </p>
+                <p className={styles.confirmationWarning}>
+                  Bu işlem geri alınamaz.
+                </p>
+                <div className={styles.confirmationActions}>
+                  <button 
+                    className={styles.cancelButton}
+                    onClick={cancelDeleteQuestion}
+                  >
+                    İptal
+                  </button>
+                  <button 
+                    className={styles.deleteButton}
+                    onClick={confirmDeleteQuestion}
+                  >
+                    Sil
                   </button>
                 </div>
               </div>

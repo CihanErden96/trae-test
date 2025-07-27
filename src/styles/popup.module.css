@@ -14,12 +14,309 @@
   animation: fadeIn 0.3s ease-out;
 }
 
+/* Departman Detay Popup Stilleri */
+.departmentDetailContent {
+  padding: 0;
+}
+
+.departmentOverview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: var(--popup-category-bg);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 2px solid var(--popup-border);
+}
+
+.overviewItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.overviewLabel {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.overviewValue {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.actionsSection {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--popup-border);
+}
+
+.actionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.actionItem {
+  padding: 16px;
+  background: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.actionItem:hover {
+  border-color: var(--primary);
+  transform: translateY(-1px);
+  box-shadow: var(--popup-shadow);
+}
+
+.completedAction {
+  opacity: 0.8;
+  background: var(--popup-category-bg);
+}
+
+.actionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.actionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.priorityBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.completedBadge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background-color: #22c55e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actionDescription {
+  font-size: 14px;
+  color: var(--popup-description-color);
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.actionMeta {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dueDate {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.noActions {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 32px;
+  background: var(--popup-category-bg);
+  border-radius: 12px;
+  border: 2px dashed var(--popup-border);
+}
+
+/* Collapsible Header Styles */
+.collapsibleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.collapsibleHeader:hover {
+  background: var(--popup-hover-bg);
+  padding: 8px 12px;
+}
+
+.collapseIcon {
+  font-size: 14px;
+  color: var(--popup-description-color);
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+.collapseIcon.collapsed {
+  transform: rotate(-90deg);
+}
+
+.departmentActions {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+  border-top: 2px solid var(--popup-border);
+}
+
+.deleteButton {
+  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.deleteButton:hover {
+  background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+}
+
+.confirmationContent {
+  text-align: center;
+  padding: 20px;
+}
+
+.confirmationText {
+  font-size: 16px;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.confirmationActions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.deleteConfirmButton {
+  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.deleteConfirmButton:hover {
+  background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+}
+
+/* Departman item'ını buton haline getirme */
+.departmentItem {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.departmentItem:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--popup-shadow);
+  border-color: var(--primary);
+}
+
+/* Mobile responsiveness for department detail */
+@media (max-width: 768px) {
+  .departmentOverview {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .overviewItem {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .overviewLabel {
+    font-size: 11px;
+  }
+  
+  .overviewValue {
+    font-size: 20px;
+  }
+  
+  .sectionTitle {
+    font-size: 16px;
+  }
+  
+  .actionItem {
+    padding: 12px;
+  }
+  
+  .actionTitle {
+    font-size: 14px;
+  }
+  
+  .actionDescription {
+    font-size: 13px;
+  }
+  
+  .priorityBadge,
+  .completedBadge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .confirmationActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .deleteButton,
+  .deleteConfirmButton {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+}
+
 .popup {
   background: var(--popup-background);
   border-radius: 16px;
   width: 90%;
   max-width: 500px;
-  max-height: 80vh;
+  max-height: 90vh;
   overflow: hidden;
   box-shadow: var(--popup-shadow);
   animation: slideUp 0.3s ease-out;
@@ -94,7 +391,7 @@
 
 .content {
   padding: 0;
-  max-height: calc(80vh - 80px);
+  max-height: calc(90vh - 80px);
   overflow-y: auto;
 }
 
@@ -283,7 +580,6 @@
   color: var(--popup-description-color);
   line-height: 1.5;
 }
-
 /* Add Question Button Styles */
 .addQuestionItem {
   padding: 20px 24px;
@@ -331,6 +627,8 @@
 
 .addText {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .addTitle {
@@ -347,6 +645,7 @@
   color: var(--popup-description-color);
   line-height: 1.5;
 }
+
 
 /* Animations */
 @keyframes fadeIn {
@@ -628,4 +927,403 @@
 
 .content::-webkit-scrollbar-thumb:hover {
   background: var(--popup-scrollbar-thumb-hover);
+}
+
+/* Confirmation Popup Styles */
+.confirmationPopup {
+  max-width: 420px;
+  width: 90%;
+}
+
+.confirmationContent {
+  padding: 32px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.confirmationIcon {
+  font-size: 48px;
+  margin-bottom: 8px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.confirmationMessage {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-weight: 500;
+  max-width: 300px;
+}
+
+.confirmationWarning {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #dc2626;
+  font-weight: 600;
+  background: rgba(220, 38, 38, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.confirmationActions {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 8px;
+}
+
+.confirmationActions .cancelButton,
+.confirmationActions .deleteButton {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.confirmationActions .cancelButton {
+  background: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border: 2px solid var(--popup-border);
+}
+
+.confirmationActions .cancelButton:hover {
+  background: var(--button-secondary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.confirmationActions .deleteButton {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+.confirmationActions .deleteButton:hover {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.confirmationActions .deleteButton:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Mobile Responsive for Confirmation Popup */
+@media (max-width: 640px) {
+  .confirmationPopup {
+    width: 95%;
+    margin: 0 10px;
+  }
+  
+  .confirmationContent {
+    padding: 24px 20px;
+    gap: 16px;
+  }
+  
+  .confirmationIcon {
+    font-size: 40px;
+  }
+  
+  .confirmationMessage {
+    font-size: 1rem;
+    max-width: 280px;
+  }
+  
+  .confirmationWarning {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .confirmationActions {
+    flex-direction: column;
+    gap: 12px;
+    max-width: 100%;
+  }
+  
+  .confirmationActions .cancelButton,
+  .confirmationActions .deleteButton {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Departments Popup Styles */
+.departmentsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: calc(90vh - 160px);
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.departmentCard {
+  background: var(--surface-color);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+
+.departmentCard:hover {
+  background: var(--surface-hover-color);
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.departmentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-bottom: 4px;
+}
+
+.departmentName {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+  line-height: 1.2;
+  padding-right: 12px;
+}
+
+.departmentScore {
+  background: var(--primary);
+  color: var(--popup-header-text);
+  font-size: 18px;
+  font-weight: 800;
+  padding: 8px 12px;
+  border-radius: 12px;
+  min-width: 60px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--popup-border);
+  flex-shrink: 0;
+}
+
+.departmentStats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 2px solid var(--popup-border);
+  background: var(--popup-category-bg);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.completedActions,
+.pendingActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  min-width: 100px;
+}
+
+.actionLabel {
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+
+.actionCount {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.completedActions .actionCount {
+  color: #22c55e;
+}
+
+.pendingActions .actionCount {
+  color: #f59e0b;
+}
+
+/* Mobile responsiveness for departments */
+@media (max-width: 768px) {
+  .departmentCard {
+    padding: 12px;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .departmentName {
+    font-size: 16px;
+    padding-right: 8px;
+  }
+  
+  .departmentScore {
+    font-size: 16px;
+    padding: 6px 10px;
+    min-width: 50px;
+    border-radius: 10px;
+  }
+  
+  .departmentStats {
+    padding: 8px;
+    margin-top: 6px;
+    padding-top: 8px;
+  }
+  
+  .completedActions,
+  .pendingActions {
+    padding: 6px 8px;
+    min-width: 80px;
+    gap: 2px;
+  }
+  
+  .actionLabel {
+    font-size: 10px;
+    letter-spacing: 0.6px;
+    margin-bottom: 1px;
+  }
+  
+  .actionCount {
+    font-size: 20px;
+  }
+}
+
+/* Add Department Button Styles */
+.addDepartmentItem {
+  padding: 20px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px dashed var(--popup-border);
+  margin: 16px 24px 16px 24px;
+  border-radius: 12px;
+  background-color: transparent;
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.addDepartmentItem:hover {
+  border-color: var(--primary);
+  background-color: var(--popup-hover-bg);
+  transform: translateY(-2px);
+  box-shadow: var(--popup-shadow);
+}
+
+.addDepartmentItem:hover {
+  border-color: var(--primary);
+  background-color: var(--popup-hover-bg);
+  transform: translateY(-2px);
+  box-shadow: var(--popup-shadow);
+}
+
+.addDepartmentContent {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.addIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #ff6b6b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.addDepartmentItem:hover .addIcon {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.addText {
+  flex: 1;
+}
+
+.addTitle {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--popup-title-color);
+  line-height: 1.4;
+}
+
+.addDescription {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--popup-description-color);
+  line-height: 1.5;
+}
+
+/* Mobile responsiveness for add department button */
+@media (max-width: 768px) {
+  .addDepartmentItem {
+    margin: 12px 16px;
+    padding: 16px 20px;
+    min-height: 70px;
+  }
+  
+  .addDepartmentContent {
+    gap: 14px;
+  }
+  
+  .addIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+  
+  .addTitle {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+  
+  .addDescription {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
 }
