@@ -6,10 +6,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   animation: fadeIn 0.3s ease-out;
   width: 100vw;
   height: 100dvh;
+  /* Arkadaki elementleri tamamen disable et */
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  /* Popup'ın en üstte olmasını garanti et */
+  isolation: isolate;
+  /* Touch events'leri engelle */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .popup {
@@ -26,6 +38,12 @@
   margin: 20px;
   box-sizing: border-box;
   margin: max(env(safe-area-inset-top), 20px) max(env(safe-area-inset-right), 20px) max(env(safe-area-inset-bottom), 20px) max(env(safe-area-inset-left), 20px);
+  /* Popup içeriğinin etkileşimini yeniden aktif et */
+  pointer-events: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 .header {
