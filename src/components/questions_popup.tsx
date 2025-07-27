@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import styles from '../styles/popup.module.css';
+import styles from '../styles/footer_popup.module.css';
 
 interface Question {
   id: number;

@@ -1,24 +1,104 @@
-/* Questions Popup Styles */
+/* Base Popup Styles */
 .overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: var(--popup-overlay);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Increased z-index to ensure popup stays on top */
+  z-index: 9999;
   backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease-out;
-  /* Ensure popup covers entire viewport */
   width: 100vw;
-  height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
+  height: 100dvh;
 }
 
-/* Departman Detay Popup Stilleri */
+.popup {
+  background: var(--popup-background);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90dvh;
+  overflow: hidden;
+  box-shadow: var(--popup-shadow);
+  animation: slideUp 0.3s ease-out;
+  position: relative;
+  font-family: var(--font-family);
+  margin: 20px;
+  box-sizing: border-box;
+  margin: max(env(safe-area-inset-top), 20px) max(env(safe-area-inset-right), 20px) max(env(safe-area-inset-bottom), 20px) max(env(safe-area-inset-left), 20px);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--popup-border);
+  background: var(--popup-header-gradient);
+  color: var(--popup-header-text);
+  position: relative;
+}
+
+.headerLeft {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.totalAllScore {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--popup-header-text);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+}
+
+.title,
+.question {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--popup-header-text);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--popup-button-hover);
+  transform: scale(1.1);
+}
+
+.content {
+  padding: 0;
+  max-height: calc(90dvh - 80px);
+  overflow-y: auto;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Department Detail Styles */
 .departmentDetailContent {
   padding: 0;
 }
@@ -108,7 +188,8 @@
   flex: 1;
 }
 
-.priorityBadge {
+.priorityBadge,
+.completedBadge {
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -119,14 +200,7 @@
 }
 
 .completedBadge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
   background-color: #22c55e;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .actionDescription {
@@ -157,7 +231,6 @@
   border: 2px dashed var(--popup-border);
 }
 
-/* Collapsible Header Styles */
 .collapsibleHeader {
   display: flex;
   justify-content: space-between;
@@ -192,62 +265,6 @@
   border-top: 2px solid var(--popup-border);
 }
 
-.deleteButton {
-  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.5px;
-}
-
-.deleteButton:hover {
-  background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
-}
-
-.confirmationContent {
-  text-align: center;
-  padding: 20px;
-}
-
-.confirmationText {
-  font-size: 16px;
-  color: var(--text-primary);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-
-.confirmationActions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-}
-
-.deleteConfirmButton {
-  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.deleteConfirmButton:hover {
-  background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
-}
-
-/* Departman item'ını buton haline getirme */
 .departmentItem {
   cursor: pointer;
   transition: all 0.3s ease;
@@ -259,169 +276,12 @@
   border-color: var(--primary);
 }
 
-/* Mobile responsiveness for department detail */
-@media (max-width: 768px) {
-  .departmentOverview {
-    flex-direction: column;
-    gap: 16px;
-    padding: 16px;
-  }
-  
-  .overviewItem {
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .overviewLabel {
-    font-size: 11px;
-  }
-  
-  .overviewValue {
-    font-size: 20px;
-  }
-  
-  .sectionTitle {
-    font-size: 16px;
-  }
-  
-  .actionItem {
-    padding: 12px;
-  }
-  
-  .actionTitle {
-    font-size: 14px;
-  }
-  
-  .actionDescription {
-    font-size: 13px;
-  }
-  
-  .priorityBadge,
-  .completedBadge {
-    font-size: 10px;
-    padding: 3px 8px;
-  }
-  
-  .confirmationActions {
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .deleteButton,
-  .deleteConfirmButton {
-    padding: 14px 20px;
-    font-size: 13px;
-  }
-}
-
-.popup {
-  background: var(--popup-background);
-  border-radius: 16px;
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  max-height: 90dvh; /* Dynamic viewport height for mobile */
-  overflow: hidden;
-  box-shadow: var(--popup-shadow);
-  animation: slideUp 0.3s ease-out;
-  position: relative;
-  font-family: var(--font-family);
-  /* Ensure popup doesn't overflow viewport */
-  margin: 20px;
-  box-sizing: border-box;
-  /* Add safe area padding for mobile devices */
-  margin-top: max(env(safe-area-inset-top), 20px);
-  margin-bottom: max(env(safe-area-inset-bottom), 20px);
-  margin-left: max(env(safe-area-inset-left), 20px);
-  margin-right: max(env(safe-area-inset-right), 20px);
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 24px;
-  border-bottom: 1px solid var(--popup-border);
-  background: var(--popup-header-gradient);
-  color: var(--popup-header-text);
-  position: relative;
-}
-
-.headerLeft {
-  position: absolute;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.totalAllScore {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--popup-header-text);
-  background: rgba(255, 255, 255, 0.2);
-  padding: 4px 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  white-space: nowrap;
-}
-
-.title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  flex: 1;
-  text-align: center;
-}
-
-.question {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-align: center;
-  flex: 1;
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  color: var(--popup-header-text);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.closeButton:hover {
-  background-color: var(--popup-button-hover);
-  transform: scale(1.1);
-}
-
-.content {
-  padding: 0;
-  max-height: calc(90vh - 80px);
-  max-height: calc(90dvh - 80px); /* Dynamic viewport height for mobile */
-  overflow-y: auto;
-  /* Ensure content doesn't overflow horizontally */
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-  /* Smooth scrolling for mobile */
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
-
+/* Questions List Styles */
 .questionsList {
   display: flex;
   flex-direction: column;
 }
 
-/* Category Group Styles */
 .categoryGroup {
   margin-bottom: 8px;
 }
@@ -436,7 +296,6 @@
 }
 
 .categoryHeader:hover {
-  background: var(--popup-header-gradient);
   transform: translateX(2px);
 }
 
@@ -496,19 +355,6 @@
   animation: slideDown 0.3s ease-out;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    max-height: 1000px;
-    transform: translateY(0);
-  }
-}
-
 .questionItem {
   padding: 16px 24px;
   border-bottom: 1px solid var(--popup-border);
@@ -554,7 +400,6 @@
 
 .questionHeader {
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
   gap: 16px;
@@ -601,27 +446,37 @@
   color: var(--popup-description-color);
   line-height: 1.5;
 }
-/* Add Question Button Styles */
-.addQuestionItem {
+
+/* Add Item Styles */
+.addQuestionItem,
+.addDepartmentItem {
   padding: 20px 24px;
   cursor: pointer;
   transition: all 0.3s ease;
   border: 2px dashed var(--popup-border);
-  margin: 16px 24px 16px 24px;
+  margin: 16px 24px;
   border-radius: 12px;
   background-color: transparent;
   position: relative;
   overflow: hidden;
 }
 
-.addQuestionItem:hover {
+.addDepartmentItem {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.addQuestionItem:hover,
+.addDepartmentItem:hover {
   border-color: var(--primary);
   background-color: var(--popup-hover-bg);
   transform: translateY(-2px);
   box-shadow: var(--popup-shadow);
 }
 
-.addQuestionContent {
+.addQuestionContent,
+.addDepartmentContent {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -642,7 +497,8 @@
   flex-shrink: 0;
 }
 
-.addQuestionItem:hover .addIcon {
+.addQuestionItem:hover .addIcon,
+.addDepartmentItem:hover .addIcon {
   transform: rotate(90deg) scale(1.1);
 }
 
@@ -667,29 +523,7 @@
   line-height: 1.5;
 }
 
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Form Stilleri */
+/* Form Styles */
 .addQuestionForm {
   padding: 24px;
 }
@@ -760,20 +594,34 @@
   gap: 12px;
 }
 
-.deleteButton {
+/* Button Styles */
+.deleteButton,
+.deleteConfirmButton {
+  background: linear-gradient(135deg, #ff4757 0%, #ff3742 100%);
+  color: white;
+  border: none;
   padding: 12px 24px;
   border-radius: 8px;
-  font-weight: 600;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.deleteButton:hover,
+.deleteConfirmButton:hover {
+  background: linear-gradient(135deg, #ff3742 0%, #ff2f3a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 71, 87, 0.3);
+}
+
+.formActions .deleteButton {
   background: #dc2626;
-  color: white;
   width: 100%;
 }
 
-.deleteButton:hover {
+.formActions .deleteButton:hover {
   background: #b91c1c;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
@@ -817,139 +665,6 @@
   box-shadow: none;
 }
 
-/* Mobile Responsive */
-@media (max-width: 640px) {
-  .popup {
-    width: 95%;
-    max-height: 85vh;
-    margin: 0 10px;
-  }
-  
-  .header {
-    padding: 16px 20px;
-  }
-  
-  .headerLeft {
-    left: 20px;
-  }
-  
-  .totalAllScore {
-    font-size: 0.75rem;
-    padding: 3px 8px;
-  }
-  
-  .title {
-    font-size: 1.125rem;
-  }
-  
-  .questionItem {
-    padding: 16px 20px;
-  }
-  
-  .questionTitle {
-    font-size: 0.9rem;
-  }
-  
-  .questionDescription {
-    font-size: 0.8rem;
-  }
-  
-  .questionScore {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-    min-width: 32px;
-  }
-  
-  .addQuestionItem {
-    margin: 12px 16px;
-    padding: 16px 20px;
-  }
-  
-  .addIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
-  
-  .addTitle {
-    font-size: 0.9rem;
-  }
-  
-  .addDescription {
-    font-size: 0.8rem;
-  }
-  
-  .categoryHeader {
-    padding: 12px 16px;
-  }
-  
-  .categoryName {
-    font-size: 0.9rem;
-  }
-  
-  .categoryStats {
-    gap: 6px;
-  }
-  
-  .questionCount {
-    font-size: 0.75rem;
-  }
-  
-  .totalScore {
-    font-size: 0.75rem;
-    padding: 1px 6px;
-  }
-  
-  .categoryContent {
-    margin-left: 16px;
-  }
-  
-  .categoryContent .questionItem {
-    padding: 12px 16px;
-  }
-  
-  .addQuestionForm {
-    padding: 20px;
-  }
-  
-  .formGroup {
-    margin-bottom: 20px;
-  }
-  
-  .rightActions {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .deleteButton,
-  .cancelButton,
-  .saveButton {
-    width: 100%;
-    flex: none;
-  }
-}
-
-/* Scrollbar Styling */
-.content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content::-webkit-scrollbar-track {
-  background: var(--popup-scrollbar-track);
-  border-radius: 6px;
-}
-
-.content::-webkit-scrollbar-thumb {
-  background: var(--popup-scrollbar-thumb);
-  border-radius: 6px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-  background: var(--popup-scrollbar-thumb-hover);
-}
-
 /* Confirmation Popup Styles */
 .confirmationPopup {
   max-width: 420px;
@@ -969,15 +684,6 @@
   font-size: 48px;
   margin-bottom: 8px;
   animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
 }
 
 .confirmationMessage {
@@ -1050,48 +756,7 @@
   box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
 
-/* Mobile Responsive for Confirmation Popup */
-@media (max-width: 640px) {
-  .confirmationPopup {
-    width: 95%;
-    margin: 0 10px;
-  }
-  
-  .confirmationContent {
-    padding: 24px 20px;
-    gap: 16px;
-  }
-  
-  .confirmationIcon {
-    font-size: 40px;
-  }
-  
-  .confirmationMessage {
-    font-size: 1rem;
-    max-width: 280px;
-  }
-  
-  .confirmationWarning {
-    font-size: 0.85rem;
-    padding: 6px 12px;
-  }
-  
-  .confirmationActions {
-    flex-direction: column;
-    gap: 12px;
-    max-width: 100%;
-  }
-  
-  .confirmationActions .cancelButton,
-  .confirmationActions .deleteButton {
-    width: 100%;
-    min-width: auto;
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-}
-
-/* Departments Popup Styles */
+/* Departments List Styles */
 .departmentsList {
   display: flex;
   flex-direction: column;
@@ -1202,8 +867,100 @@
   color: #f59e0b;
 }
 
-/* Mobile responsiveness for departments */
+/* Scrollbar Styling */
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: var(--popup-scrollbar-track);
+  border-radius: 6px;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: var(--popup-scrollbar-thumb);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: var(--popup-scrollbar-thumb-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* Mobile Responsive Styles */
 @media (max-width: 768px) {
+  .departmentOverview {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .overviewItem {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .overviewLabel { font-size: 11px; }
+  .overviewValue { font-size: 20px; }
+  .sectionTitle { font-size: 16px; }
+  .actionItem { padding: 12px; }
+  .actionTitle { font-size: 14px; }
+  .actionDescription { font-size: 13px; }
+  
+  .priorityBadge,
+  .completedBadge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .confirmationActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .deleteButton,
+  .deleteConfirmButton {
+    padding: 14px 20px;
+    font-size: 13px;
+  }
+  
   .departmentCard {
     padding: 12px;
     gap: 8px;
@@ -1241,96 +998,15 @@
     margin-bottom: 1px;
   }
   
-  .actionCount {
-    font-size: 20px;
-  }
-}
-
-/* Add Department Button Styles */
-.addDepartmentItem {
-  padding: 20px 24px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px dashed var(--popup-border);
-  margin: 16px 24px 16px 24px;
-  border-radius: 12px;
-  background-color: transparent;
-  position: relative;
-  overflow: hidden;
-  min-height: 80px;
-  display: flex;
-  align-items: center;
-}
-
-.addDepartmentItem:hover {
-  border-color: var(--primary);
-  background-color: var(--popup-hover-bg);
-  transform: translateY(-2px);
-  box-shadow: var(--popup-shadow);
-}
-
-.addDepartmentItem:hover {
-  border-color: var(--primary);
-  background-color: var(--popup-hover-bg);
-  transform: translateY(-2px);
-  box-shadow: var(--popup-shadow);
-}
-
-.addDepartmentContent {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.addIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary) 0%, #ff6b6b 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.addDepartmentItem:hover .addIcon {
-  transform: rotate(90deg) scale(1.1);
-}
-
-.addText {
-  flex: 1;
-}
-
-.addTitle {
-  margin: 0 0 4px 0;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--popup-title-color);
-  line-height: 1.4;
-}
-
-.addDescription {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--popup-description-color);
-  line-height: 1.5;
-}
-
-/* Mobile responsiveness for add department button */
-@media (max-width: 768px) {
+  .actionCount { font-size: 20px; }
+  
   .addDepartmentItem {
     margin: 12px 16px;
     padding: 16px 20px;
     min-height: 70px;
   }
   
-  .addDepartmentContent {
-    gap: 14px;
-  }
+  .addDepartmentContent { gap: 14px; }
   
   .addIcon {
     width: 40px;
@@ -1346,5 +1022,100 @@
   .addDescription {
     font-size: 0.8rem;
     line-height: 1.4;
+  }
+}
+
+@media (max-width: 640px) {
+  .popup {
+    width: 95%;
+    max-height: 85vh;
+    margin: 0 10px;
+  }
+  
+  .header { padding: 16px 20px; }
+  .headerLeft { left: 20px; }
+  
+  .totalAllScore {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+  
+  .title { font-size: 1.125rem; }
+  .questionItem { padding: 16px 20px; }
+  .questionTitle { font-size: 0.9rem; }
+  .questionDescription { font-size: 0.8rem; }
+  
+  .questionScore {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    min-width: 32px;
+  }
+  
+  .addQuestionItem {
+    margin: 12px 16px;
+    padding: 16px 20px;
+  }
+  
+  .categoryHeader { padding: 12px 16px; }
+  .categoryName { font-size: 0.9rem; }
+  .categoryStats { gap: 6px; }
+  .questionCount { font-size: 0.75rem; }
+  
+  .totalScore {
+    font-size: 0.75rem;
+    padding: 1px 6px;
+  }
+  
+  .categoryContent { margin-left: 16px; }
+  .categoryContent .questionItem { padding: 12px 16px; }
+  .addQuestionForm { padding: 20px; }
+  .formGroup { margin-bottom: 20px; }
+  
+  .rightActions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .deleteButton,
+  .cancelButton,
+  .saveButton {
+    width: 100%;
+    flex: none;
+  }
+  
+  .confirmationPopup {
+    width: 95%;
+    margin: 0 10px;
+  }
+  
+  .confirmationContent {
+    padding: 24px 20px;
+    gap: 16px;
+  }
+  
+  .confirmationIcon { font-size: 40px; }
+  
+  .confirmationMessage {
+    font-size: 1rem;
+    max-width: 280px;
+  }
+  
+  .confirmationWarning {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .confirmationActions {
+    flex-direction: column;
+    gap: 12px;
+    max-width: 100%;
+  }
+  
+  .confirmationActions .cancelButton,
+  .confirmationActions .deleteButton {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 16px;
+    font-size: 14px;
   }
 }
