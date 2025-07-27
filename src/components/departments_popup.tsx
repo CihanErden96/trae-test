@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 
 interface Action {
@@ -224,274 +225,277 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
   if (!isOpen) return null;
 
-  return (
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Departmanlar</h2>
-          <button 
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Kapat"
-          >
-            ×
-          </button>
-        </div>
-        
-        <div className={styles.content}>
-          <div className={styles.departmentsList}>
-            {departments.map((department) => (
-              <div 
-                key={department.id} 
-                className={styles.departmentCard}
-                onClick={() => handleDepartmentClick(department)}
-              >
-                <div className={styles.departmentHeader}>
-                  <h3 className={styles.departmentName}>{department.name}</h3>
-                  <div className={styles.departmentScore}>{department.score}</div>
-                </div>
-                <div className={styles.departmentStats}>
-                  <div className={styles.completedActions}>
-                    <span className={styles.actionLabel}>Biten Aksiyon</span>
-                    <span className={styles.actionCount}>{department.completedActions}</span>
-                  </div>
-                  <div className={styles.pendingActions}>
-                    <span className={styles.actionLabel}>Bekleyen Aksiyon</span>
-                    <span className={styles.actionCount}>{department.pendingActions}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-            
-            {/* Yeni Departman Ekle Butonu */}
-            <div className={styles.addDepartmentItem} onClick={handleAddDepartment}>
-              <div className={styles.addDepartmentContent}>
-                <div className={styles.addIcon}>+</div>
-                <div className={styles.addText}>
-                  <h3 className={styles.addTitle}>Yeni Departman Ekle</h3>
-                  <p className={styles.addDescription}>Yeni bir departman oluşturmak için tıklayın</p>
-                </div>
-              </div>
-            </div>
-            
+  return createPortal(
+    <>
+      <div className={styles.overlay} onClick={handleOverlayClick}>
+        <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.header}>
+            <h2 className={styles.title}>Departmanlar</h2>
+            <button 
+              className={styles.closeButton}
+              onClick={onClose}
+              aria-label="Kapat"
+            >
+              ×
+            </button>
           </div>
-        </div>
-      </div>
-
-      {/* Yeni Departman Ekleme Popup'ı */}
-      {isAddDepartmentOpen && (
-        <div className={styles.overlay} onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            handleCloseAddDepartment();
-          }
-        }}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Yeni Departman Ekle</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={handleCloseAddDepartment}
-                aria-label="Kapat"
-              >
-                ×
-              </button>
-            </div>
-            
-            <div className={styles.content}>
-              <div className={styles.addQuestionForm}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Departman İsmi</label>
-                  <input 
-                    type="text"
-                    className={styles.formInput}
-                    placeholder="Departman ismini girin..."
-                    value={newDepartmentName}
-                    onChange={(e) => setNewDepartmentName(e.target.value)}
-                  />
+          
+          <div className={styles.content}>
+            <div className={styles.departmentsList}>
+              {departments.map((department) => (
+                <div 
+                  key={department.id} 
+                  className={styles.departmentCard}
+                  onClick={() => handleDepartmentClick(department)}
+                >
+                  <div className={styles.departmentHeader}>
+                    <h3 className={styles.departmentName}>{department.name}</h3>
+                    <div className={styles.departmentScore}>{department.score}</div>
+                  </div>
+                  <div className={styles.departmentStats}>
+                    <div className={styles.completedActions}>
+                      <span className={styles.actionLabel}>Biten Aksiyon</span>
+                      <span className={styles.actionCount}>{department.completedActions}</span>
+                    </div>
+                    <div className={styles.pendingActions}>
+                      <span className={styles.actionLabel}>Bekleyen Aksiyon</span>
+                      <span className={styles.actionCount}>{department.pendingActions}</span>
+                    </div>
+                  </div>
                 </div>
-
-                <div className={styles.formActions}>
-                  <button 
-                    className={styles.cancelButton}
-                    onClick={handleCloseAddDepartment}
-                  >
-                    İptal
-                  </button>
-                  <button 
-                    className={styles.saveButton}
-                    onClick={handleSaveDepartment}
-                    disabled={!newDepartmentName.trim()}
-                  >
-                    Kaydet
-                  </button>
+              ))}
+              
+              {/* Yeni Departman Ekle Butonu */}
+              <div className={styles.addDepartmentItem} onClick={handleAddDepartment}>
+                <div className={styles.addDepartmentContent}>
+                  <div className={styles.addIcon}>+</div>
+                  <div className={styles.addText}>
+                    <h3 className={styles.addTitle}>Yeni Departman Ekle</h3>
+                    <p className={styles.addDescription}>Yeni bir departman oluşturmak için tıklayın</p>
+                  </div>
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
-      )}
 
-      {/* Departman Detay Popup'ı */}
-      {isDepartmentDetailOpen && selectedDepartment && (
-        <div className={styles.overlay} onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            handleCloseDepartmentDetail();
-          }
-        }}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>{selectedDepartment.name} Detayları</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={handleCloseDepartmentDetail}
-                aria-label="Kapat"
-              >
-                ×
-              </button>
-            </div>
-            
-            <div className={styles.content}>
-              <div className={styles.addQuestionForm}>
-                {/* Departman Adı Düzenleme */}
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Departman İsmi</label>
-                  <input 
-                    type="text"
-                    className={styles.formInput}
-                    placeholder="Departman ismini girin..."
-                    value={editedDepartmentName}
-                    onChange={(e) => setEditedDepartmentName(e.target.value)}
-                  />
-                </div>
-
-                <div className={styles.categoryGroup}>
-                  <div 
-                    className={styles.categoryHeader}
-                    onClick={() => setIsPendingActionsCollapsed(!isPendingActionsCollapsed)}
-                  >
-                    <div className={styles.categoryTitle}>
-                      <span className={styles.categoryIcon}>
-                        {isPendingActionsCollapsed ? '▶' : '▼'}
-                      </span>
-                      <h3 className={styles.categoryName}>Bekleyen Aksiyonlar</h3>
-                      <div className={styles.categoryStats}>
-                        <span className={styles.questionCount}>({selectedDepartment.pendingActionsList.length})</span>
-                      </div>
-                    </div>
+        {/* Yeni Departman Ekleme Popup'ı */}
+        {isAddDepartmentOpen && (
+          <div className={styles.overlay} onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseAddDepartment();
+            }
+          }}>
+            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>Yeni Departman Ekle</h2>
+                <button 
+                  className={styles.closeButton}
+                  onClick={handleCloseAddDepartment}
+                  aria-label="Kapat"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className={styles.content}>
+                <div className={styles.addQuestionForm}>
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Departman İsmi</label>
+                    <input 
+                      type="text"
+                      className={styles.formInput}
+                      placeholder="Departman ismini girin..."
+                      value={newDepartmentName}
+                      onChange={(e) => setNewDepartmentName(e.target.value)}
+                    />
                   </div>
-                  {!isPendingActionsCollapsed && (
-                    selectedDepartment.pendingActionsList.length > 0 ? (
-                      <div className={styles.categoryContent}>
-                        {selectedDepartment.pendingActionsList.map((action) => (
-                          <div key={action.id} className={styles.questionItem}>
-                            <p className={styles.questionDescription}>{action.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className={styles.categoryContent}>
-                        <p className={styles.noActions}>Bekleyen aksiyon bulunmuyor.</p>
-                      </div>
-                    )
-                  )}
-                </div>
 
-                <div className={styles.categoryGroup}>
-                  <div 
-                    className={styles.categoryHeader}
-                    onClick={() => setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed)}
-                  >
-                    <div className={styles.categoryTitle}>
-                      <span className={styles.categoryIcon}>
-                        {isCompletedActionsCollapsed ? '▶' : '▼'}
-                      </span>
-                      <h3 className={styles.categoryName}>Tamamlanan Aksiyonlar</h3>
-                      <div className={styles.categoryStats}>
-                        <span className={styles.questionCount}>({selectedDepartment.completedActionsList.length})</span>
-                      </div>
-                    </div>
-                  </div>
-                  {!isCompletedActionsCollapsed && (
-                    selectedDepartment.completedActionsList.length > 0 ? (
-                      <div className={styles.categoryContent}>
-                        {selectedDepartment.completedActionsList.map((action) => (
-                          <div key={action.id} className={`${styles.questionItem} ${styles.completedAction}`}>
-                            <p className={styles.questionDescription}>{action.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className={styles.categoryContent}>
-                        <p className={styles.noActions}>Tamamlanan aksiyon bulunmuyor.</p>
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <div className={styles.formActions}>
-                  <button 
-                    className={styles.deleteButton}
-                    onClick={() => handleDeleteDepartment(selectedDepartment)}
-                  >
-                    Sil
-                  </button>
-                  <div className={styles.rightActions}>
+                  <div className={styles.formActions}>
                     <button 
                       className={styles.cancelButton}
-                      onClick={handleCancelEditDepartment}
+                      onClick={handleCloseAddDepartment}
                     >
                       İptal
                     </button>
                     <button 
                       className={styles.saveButton}
-                      onClick={handleSaveEditDepartment}
-                      disabled={!editedDepartmentName.trim()}
+                      onClick={handleSaveDepartment}
+                      disabled={!newDepartmentName.trim()}
                     >
-                      Güncelle
+                      Kaydet
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Silme Onay Popup'ı */}
-      {showDeleteConfirmation && departmentToDelete && (
-        <div className={styles.overlay}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Departmanı Sil</h2>
-            </div>
-            
-            <div className={styles.content}>
-              <div className={styles.confirmationContent}>
-                <p className={styles.confirmationMessage}>
-                  <strong>{departmentToDelete.name}</strong> departmanını silmek istediğinizden emin misiniz?
-                </p>
-                <p className={styles.confirmationWarning}>
-                  Bu işlem geri alınamaz.
-                </p>
-                <div className={styles.confirmationActions}>
-                  <button 
-                    className={styles.cancelButton}
-                    onClick={cancelDeleteDepartment}
-                  >
-                    İptal
-                  </button>
-                  <button 
-                    className={styles.deleteConfirmButton}
-                    onClick={confirmDeleteDepartment}
-                  >
-                    Sil
-                  </button>
+        {/* Departman Detay Popup'ı */}
+        {isDepartmentDetailOpen && selectedDepartment && (
+          <div className={styles.overlay} onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseDepartmentDetail();
+            }
+          }}>
+            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>{selectedDepartment.name} Detayları</h2>
+                <button 
+                  className={styles.closeButton}
+                  onClick={handleCloseDepartmentDetail}
+                  aria-label="Kapat"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className={styles.content}>
+                <div className={styles.addQuestionForm}>
+                  {/* Departman Adı Düzenleme */}
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>Departman İsmi</label>
+                    <input 
+                      type="text"
+                      className={styles.formInput}
+                      placeholder="Departman ismini girin..."
+                      value={editedDepartmentName}
+                      onChange={(e) => setEditedDepartmentName(e.target.value)}
+                    />
+                  </div>
+
+                  <div className={styles.categoryGroup}>
+                    <div 
+                      className={styles.categoryHeader}
+                      onClick={() => setIsPendingActionsCollapsed(!isPendingActionsCollapsed)}
+                    >
+                      <div className={styles.categoryTitle}>
+                        <span className={styles.categoryIcon}>
+                          {isPendingActionsCollapsed ? '▶' : '▼'}
+                        </span>
+                        <h3 className={styles.categoryName}>Bekleyen Aksiyonlar</h3>
+                        <div className={styles.categoryStats}>
+                          <span className={styles.questionCount}>({selectedDepartment.pendingActionsList.length})</span>
+                        </div>
+                      </div>
+                    </div>
+                    {!isPendingActionsCollapsed && (
+                      selectedDepartment.pendingActionsList.length > 0 ? (
+                        <div className={styles.categoryContent}>
+                          {selectedDepartment.pendingActionsList.map((action) => (
+                            <div key={action.id} className={styles.questionItem}>
+                              <p className={styles.questionDescription}>{action.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className={styles.categoryContent}>
+                          <p className={styles.noActions}>Bekleyen aksiyon bulunmuyor.</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+
+                  <div className={styles.categoryGroup}>
+                    <div 
+                      className={styles.categoryHeader}
+                      onClick={() => setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed)}
+                    >
+                      <div className={styles.categoryTitle}>
+                        <span className={styles.categoryIcon}>
+                          {isCompletedActionsCollapsed ? '▶' : '▼'}
+                        </span>
+                        <h3 className={styles.categoryName}>Tamamlanan Aksiyonlar</h3>
+                        <div className={styles.categoryStats}>
+                          <span className={styles.questionCount}>({selectedDepartment.completedActionsList.length})</span>
+                        </div>
+                      </div>
+                    </div>
+                    {!isCompletedActionsCollapsed && (
+                      selectedDepartment.completedActionsList.length > 0 ? (
+                        <div className={styles.categoryContent}>
+                          {selectedDepartment.completedActionsList.map((action) => (
+                            <div key={action.id} className={`${styles.questionItem} ${styles.completedAction}`}>
+                              <p className={styles.questionDescription}>{action.description}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className={styles.categoryContent}>
+                          <p className={styles.noActions}>Tamamlanan aksiyon bulunmuyor.</p>
+                        </div>
+                      )
+                    )}
+                  </div>
+
+                  <div className={styles.formActions}>
+                    <button 
+                      className={styles.deleteButton}
+                      onClick={() => handleDeleteDepartment(selectedDepartment)}
+                    >
+                      Sil
+                    </button>
+                    <div className={styles.rightActions}>
+                      <button 
+                        className={styles.cancelButton}
+                        onClick={handleCancelEditDepartment}
+                      >
+                        İptal
+                      </button>
+                      <button 
+                        className={styles.saveButton}
+                        onClick={handleSaveEditDepartment}
+                        disabled={!editedDepartmentName.trim()}
+                      >
+                        Güncelle
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {/* Silme Onay Popup'ı */}
+        {showDeleteConfirmation && departmentToDelete && (
+          <div className={styles.overlay}>
+            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>Departmanı Sil</h2>
+              </div>
+              
+              <div className={styles.content}>
+                <div className={styles.confirmationContent}>
+                  <p className={styles.confirmationMessage}>
+                    <strong>{departmentToDelete.name}</strong> departmanını silmek istediğinizden emin misiniz?
+                  </p>
+                  <p className={styles.confirmationWarning}>
+                    Bu işlem geri alınamaz.
+                  </p>
+                  <div className={styles.confirmationActions}>
+                    <button 
+                      className={styles.cancelButton}
+                      onClick={cancelDeleteDepartment}
+                    >
+                      İptal
+                    </button>
+                    <button 
+                      className={styles.deleteConfirmButton}
+                      onClick={confirmDeleteDepartment}
+                    >
+                      Sil
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>,
+    document.body
   );
 }

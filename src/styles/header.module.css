@@ -1,58 +1,90 @@
 .header {
-  background-color: var(--primary);
+  background: var(--popup-header-gradient);
   border-radius: var(--border-radius-header);
   box-shadow: var(--shadow);
-  padding: 12px 20px;
+  padding: 16px 24px;
   display: flex;
   align-items: center;
-  gap: 31px;
+  gap: 20px;
   position: relative;
-  z-index: 10; /* Ensure header stays on top */
-  /* Ensure header doesn't overflow */
+  z-index: 10;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  /* Add safe area padding for mobile devices */
-  padding-top: max(env(safe-area-inset-top), 12px);
+  padding-top: max(env(safe-area-inset-top), 16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--popup-border);
+  font-family: var(--font-family);
 }
 
 .settingsIcon {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background);
+  background: var(--popup-background);
   border-radius: 50%;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid var(--popup-border);
+}
+
+.settingsIcon:hover {
+  transform: scale(1.05);
+  box-shadow: var(--popup-shadow);
+  background: var(--popup-hover-bg);
+}
+
+.settingsIcon:active {
+  transform: scale(0.95);
+  transition: all 0.15s ease;
 }
 
 .pageTitle {
-  color: var(--foreground);
+  color: var(--popup-header-text);
   margin: 0;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
+  flex: 1;
+  font-family: var(--font-family);
 }
 
 .profileContainer {
-  margin-left: auto;
-  width: 40px; 
-  height:40px;
-  border-radius: 20px;
-  box-shadow: var(--shadow);
-  background-color: var(--primary);
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  box-shadow: var(--popup-shadow);
+  background: var(--popup-header-gradient);
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  color: var(--background); 
-
+  color: var(--popup-header-text);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid var(--popup-border);
 }
 
+.profileContainer:hover {
+  transform: scale(1.05);
+  box-shadow: var(--popup-shadow);
+  background: var(--popup-header-gradient);
+}
 
+.profileContainer:active {
+  transform: scale(0.95);
+  transition: all 0.15s ease;
+}
 
 .profileImage {
   border-radius: 50%;
-  width: 60%;
-  height: 60%; 
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }

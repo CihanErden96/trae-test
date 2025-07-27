@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 
 interface Question {
@@ -253,7 +254,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   // Tüm soruların toplam puanını hesapla
   const totalAllScore = questions.reduce((sum, question) => sum + question.score, 0);
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.popup}>
         <div className={styles.header}>
@@ -570,7 +571,8 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 };
 

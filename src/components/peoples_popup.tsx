@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 
 interface Person {
@@ -94,7 +95,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
@@ -189,6 +190,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
