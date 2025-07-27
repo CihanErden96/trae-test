@@ -36,6 +36,13 @@
   --button-secondary-bg: #FFF3E0;
   --button-secondary-text: #8D4E00;
   --button-secondary-hover: #F5E6A8;
+  --button-danger-bg: #dc2626;
+  --button-danger-text: #ffffff;
+  --button-danger-hover: #b91c1c;
+  --button-danger-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  --button-danger-hover-gradient: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  --button-danger-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  --button-danger-hover-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
   
   /* Additional Theme Variables */
   --primary-rgb: 227, 28, 36;
@@ -83,6 +90,13 @@
   --button-secondary-bg: #4A2C2A;
   --button-secondary-text: #FFF8E1;
   --button-secondary-hover: #3A3A3A;
+  --button-danger-bg: #dc2626;
+  --button-danger-text: #ffffff;
+  --button-danger-hover: #b91c1c;
+  --button-danger-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  --button-danger-hover-gradient: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  --button-danger-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  --button-danger-hover-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
   
   /* Additional Theme Variables - Dark Mode */
   --primary-rgb: 227, 28, 36;

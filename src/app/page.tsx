@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import CardDenetimler from "../components/card_denetimler";
+import { CardAksiyonlarMain } from "../components/card_aksiyonlar";
 import styles from "../styles/layout.module.css";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
 
       <main className={styles.body}>
         <CardDenetimler />
+        <CardAksiyonlarMain />
       </main>
 
       <Footer />

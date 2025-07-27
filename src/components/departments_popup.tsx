@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import popupStyles from '../styles/footer_popup.module.css';
-import AksiyonlarPopup from './aksiyonlar_popup';
+import AksiyonlarPopup, { departmentsData } from './card_aksiyonlar';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -13,10 +13,13 @@ const truncateText = (text: string, maxLength: number = 100): string => {
 
 interface Action {
   id: number;
-  title: string;
+  question: string;
   description: string;
   dueDate: string;
-  priority: 'low' | 'medium' | 'high';
+  startDate: string;
+  image?: string;
+  department?: string;
+  creator?: string;
 }
 
 interface Department {
@@ -35,101 +38,7 @@ interface DepartmentsPopupProps {
 }
 
 export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupProps) {
-  const [departments, setDepartments] = useState<Department[]>([
-    {
-      id: 1,
-      name: "İnsan Kaynakları",
-      score: 85,
-      completedActions: 12,
-      pendingActions: 3,
-      pendingActionsList: [
-        { id: 1, title: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", priority: "high" },
-        { id: 2, title: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", priority: "medium" },
-        { id: 3, title: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", priority: "low" }
-      ],
-      completedActionsList: [
-        { id: 4, title: "Bordro hazırlama", description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", priority: "high" },
-        { id: 5, title: "Sigorta işlemleri", description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", priority: "medium" }
-      ]
-    },
-    {
-      id: 2,
-      name: "Üretim",
-      score: 92,
-      completedActions: 18,
-      pendingActions: 5,
-      pendingActionsList: [
-        { id: 6, title: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "2024-01-10", priority: "high" },
-        { id: 7, title: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", priority: "high" },
-        { id: 8, title: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", priority: "medium" },
-        { id: 9, title: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", priority: "medium" },
-        { id: 10, title: "Üretim raporu", description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", priority: "low" }
-      ],
-      completedActionsList: [
-        { id: 11, title: "Sipariş teslimi", description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", priority: "high" }
-      ]
-    },
-    {
-      id: 3,
-      name: "Satış ve Pazarlama",
-      score: 78,
-      completedActions: 9,
-      pendingActions: 7,
-      pendingActionsList: [
-        { id: 12, title: "Kampanya hazırlığı", description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", priority: "high" },
-        { id: 13, title: "Müşteri toplantısı", description: "B firması ile görüşme", dueDate: "2024-01-08", priority: "high" },
-        { id: 14, title: "Pazar araştırması", description: "Rakip analizi raporu", dueDate: "2024-01-15", priority: "medium" }
-      ],
-      completedActionsList: [
-        { id: 15, title: "Sosyal medya paylaşımı", description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", priority: "low" }
-      ]
-    },
-    {
-      id: 4,
-      name: "Muhasebe",
-      score: 88,
-      completedActions: 15,
-      pendingActions: 2,
-      pendingActionsList: [
-        { id: 16, title: "Mali müşavir toplantısı", description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", priority: "high" },
-        { id: 17, title: "Fatura kontrolü", description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", priority: "medium" }
-      ],
-      completedActionsList: [
-        { id: 18, title: "Vergi beyannamesi", description: "KDV beyannamesi verildi", dueDate: "2023-12-25", priority: "high" }
-      ]
-    },
-    {
-      id: 5,
-      name: "Ar-Ge",
-      score: 95,
-      completedActions: 22,
-      pendingActions: 4,
-      pendingActionsList: [
-        { id: 19, title: "Prototip testi", description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", priority: "high" },
-        { id: 20, title: "Patent başvurusu", description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", priority: "medium" },
-        { id: 21, title: "Araştırma raporu", description: "Teknoloji trend analizi", dueDate: "2024-01-25", priority: "low" },
-        { id: 22, title: "Lab ekipmanı", description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", priority: "medium" }
-      ],
-      completedActionsList: [
-        { id: 23, title: "Ürün geliştirme", description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", priority: "high" }
-      ]
-    },
-    {
-      id: 6,
-      name: "Lojistik",
-      score: 82,
-      completedActions: 14,
-      pendingActions: 6,
-      pendingActionsList: [
-        { id: 24, title: "Kargo takibi", description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", priority: "high" },
-        { id: 25, title: "Depo düzenleme", description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", priority: "medium" },
-        { id: 26, title: "Nakliye planlaması", description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", priority: "medium" }
-      ],
-      completedActionsList: [
-        { id: 27, title: "Envanter sayımı", description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", priority: "high" }
-      ]
-    }
-  ]);
+  const [departments, setDepartments] = useState<Department[]>(departmentsData);
 
   const [isAddDepartmentOpen, setIsAddDepartmentOpen] = useState(false);
   const [newDepartmentName, setNewDepartmentName] = useState('');
