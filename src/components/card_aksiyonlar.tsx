@@ -158,7 +158,6 @@ const calculateTotalActions = () => {
 export function CardAksiyonlarMain() {
   const { totalCompleted, totalPending, progressPercentage } = calculateTotalActions();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [popupType, setPopupType] = useState<'pending' | 'completed'>('pending');
   const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
   const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(false);
   
@@ -166,24 +165,6 @@ export function CardAksiyonlarMain() {
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
-
-  // Bekleyen aksiyonlar butonuna tıklama
-  const handlePendingClick = () => {
-    hapticFeedback.light();
-    setPopupType('pending');
-    setIsPendingActionsCollapsed(false);
-    setIsCompletedActionsCollapsed(true);
-    setIsPopupOpen(true);
-  };
-
-  // Tamamlanan aksiyonlar butonuna tıklama
-  const handleCompletedClick = () => {
-    hapticFeedback.light();
-    setPopupType('completed');
-    setIsPendingActionsCollapsed(true);
-    setIsCompletedActionsCollapsed(false);
-    setIsPopupOpen(true);
-  };
 
   // Popup'ı kapatma
   const handleClosePopup = () => {
@@ -194,7 +175,6 @@ export function CardAksiyonlarMain() {
   // Card'a tıklama - tüm aksiyonları göster
   const handleCardClick = () => {
     hapticFeedback.light();
-    setPopupType('pending');
     setIsPendingActionsCollapsed(false);
     setIsCompletedActionsCollapsed(false);
     setIsPopupOpen(true);
@@ -283,7 +263,7 @@ export function CardAksiyonlarMain() {
           <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
             <div className={styles.header}>
               <h2 className={styles.title}>
-                {popupType === 'pending' ? 'Bekleyen Aksiyonlar' : 'Tamamlanan Aksiyonlar'}
+                Aksiyonlar
               </h2>
               <button 
                 className={styles.closeButton}
