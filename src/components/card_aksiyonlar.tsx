@@ -369,7 +369,6 @@ export default function AksiyonlarPopup({
                   key={action.id} 
                   className={styles.questionItem}
                   onClick={() => handleActionClick(action)}
-                  style={{ cursor: 'pointer' }}
                 >
                   <p className={styles.questionDescription}>
                     {truncateText(action.description)}
@@ -427,7 +426,6 @@ export default function AksiyonlarPopup({
                   key={action.id} 
                   className={`${styles.questionItem} ${styles.completedAction}`}
                   onClick={() => handleActionClick(action)}
-                  style={{ cursor: 'pointer' }}
                 >
                   <p className={styles.questionDescription}>
                     {truncateText(action.description)}
