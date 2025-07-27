@@ -1,8 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../styles/footer_popup.module.css';
+import popupStyles from '../styles/footer_popup.module.css';
+import AksiyonlarPopup from './aksiyonlar_popup';
+
+// Metin kısaltma utility fonksiyonu
+const truncateText = (text: string, maxLength: number = 100): string => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
 
 interface Action {
   id: number;
@@ -36,7 +43,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       completedActions: 12,
       pendingActions: 3,
       pendingActionsList: [
-        { id: 1, title: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla", dueDate: "2024-01-15", priority: "high" },
+        { id: 1, title: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", priority: "high" },
         { id: 2, title: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", priority: "medium" },
         { id: 3, title: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", priority: "low" }
       ],
@@ -227,12 +234,12 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
   return createPortal(
     <>
-      <div className={styles.overlay} onClick={handleOverlayClick}>
-        <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.header}>
-            <h2 className={styles.title}>Departmanlar</h2>
+      <div className={popupStyles.overlay} onClick={handleOverlayClick}>
+        <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={popupStyles.header}>
+            <h2 className={popupStyles.title}>Departmanlar</h2>
             <button 
-              className={styles.closeButton}
+              className={popupStyles.closeButton}
               onClick={onClose}
               aria-label="Kapat"
             >
@@ -240,38 +247,38 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
             </button>
           </div>
           
-          <div className={styles.content}>
-            <div className={styles.departmentsList}>
+          <div className={popupStyles.content}>
+            <div className={popupStyles.departmentsList}>
               {departments.map((department) => (
                 <div 
                   key={department.id} 
-                  className={styles.departmentCard}
+                  className={popupStyles.departmentCard}
                   onClick={() => handleDepartmentClick(department)}
                 >
-                  <div className={styles.departmentHeader}>
-                    <h3 className={styles.departmentName}>{department.name}</h3>
-                    <div className={styles.departmentScore}>{department.score}</div>
+                  <div className={popupStyles.departmentHeader}>
+                    <h3 className={popupStyles.departmentName}>{department.name}</h3>
+                    <div className={popupStyles.departmentScore}>{department.score}</div>
                   </div>
-                  <div className={styles.departmentStats}>
-                    <div className={styles.completedActions}>
-                      <span className={styles.actionLabel}>Biten Aksiyon</span>
-                      <span className={styles.actionCount}>{department.completedActions}</span>
+                  <div className={popupStyles.departmentStats}>
+                    <div className={popupStyles.completedActions}>
+                      <span className={popupStyles.actionLabel}>Biten Aksiyon</span>
+                      <span className={popupStyles.actionCount}>{department.completedActions}</span>
                     </div>
-                    <div className={styles.pendingActions}>
-                      <span className={styles.actionLabel}>Bekleyen Aksiyon</span>
-                      <span className={styles.actionCount}>{department.pendingActions}</span>
+                    <div className={popupStyles.pendingActions}>
+                      <span className={popupStyles.actionLabel}>Bekleyen Aksiyon</span>
+                      <span className={popupStyles.actionCount}>{department.pendingActions}</span>
                     </div>
                   </div>
                 </div>
               ))}
               
               {/* Yeni Departman Ekle Butonu */}
-              <div className={styles.addDepartmentItem} onClick={handleAddDepartment}>
-                <div className={styles.addDepartmentContent}>
-                  <div className={styles.addIcon}>+</div>
-                  <div className={styles.addText}>
-                    <h3 className={styles.addTitle}>Yeni Departman Ekle</h3>
-                    <p className={styles.addDescription}>Yeni bir departman oluşturmak için tıklayın</p>
+              <div className={popupStyles.addDepartmentItem} onClick={handleAddDepartment}>
+                <div className={popupStyles.addDepartmentContent}>
+                  <div className={popupStyles.addIcon}>+</div>
+                  <div className={popupStyles.addText}>
+                    <h3 className={popupStyles.addTitle}>Yeni Departman Ekle</h3>
+                    <p className={popupStyles.addDescription}>{truncateText("Yeni bir departman oluşturmak için tıklayın")}</p>
                   </div>
                 </div>
               </div>
@@ -282,16 +289,16 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Yeni Departman Ekleme Popup'ı */}
         {isAddDepartmentOpen && (
-          <div className={styles.overlay} onClick={(e) => {
+          <div className={popupStyles.overlay} onClick={(e) => {
             if (e.target === e.currentTarget) {
               handleCloseAddDepartment();
             }
           }}>
-            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-              <div className={styles.header}>
-                <h2 className={styles.title}>Yeni Departman Ekle</h2>
+            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={popupStyles.header}>
+                <h2 className={popupStyles.title}>Yeni Departman Ekle</h2>
                 <button 
-                  className={styles.closeButton}
+                  className={popupStyles.closeButton}
                   onClick={handleCloseAddDepartment}
                   aria-label="Kapat"
                 >
@@ -299,28 +306,28 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                 </button>
               </div>
               
-              <div className={styles.content}>
-                <div className={styles.addQuestionForm}>
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Departman İsmi</label>
+              <div className={popupStyles.content}>
+                <div className={popupStyles.addQuestionForm}>
+                  <div className={popupStyles.formGroup}>
+                    <label className={popupStyles.formLabel}>Departman İsmi</label>
                     <input 
                       type="text"
-                      className={styles.formInput}
+                      className={popupStyles.formInput}
                       placeholder="Departman ismini girin..."
                       value={newDepartmentName}
                       onChange={(e) => setNewDepartmentName(e.target.value)}
                     />
                   </div>
 
-                  <div className={styles.formActions}>
+                  <div className={popupStyles.formActions}>
                     <button 
-                      className={styles.cancelButton}
+                      className={popupStyles.cancelButton}
                       onClick={handleCloseAddDepartment}
                     >
                       İptal
                     </button>
                     <button 
-                      className={styles.saveButton}
+                      className={popupStyles.saveButton}
                       onClick={handleSaveDepartment}
                       disabled={!newDepartmentName.trim()}
                     >
@@ -335,16 +342,16 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Departman Detay Popup'ı */}
         {isDepartmentDetailOpen && selectedDepartment && (
-          <div className={styles.overlay} onClick={(e) => {
+          <div className={popupStyles.overlay} onClick={(e) => {
             if (e.target === e.currentTarget) {
               handleCloseDepartmentDetail();
             }
           }}>
-            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-              <div className={styles.header}>
-                <h2 className={styles.title}>{selectedDepartment.name} Detayları</h2>
+            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={popupStyles.header}>
+                <h2 className={popupStyles.title}>{selectedDepartment.name} Detayları</h2>
                 <button 
-                  className={styles.closeButton}
+                  className={popupStyles.closeButton}
                   onClick={handleCloseDepartmentDetail}
                   aria-label="Kapat"
                 >
@@ -352,105 +359,50 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                 </button>
               </div>
               
-              <div className={styles.content}>
-                <div className={styles.addQuestionForm}>
-                  {/* Departman Adı Düzenleme */}
-                  <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>Departman İsmi</label>
-                    <input 
-                      type="text"
-                      className={styles.formInput}
-                      placeholder="Departman ismini girin..."
-                      value={editedDepartmentName}
-                      onChange={(e) => setEditedDepartmentName(e.target.value)}
+              <div className={popupStyles.content}>
+                <div className={popupStyles.addQuestionForm}>
+                  <div className={popupStyles.categoryGroup}>
+                    <div className={popupStyles.formGroup}>
+                      <label className={popupStyles.formLabel}>Departman İsmi</label>
+                      <input 
+                        type="text"
+                        className={popupStyles.formInput}
+                        placeholder="Departman ismini girin..."
+                        value={editedDepartmentName}
+                        onChange={(e) => setEditedDepartmentName(e.target.value)}
+                      />
+                    </div>
+
+                    <AksiyonlarPopup 
+                      department={selectedDepartment}
+                      isPendingActionsCollapsed={isPendingActionsCollapsed}
+                      setIsPendingActionsCollapsed={setIsPendingActionsCollapsed}
+                      isCompletedActionsCollapsed={isCompletedActionsCollapsed}
+                      setIsCompletedActionsCollapsed={setIsCompletedActionsCollapsed}
                     />
-                  </div>
 
-                  <div className={styles.categoryGroup}>
-                    <div 
-                      className={styles.categoryHeader}
-                      onClick={() => setIsPendingActionsCollapsed(!isPendingActionsCollapsed)}
-                    >
-                      <div className={styles.categoryTitle}>
-                        <span className={styles.categoryIcon}>
-                          {isPendingActionsCollapsed ? '▶' : '▼'}
-                        </span>
-                        <h3 className={styles.categoryName}>Bekleyen Aksiyonlar</h3>
-                        <div className={styles.categoryStats}>
-                          <span className={styles.questionCount}>({selectedDepartment.pendingActionsList.length})</span>
-                        </div>
-                      </div>
-                    </div>
-                    {!isPendingActionsCollapsed && (
-                      selectedDepartment.pendingActionsList.length > 0 ? (
-                        <div className={styles.categoryContent}>
-                          {selectedDepartment.pendingActionsList.map((action) => (
-                            <div key={action.id} className={styles.questionItem}>
-                              <p className={styles.questionDescription}>{action.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className={styles.categoryContent}>
-                          <p className={styles.noActions}>Bekleyen aksiyon bulunmuyor.</p>
-                        </div>
-                      )
-                    )}
-                  </div>
-
-                  <div className={styles.categoryGroup}>
-                    <div 
-                      className={styles.categoryHeader}
-                      onClick={() => setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed)}
-                    >
-                      <div className={styles.categoryTitle}>
-                        <span className={styles.categoryIcon}>
-                          {isCompletedActionsCollapsed ? '▶' : '▼'}
-                        </span>
-                        <h3 className={styles.categoryName}>Tamamlanan Aksiyonlar</h3>
-                        <div className={styles.categoryStats}>
-                          <span className={styles.questionCount}>({selectedDepartment.completedActionsList.length})</span>
-                        </div>
-                      </div>
-                    </div>
-                    {!isCompletedActionsCollapsed && (
-                      selectedDepartment.completedActionsList.length > 0 ? (
-                        <div className={styles.categoryContent}>
-                          {selectedDepartment.completedActionsList.map((action) => (
-                            <div key={action.id} className={`${styles.questionItem} ${styles.completedAction}`}>
-                              <p className={styles.questionDescription}>{action.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className={styles.categoryContent}>
-                          <p className={styles.noActions}>Tamamlanan aksiyon bulunmuyor.</p>
-                        </div>
-                      )
-                    )}
-                  </div>
-
-                  <div className={styles.formActions}>
-                    <button 
-                      className={styles.deleteButton}
-                      onClick={() => handleDeleteDepartment(selectedDepartment)}
-                    >
-                      Sil
-                    </button>
-                    <div className={styles.rightActions}>
+                    <div className={popupStyles.formActions}>
                       <button 
-                        className={styles.cancelButton}
-                        onClick={handleCancelEditDepartment}
+                        className={popupStyles.deleteButton}
+                        onClick={() => handleDeleteDepartment(selectedDepartment)}
                       >
-                        İptal
+                        Sil
                       </button>
-                      <button 
-                        className={styles.saveButton}
-                        onClick={handleSaveEditDepartment}
-                        disabled={!editedDepartmentName.trim()}
-                      >
-                        Güncelle
-                      </button>
+                      <div className={popupStyles.rightActions}>
+                        <button 
+                          className={popupStyles.cancelButton}
+                          onClick={handleCancelEditDepartment}
+                        >
+                          İptal
+                        </button>
+                        <button 
+                          className={popupStyles.saveButton}
+                          onClick={handleSaveEditDepartment}
+                          disabled={!editedDepartmentName.trim()}
+                        >
+                          Güncelle
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -461,29 +413,29 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Silme Onay Popup'ı */}
         {showDeleteConfirmation && departmentToDelete && (
-          <div className={styles.overlay}>
-            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-              <div className={styles.header}>
-                <h2 className={styles.title}>Departmanı Sil</h2>
+          <div className={popupStyles.overlay}>
+            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+              <div className={popupStyles.header}>
+                <h2 className={popupStyles.title}>Departmanı Sil</h2>
               </div>
               
-              <div className={styles.content}>
-                <div className={styles.confirmationContent}>
-                  <p className={styles.confirmationMessage}>
+              <div className={popupStyles.content}>
+                <div className={popupStyles.confirmationContent}>
+                  <p className={popupStyles.confirmationMessage}>
                     <strong>{departmentToDelete.name}</strong> departmanını silmek istediğinizden emin misiniz?
                   </p>
-                  <p className={styles.confirmationWarning}>
+                  <p className={popupStyles.confirmationWarning}>
                     Bu işlem geri alınamaz.
                   </p>
-                  <div className={styles.confirmationActions}>
+                  <div className={popupStyles.confirmationActions}>
                     <button 
-                      className={styles.cancelButton}
+                      className={popupStyles.cancelButton}
                       onClick={cancelDeleteDepartment}
                     >
                       İptal
                     </button>
                     <button 
-                      className={styles.deleteConfirmButton}
+                      className={popupStyles.deleteConfirmButton}
                       onClick={confirmDeleteDepartment}
                     >
                       Sil

@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 
+// Metin kısaltma utility fonksiyonu
+const truncateText = (text: string, maxLength: number = 100): string => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
 interface Question {
   id: number;
   question: string;
@@ -307,7 +313,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                             <h3 className={styles.questionquestion}>{question.question}</h3>
                             <div className={styles.questionScore}>{question.score}</div>
                           </div>
-                          <p className={styles.questionDescription}>{question.description}</p>
+                          <p className={styles.questionDescription}>{truncateText(question.description)}</p>
                         </div>
                       ))}
                     </div>
@@ -321,7 +327,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 <div className={styles.addIcon}>+</div>
                 <div className={styles.addText}>
                   <h3 className={styles.addTitle}>Yeni Soru Ekle</h3>
-                  <p className={styles.addDescription}>Kendi sorunuzu ekleyerek listeyi genişletin</p>
+                  <p className={styles.addDescription}>{truncateText("Kendi sorunuzu ekleyerek listeyi genişletin")}</p>
                 </div>
               </div>
             </div>

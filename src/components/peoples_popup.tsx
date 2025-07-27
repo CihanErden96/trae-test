@@ -4,6 +4,12 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 
+// Metin kısaltma utility fonksiyonu
+const truncateText = (text: string, maxLength: number = 100): string => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
 interface Person {
   id: number;
   name: string;
@@ -121,7 +127,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                       {person.name} {person.surname}
                     </h3>
                     <p className={styles.questionDescription}>
-                       <strong>Rol:</strong> {person.title}
+                       <strong>Rol:</strong> {truncateText(person.title)}
                      </p>
                   </div>
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
@@ -166,10 +172,10 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                 <div className={styles.confirmationIcon}>
                 </div>
                 <p className={styles.confirmationMessage}>
-                  <strong>{deleteConfirmation.personName}</strong> adlı personeli silmek istediğinizden emin misiniz?
+                  <strong>{deleteConfirmation.personName}</strong> {truncateText("adlı personeli silmek istediğinizden emin misiniz?")}
                 </p>
                 <p className={styles.confirmationWarning}>
-                  Bu işlem geri alınamaz.
+                  {truncateText("Bu işlem geri alınamaz.")}
                 </p>
                 <div className={styles.confirmationActions}>
                   <button
