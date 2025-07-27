@@ -8,7 +8,6 @@
   max-width: 430px;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
   /* Ensure container stays within viewport */
   overflow-x: hidden;
   /* Add safe area padding for mobile devices */
