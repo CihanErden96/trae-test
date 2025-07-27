@@ -159,7 +159,7 @@ export function CardAksiyonlarMain() {
   const { totalCompleted, totalPending, progressPercentage } = calculateTotalActions();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
-  const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(false);
+  const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(true);
   
   // SVG circle için hesaplamalar
   const radius = 40;
@@ -172,11 +172,11 @@ export function CardAksiyonlarMain() {
     setIsPopupOpen(false);
   };
 
-  // Card'a tıklama - tüm aksiyonları göster
+  // Card'a tıklama - bekleyen aksiyonları göster, tamamlananları kapalı tut
   const handleCardClick = () => {
     hapticFeedback.light();
     setIsPendingActionsCollapsed(false);
-    setIsCompletedActionsCollapsed(false);
+    setIsCompletedActionsCollapsed(true);
     setIsPopupOpen(true);
   };
 
