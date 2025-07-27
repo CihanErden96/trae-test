@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import styles from '../styles/aksiyon_card.module.css';
+import { createPortal } from 'react-dom';
+import styles from '../styles/card_aksiyonlar.module.css';
 import cardStyles from '../styles/card_denetimler.module.css';
 import { hapticFeedback } from '../utils/haptic';
 
@@ -190,6 +191,15 @@ export function CardAksiyonlarMain() {
     setIsPopupOpen(false);
   };
 
+  // Card'a tıklama - tüm aksiyonları göster
+  const handleCardClick = () => {
+    hapticFeedback.light();
+    setPopupType('pending');
+    setIsPendingActionsCollapsed(false);
+    setIsCompletedActionsCollapsed(false);
+    setIsPopupOpen(true);
+  };
+
   // Tüm departmanları birleştirerek tek bir departman objesi oluştur
   const allActionsData: Department = {
     id: 0,
@@ -204,7 +214,7 @@ export function CardAksiyonlarMain() {
   return (
     <>
       <div className={cardStyles.cardContainer}>
-        <div className={cardStyles.card}>
+        <div className={cardStyles.card} onClick={handleCardClick}>
           <div className={cardStyles.cardContent}>
             {/* Card Label - Sol Üst */}
             <div className={`${cardStyles.cardLabel}`}>
@@ -246,27 +256,25 @@ export function CardAksiyonlarMain() {
               </svg>
             </div>
             
-            {/* Bekleyen Aksiyonlar Butonu - Sol Alt */}
-            <button 
+            {/* Bekleyen Aksiyonlar Bilgi Alanı - Sol Alt */}
+            <div 
               className={`${cardStyles.actionButton} ${cardStyles.pendingButton}`}
-              onClick={handlePendingClick}
             >
               Bekleyen: {totalPending}
-            </button>
+            </div>
             
-            {/* Tamamlanan Aksiyonlar Butonu - Sağ Alt */}
-            <button 
+            {/* Tamamlanan Aksiyonlar Bilgi Alanı - Sağ Alt */}
+            <div 
               className={`${cardStyles.actionButton} ${cardStyles.completedButton}`}
-              onClick={handleCompletedClick}
             >
               Tamamlanan: {totalCompleted}
-            </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Aksiyonlar Popup */}
-      {isPopupOpen && (
+      {isPopupOpen && createPortal(
         <div className={styles.overlay} onClick={(e) => {
           if (e.target === e.currentTarget) {
             handleClosePopup();
@@ -296,7 +304,8 @@ export function CardAksiyonlarMain() {
               />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
@@ -470,7 +479,7 @@ export default function AksiyonlarPopup({
       </div>
 
       {/* Aksiyon Detay Popup'ı */}
-      {isActionDetailOpen && selectedAction && (
+      {isActionDetailOpen && selectedAction && createPortal(
         <div className={styles.overlay} onClick={(e) => {
           if (e.target === e.currentTarget) {
             handleCloseActionDetail();
@@ -554,7 +563,8 @@ export default function AksiyonlarPopup({
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

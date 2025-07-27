@@ -238,6 +238,7 @@
   padding: 20px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
   /* Arkadaki elementleri tamamen disable et */
   pointer-events: auto;
   user-select: none;

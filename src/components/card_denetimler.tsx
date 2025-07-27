@@ -51,11 +51,6 @@ export default function CardDenetimler() {
             +
           </div>
           
-          {/* All Button - Sol Orta */}
-          <div className={`${styles.allButton}`}>
-            Tümü
-          </div>
-          
           {/* Progress Bar - Sol Alt */}
           <div className={styles.progressContainer}>
             <div className={styles.progressBarLabel}>Güncel</div>

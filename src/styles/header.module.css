@@ -18,6 +18,7 @@
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--popup-border);
   font-family: var(--font-family);
+  z-index: 10;
 }
 
 .settingsIcon {
