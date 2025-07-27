@@ -18,7 +18,8 @@
 .body {
   flex: 1;
   padding: 20px;
-  padding-bottom: 100px;
+  padding-top: calc(80px + max(env(safe-area-inset-top), 16px)); /* Header yüksekliği + safe area */
+  padding-bottom: 120px; /* Footer yüksekliği + extra space */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -28,4 +29,14 @@
   /* Add safe scrolling area */
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  height: 100dvh;
+  box-sizing: border-box;
+  z-index: 50;
 }

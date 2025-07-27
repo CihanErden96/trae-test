@@ -249,6 +249,8 @@
   /* Touch events'leri engelle */
   -webkit-touch-callout: none;
   -webkit-tap-highlight-color: transparent;
+  /* Popup'ların header ve footer'ın önünde kalması için yüksek z-index */
+  z-index: 1000;
 }
 
 .popup {

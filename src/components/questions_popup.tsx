@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
+import { hapticFeedback } from '../utils/haptic';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -124,6 +125,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   const availableCategories = Object.keys(groupedQuestions);
 
   const toggleCategory = (category: string) => {
+    hapticFeedback.light();
     const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(category)) {
       newExpanded.delete(category);
@@ -134,6 +136,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const handleQuestionClick = (question: Question) => {
+    hapticFeedback.medium();
     setEditingQuestion(question);
     setNewQuestion({
       category: question.category,
@@ -145,6 +148,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const handleCloseEditQuestion = () => {
+    hapticFeedback.light();
     setIsEditQuestionOpen(false);
     setEditingQuestion(null);
     setNewQuestion({
@@ -156,6 +160,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const handleDeleteQuestion = () => {
+    hapticFeedback.warning();
     if (editingQuestion) {
       setQuestionToDelete(editingQuestion);
       setShowDeleteConfirmation(true);
@@ -163,6 +168,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const confirmDeleteQuestion = () => {
+    hapticFeedback.heavy();
     if (questionToDelete) {
       setQuestions(prevQuestions => 
         prevQuestions.filter(q => q.id !== questionToDelete.id)
@@ -174,12 +180,14 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   };
 
   const cancelDeleteQuestion = () => {
+    hapticFeedback.light();
     setShowDeleteConfirmation(false);
     setQuestionToDelete(null);
   };
 
   const handleUpdateQuestion = () => {
     if (newQuestion.category && newQuestion.question && newQuestion.description && newQuestion.score && editingQuestion) {
+      hapticFeedback.success();
       const updatedQuestion: Question = {
         ...editingQuestion,
         category: newQuestion.category,
@@ -192,14 +200,18 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
         prevQuestions.map(q => q.id === editingQuestion.id ? updatedQuestion : q)
       );
       handleCloseEditQuestion();
+    } else {
+      hapticFeedback.error();
     }
   };
 
   const handleAddQuestion = () => {
+    hapticFeedback.light();
     setIsAddQuestionOpen(true);
   };
 
   const handleCloseAddQuestion = () => {
+    hapticFeedback.light();
     setIsAddQuestionOpen(false);
     setNewQuestion({
       category: '',
@@ -211,6 +223,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   const handleSaveQuestion = () => {
     if (newQuestion.category && newQuestion.question && newQuestion.description && newQuestion.score) {
+      hapticFeedback.success();
       const newId = Math.max(...questions.map(q => q.id)) + 1;
       const questionToAdd: Question = {
         id: newId,
@@ -222,6 +235,8 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
       
       setQuestions(prevQuestions => [...prevQuestions, questionToAdd]);
       handleCloseAddQuestion();
+    } else {
+      hapticFeedback.error();
     }
   };
 
@@ -251,6 +266,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      hapticFeedback.light();
       onClose();
     }
   };

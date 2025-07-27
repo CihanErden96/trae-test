@@ -6,6 +6,7 @@ import styles from '../styles/footer.module.css';
 import QuestionsPopup from './questions_popup';
 import PeoplesPopup from './peoples_popup';
 import DepartmentsPopup from './departments_popup';
+import { hapticFeedback } from '../utils/haptic';
 
 export default function Footer() {
   const [peoplesRipples, setPeoplesRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
@@ -16,6 +17,9 @@ export default function Footer() {
   const [isDepartmentsPopupOpen, setIsDepartmentsPopupOpen] = useState(false);
 
   const handleDepartmentsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Haptic feedback ekle
+    hapticFeedback.light();
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -33,7 +37,7 @@ export default function Footer() {
       navigator.vibrate(10);
     }
     
-    // Remove ripple after animation
+    // Ripple'ı temizle
     setTimeout(() => {
       setDepartmentsRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
     }, 600);
@@ -42,6 +46,9 @@ export default function Footer() {
   };
 
   const handlePeoplesClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Haptic feedback ekle
+    hapticFeedback.light();
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -54,12 +61,7 @@ export default function Footer() {
     
     setPeoplesRipples(prev => [...prev, newRipple]);
     
-    // Haptic feedback (iOS Safari)
-    if ('vibrate' in navigator) {
-      navigator.vibrate(10);
-    }
-    
-    // Remove ripple after animation
+    // Ripple'ı temizle
     setTimeout(() => {
       setPeoplesRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
     }, 600);
@@ -68,6 +70,9 @@ export default function Footer() {
   };
 
   const handleQuestionsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // Haptic feedback ekle
+    hapticFeedback.light();
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -80,12 +85,7 @@ export default function Footer() {
     
     setQuestionsRipples(prev => [...prev, newRipple]);
     
-    // Haptic feedback (iOS Safari)
-    if ('vibrate' in navigator) {
-      navigator.vibrate(10);
-    }
-    
-    // Remove ripple after animation
+    // Ripple'ı temizle
     setTimeout(() => {
       setQuestionsRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
     }, 600);

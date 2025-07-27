@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import popupStyles from '../styles/footer_popup.module.css';
 import AksiyonlarPopup, { departmentsData } from './card_aksiyonlar';
+import { hapticFeedback } from '../utils/haptic';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -51,16 +52,19 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const [editedDepartmentName, setEditedDepartmentName] = useState('');
 
   const handleAddDepartment = () => {
+    hapticFeedback.light();
     setIsAddDepartmentOpen(true);
   };
 
   const handleCloseAddDepartment = () => {
+    hapticFeedback.light();
     setIsAddDepartmentOpen(false);
     setNewDepartmentName('');
   };
 
   const handleSaveDepartment = () => {
     if (newDepartmentName.trim()) {
+      hapticFeedback.success();
       const newId = Math.max(...departments.map(d => d.id)) + 1;
       const newDepartment: Department = {
         id: newId,
@@ -74,16 +78,20 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       
       setDepartments(prevDepartments => [...prevDepartments, newDepartment]);
       handleCloseAddDepartment();
+    } else {
+      hapticFeedback.error();
     }
   };
 
   const handleDepartmentClick = (department: Department) => {
+    hapticFeedback.medium();
     setSelectedDepartment(department);
     setEditedDepartmentName(department.name);
     setIsDepartmentDetailOpen(true);
   };
 
   const handleCloseDepartmentDetail = () => {
+    hapticFeedback.light();
     setIsDepartmentDetailOpen(false);
     setSelectedDepartment(null);
     setEditedDepartmentName('');
@@ -91,6 +99,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
   const handleSaveEditDepartment = () => {
     if (selectedDepartment && editedDepartmentName.trim() && editedDepartmentName.trim() !== selectedDepartment.name) {
+      hapticFeedback.success();
       setDepartments(prevDepartments => 
         prevDepartments.map(dept => 
           dept.id === selectedDepartment.id 
@@ -99,22 +108,27 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
         )
       );
       setSelectedDepartment(prev => prev ? { ...prev, name: editedDepartmentName.trim() } : null);
+    } else if (editedDepartmentName.trim() === '') {
+      hapticFeedback.error();
     }
     // Departman detay popup'ını kapat ve ana listeye dön
     handleCloseDepartmentDetail();
   };
 
   const handleCancelEditDepartment = () => {
+    hapticFeedback.light();
     // İptal butonuna basıldığında detay popup'ını kapat
     handleCloseDepartmentDetail();
   };
 
   const handleDeleteDepartment = (department: Department) => {
+    hapticFeedback.warning();
     setDepartmentToDelete(department);
     setShowDeleteConfirmation(true);
   };
 
   const confirmDeleteDepartment = () => {
+    hapticFeedback.heavy();
     if (departmentToDelete) {
       setDepartments(prevDepartments => 
         prevDepartments.filter(dept => dept.id !== departmentToDelete.id)
@@ -127,12 +141,14 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   };
 
   const cancelDeleteDepartment = () => {
+    hapticFeedback.light();
     setShowDeleteConfirmation(false);
     setDepartmentToDelete(null);
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
+      hapticFeedback.light();
       onClose();
     }
   };

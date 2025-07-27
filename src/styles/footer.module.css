@@ -5,13 +5,17 @@
   padding: 0 24px;
   display: flex;
   justify-content: space-between;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  max-width: 100%;
+  max-width: 430px;
   box-sizing: border-box;
   padding-bottom: max(env(safe-area-inset-bottom), 8px);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
 }
 
 .navIcon {

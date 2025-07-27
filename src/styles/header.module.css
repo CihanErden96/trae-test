@@ -6,15 +6,19 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  max-width: 100%;
+  max-width: 430px;
   box-sizing: border-box;
   padding-top: max(env(safe-area-inset-top), 16px);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--popup-border);
   font-family: var(--font-family);
+  z-index: 100;
 }
 
 .settingsIcon {

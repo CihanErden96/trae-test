@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import styles from '../styles/aksiyon_card.module.css';
 import cardStyles from '../styles/card_denetimler.module.css';
+import { hapticFeedback } from '../utils/haptic';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -167,6 +168,7 @@ export function CardAksiyonlarMain() {
 
   // Bekleyen aksiyonlar butonuna tıklama
   const handlePendingClick = () => {
+    hapticFeedback.light();
     setPopupType('pending');
     setIsPendingActionsCollapsed(false);
     setIsCompletedActionsCollapsed(true);
@@ -175,6 +177,7 @@ export function CardAksiyonlarMain() {
 
   // Tamamlanan aksiyonlar butonuna tıklama
   const handleCompletedClick = () => {
+    hapticFeedback.light();
     setPopupType('completed');
     setIsPendingActionsCollapsed(true);
     setIsCompletedActionsCollapsed(false);
@@ -183,6 +186,7 @@ export function CardAksiyonlarMain() {
 
   // Popup'ı kapatma
   const handleClosePopup = () => {
+    hapticFeedback.light();
     setIsPopupOpen(false);
   };
 
@@ -316,22 +320,26 @@ export default function AksiyonlarPopup({
   const ITEMS_PER_PAGE = 10;
 
   const handleActionClick = (action: Action) => {
+    hapticFeedback.medium();
     setSelectedAction(action);
     setIsActionDetailOpen(true);
   };
 
   const handleCloseActionDetail = () => {
+    hapticFeedback.light();
     setIsActionDetailOpen(false);
     setSelectedAction(null);
   };
 
   // Bekleyen aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMorePending = () => {
+    hapticFeedback.light();
     setPendingDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
   // Tamamlanan aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMoreCompleted = () => {
+    hapticFeedback.light();
     setCompletedDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
@@ -349,7 +357,10 @@ export default function AksiyonlarPopup({
       <div className={styles.categoryGroup}>
         <div 
           className={styles.categoryHeader}
-          onClick={() => setIsPendingActionsCollapsed(!isPendingActionsCollapsed)}
+          onClick={() => {
+            hapticFeedback.light();
+            setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
+          }}
         >
           <div className={styles.categoryTitle}>
             <span className={styles.categoryIcon}>
@@ -404,7 +415,10 @@ export default function AksiyonlarPopup({
       <div className={styles.categoryGroup}>
         <div 
           className={styles.categoryHeader}
-          onClick={() => setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed)}
+          onClick={() => {
+            hapticFeedback.light();
+            setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed);
+          }}
         >
           <div className={styles.categoryTitle}>
             <span className={styles.categoryIcon}>

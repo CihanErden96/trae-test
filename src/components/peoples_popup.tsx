@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
+import { hapticFeedback } from '../utils/haptic';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -73,6 +74,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   });
 
   const handleDeleteClick = (person: Person) => {
+    hapticFeedback.warning();
     setDeleteConfirmation({
       isOpen: true,
       personId: person.id,
@@ -81,6 +83,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   };
 
   const handleConfirmDelete = () => {
+    hapticFeedback.heavy();
     if (deleteConfirmation.personId) {
       setPeoples(prev => prev.filter(person => person.id !== deleteConfirmation.personId));
     }
@@ -92,6 +95,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   };
 
   const handleCancelDelete = () => {
+    hapticFeedback.light();
     setDeleteConfirmation({
       isOpen: false,
       personId: null,
@@ -99,10 +103,22 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
     });
   };
 
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      hapticFeedback.light();
+      onClose();
+    }
+  };
+
+  const handleCloseButton = () => {
+    hapticFeedback.light();
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return createPortal(
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={styles.overlay} onClick={handleOverlayClick}>
       <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -111,7 +127,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
             </span>
           </div>
           <h2 className={styles.title}>Personel Listesi</h2>
-          <button className={styles.closeButton} onClick={onClose}>
+          <button className={styles.closeButton} onClick={handleCloseButton}>
             ×
           </button>
         </div>
