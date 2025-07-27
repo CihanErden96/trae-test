@@ -7,6 +7,13 @@
   "background_color": "#FFF8E1",
   "theme_color": "#E31C24",
   "orientation": "portrait",
+  "scope": "/",
+  "lang": "tr",
+  "categories": ["business", "productivity"],
+  "prefer_related_applications": false,
+  "permissions": [
+    "vibrate"
+  ],
   "icons": [
     {
       "src": "/icons/icon-192x192.png",
@@ -19,5 +26,23 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "shortcuts": [
+    {
+      "name": "Aksiyonlar",
+      "short_name": "Aksiyonlar",
+      "description": "Bekleyen ve tamamlanan aksiyonları görüntüle",
+      "url": "/?shortcut=actions",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "edge_side_panel": {
+    "preferred_width": 430
+  }
 }
