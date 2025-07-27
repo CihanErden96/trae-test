@@ -1,5 +1,5 @@
 import React from "react";
-import styles from '../styles/card_denetimler.module.css';
+import styles from '../styles/card.module.css';
 
 export default function CardDenetimler() {
   return (

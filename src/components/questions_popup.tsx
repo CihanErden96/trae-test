@@ -326,7 +326,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                           onClick={() => handleQuestionClick(question)}
                         >
                           <div className={styles.questionHeader}>
-                            <h3 className={styles.questionquestion}>{question.question}</h3>
+                            <h3 className={styles.questionTitle}>{question.question}</h3>
                             <div className={styles.questionScore}>{question.score}</div>
                           </div>
                           <p className={styles.questionDescription}>{truncateText(question.description)}</p>

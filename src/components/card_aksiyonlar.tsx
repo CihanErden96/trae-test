@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import styles from '../styles/card_aksiyonlar.module.css';
-import cardStyles from '../styles/card_denetimler.module.css';
+import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
 
 // Metin kısaltma utility fonksiyonu
@@ -193,16 +192,16 @@ export function CardAksiyonlarMain() {
 
   return (
     <>
-      <div className={cardStyles.cardContainer}>
-        <div className={cardStyles.card} onClick={handleCardClick}>
-          <div className={cardStyles.cardContent}>
+      <div className={styles.cardContainer}>
+        <div className={styles.card} onClick={handleCardClick}>
+          <div className={styles.cardContent}>
             {/* Card Label - Sol Üst */}
-            <div className={`${cardStyles.cardLabel}`}>
+            <div className={`${styles.cardLabel}`}>
               Aksiyonlar
             </div>
             
             {/* Circular Progress - Sağ Üst */}
-            <div className={`${cardStyles.circularProgress}`}>
+            <div className={`${styles.circularProgress}`}>
               <svg width="100" height="100" viewBox="0 0 100 100">
                 <circle
                   cx="50"
@@ -229,7 +228,7 @@ export function CardAksiyonlarMain() {
                   y="50"
                   textAnchor="middle"
                   dy=".3em"
-                  className={cardStyles.circularProgressText}
+                  className={styles.circularProgressText}
                 >
                   {progressPercentage}%
                 </text>
@@ -367,14 +366,15 @@ export default function AksiyonlarPopup({
               {displayedPendingActions.map((action) => (
                 <div 
                   key={action.id} 
-                  className={styles.questionItem}
+                  className={styles.actionItem}
                   onClick={() => handleActionClick(action)}
                 >
-                  <p className={styles.questionDescription}>
+                  <p className={styles.actionDescription}>
+                    <strong>{action.question}</strong><br />
                     {truncateText(action.description)}
                   </p>
-                  <span className={styles.questionScore}>
-                    {action.dueDate}
+                  <span className={styles.actionScore}>
+                    {new Date(action.dueDate).toLocaleDateString('tr-TR')}
                   </span>
                 </div>
               ))}
@@ -424,14 +424,15 @@ export default function AksiyonlarPopup({
               {displayedCompletedActions.map((action) => (
                 <div 
                   key={action.id} 
-                  className={`${styles.questionItem} ${styles.completedAction}`}
+                  className={`${styles.actionItem} ${styles.completedAction}`}
                   onClick={() => handleActionClick(action)}
                 >
-                  <p className={styles.questionDescription}>
+                  <p className={styles.actionDescription}>
+                    <strong>{action.question}</strong><br />
                     {truncateText(action.description)}
                   </p>
-                  <span className={styles.questionScore}>
-                    Tamamlandı: {action.dueDate}
+                  <span className={styles.actionScore}>
+                    Tamamlandı: {new Date(action.dueDate).toLocaleDateString('tr-TR')}
                   </span>
                 </div>
               ))}
