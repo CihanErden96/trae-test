@@ -6,6 +6,13 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  z-index: 10; /* Ensure footer stays on top */
+  /* Ensure footer doesn't overflow */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Add safe area padding for mobile devices */
+  padding-bottom: max(env(safe-area-inset-bottom), 0px);
 }
 
 .navIcon {
@@ -16,6 +23,7 @@
   background-color: var(--primary);
   transform: translateY(-30px);
   position: relative;
+  z-index: 11; /* Ensure nav icons stay above footer */
   display: flex;
   justify-content: center;
   align-items: center;

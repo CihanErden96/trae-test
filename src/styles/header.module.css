@@ -6,6 +6,14 @@
   display: flex;
   align-items: center;
   gap: 31px;
+  position: relative;
+  z-index: 10; /* Ensure header stays on top */
+  /* Ensure header doesn't overflow */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Add safe area padding for mobile devices */
+  padding-top: max(env(safe-area-inset-top), 12px);
 }
 
 .settingsIcon {

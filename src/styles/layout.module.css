@@ -2,16 +2,31 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile */
   width: 100%;
   max-width: 430px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  /* Ensure container stays within viewport */
+  overflow-x: hidden;
+  /* Add safe area padding for mobile devices */
+  padding-left: max(env(safe-area-inset-left), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
 }
 
 .body {
   flex: 1;
   padding: 20px;
+  padding-bottom: 100px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* Ensure content doesn't overflow */
+  overflow-x: hidden;
+  overflow-y: auto;
+  /* Add safe scrolling area */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }

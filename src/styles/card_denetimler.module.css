@@ -1,5 +1,9 @@
 .cardContainer {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  /* Ensure card doesn't overflow */
+  overflow: hidden;
 }
 
 .card {
@@ -8,8 +12,12 @@
   box-shadow: var(--shadow);
   padding: 5px;
   width: 100%;
+  max-width: 100%;
   min-height: 150px;
   position: relative;
+  box-sizing: border-box;
+  /* Ensure card doesn't overflow */
+  overflow: hidden;
 }
 
 .cardContent {
