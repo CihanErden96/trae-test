@@ -1,65 +1,42 @@
 /* Aksiyon Card Stilleri */
 
 .categoryGroup {
-  margin-bottom: 20px;
-  border: 1px solid var(--popup-border);
-  border-radius: 8px;
-  background-color: var(--popup-background);
-  box-shadow: var(--popup-shadow);
-}
-
-/* Çok küçük ekranlar için ek responsive kurallar */
-@media (max-width: 480px) {
-  .dateRow,
-  .infoRow {
-    gap: 8px;
-  }
-  
-  .detailLabel {
-    font-size: 0.8rem;
-  }
-  
-  .detailText {
-    font-size: 0.75rem;
-  }
-  
-  .actionDetailContent {
-    padding: 16px;
-    gap: 16px;
-  }
+  margin-bottom: 8px;
 }
 
 .categoryHeader {
-  padding: 16px;
-  background-color: var(--popup-category-bg);
-  border-bottom: 1px solid var(--popup-border);
+  padding: 16px 24px;
+  background: var(--popup-header-gradient);
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 8px 8px 0 0;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  border: 1px solid var(--popup-border);
 }
 
 .categoryHeader:hover {
-  background-color: var(--popup-hover-bg);
+  transform: translateX(2px);
 }
 
 .categoryTitle {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
 }
 
 .categoryIcon {
-  margin-right: 12px;
-  font-size: 14px;
-  color: var(--popup-category-color);
+  font-size: 12px;
+  color: var(--popup-header-text);
   transition: transform 0.2s ease;
+  width: 16px;
+  display: flex;
+  justify-content: center;
 }
 
 .categoryName {
   margin: 0;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--popup-title-color);
+  color: var(--popup-header-text);
   flex: 1;
 }
 
@@ -69,54 +46,31 @@
   gap: 8px;
 }
 
-.questionCount {
-  background: var(--popup-header-gradient);
-  color: var(--popup-header-text);
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.875rem;
-  font-weight: 700;
-  min-width: 40px;
-  text-align: center;
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
-}
-
-.categoryContent {
-  padding: 0;
-}
-
 .questionItem {
-  background: var(--surface-color);
-  border: 2px solid var(--border-color);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--popup-border);
+  cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  box-shadow: var(--shadow);
-  cursor: pointer;
+  overflow: hidden;
+  margin-left: 0;
+  background: var(--popup-background);
 }
 
 .categoryContent .questionItem {
   margin-left: 0;
-  border-left: 2px solid var(--border-color);
-  border-radius: 16px;
-  border-bottom: 2px solid var(--border-color);
+  border-left: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--popup-border);
 }
 
 .questionItem:hover {
-  background: var(--surface-hover-color);
-  border-color: var(--primary);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background-color: var(--popup-hover-bg);
+  transform: translateX(4px);
 }
 
 .questionItem:last-child {
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: none;
 }
 
 .questionItem::before {
@@ -129,7 +83,6 @@
   background: var(--popup-header-gradient);
   transform: scaleY(0);
   transition: transform 0.2s ease;
-  border-radius: 16px 0 0 16px;
 }
 
 .questionItem:hover::before {
@@ -137,43 +90,41 @@
 }
 
 .completedAction {
-  background-color: var(--surface-color);
-  border-color: #22c55e;
+  background-color: var(--button-secondary-bg);
 }
 
 .completedAction:hover {
-  background-color: var(--surface-hover-color);
-  border-color: #16a34a;
+  background-color: var(--button-secondary-hover);
 }
 
 .completedAction::before {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
 }
 
 .questionDescription {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.4;
-  flex: 1;
-  padding-right: 12px;
+  font-size: 0.875rem;
+  color: var(--popup-description-color);
+  line-height: 1.5;
+  padding-bottom: 25px;
+  position: relative;
 }
 
 .questionScore {
-  background: var(--primary);
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: var(--popup-header-gradient);
   color: var(--popup-header-text);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 700;
-  padding: 8px 12px;
-  border-radius: 12px;
-  min-width: 100px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  min-width: 40px;
   text-align: center;
-  box-shadow: var(--shadow);
-  border: 2px solid var(--popup-border);
   flex-shrink: 0;
+  box-shadow: var(--shadow);
   white-space: nowrap;
-  align-self: flex-end;
 }
 
 .noActions {
@@ -187,6 +138,15 @@
   border: 2px dashed var(--popup-border);
 }
 
+.actionCount {
+  font-size: 0.875rem;
+  color: var(--popup-header-text);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .categoryHeader {
@@ -198,9 +158,8 @@
   }
   
   .questionItem {
-    padding: 12px;
-    margin-bottom: 8px;
-    gap: 6px;
+    padding: 12px 16px;
+    margin-bottom: 0;
   }
   
   .categoryName {
@@ -208,14 +167,13 @@
   }
   
   .questionDescription {
-    font-size: 14px;
-    padding-right: 8px;
+    font-size: 13px;
+    padding-bottom: 30px;
   }
   
   .questionScore {
-    font-size: 12px;
-    padding: 6px 10px;
-    min-width: 80px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
   }
 }
 
@@ -348,6 +306,7 @@
   flex: 1;
   margin-bottom: 0;
 }
+
 
 .detailSection {
   display: flex;
@@ -522,6 +481,43 @@
     font-size: 14px;
   }
 }
+
+/* Descriptive Data Stili - Global tema ile uyumlu */
+.descriptiveData {
+  position: absolute;
+  background: var(--popup-background);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--popup-border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  text-shadow: none;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: auto;
+  height: auto;
+}
+
+.descriptiveDataLeft {
+  bottom: 0px;
+  left: 8px;
+}
+
+.descriptiveDataRight {
+  bottom: 0px;
+  right: 8px;
+}
+
+
+
 
 /* Load More Button Styles - Mobil stiline benzetildi */
 .loadMoreContainer {

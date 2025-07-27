@@ -238,14 +238,14 @@ export function CardAksiyonlarMain() {
             
             {/* Bekleyen Aksiyonlar Bilgi Alanı - Sol Alt */}
             <div 
-              className={`${cardStyles.actionButton} ${cardStyles.pendingButton}`}
+              className={`${styles.descriptiveData} ${styles.descriptiveDataLeft}`}
             >
               Bekleyen: {totalPending}
             </div>
             
             {/* Tamamlanan Aksiyonlar Bilgi Alanı - Sağ Alt */}
             <div 
-              className={`${cardStyles.actionButton} ${cardStyles.completedButton}`}
+              className={`${styles.descriptiveData} ${styles.descriptiveDataRight}`}
             >
               Tamamlanan: {totalCompleted}
             </div>
@@ -357,7 +357,7 @@ export default function AksiyonlarPopup({
             </span>
             <h3 className={styles.categoryName}>Bekleyen Aksiyonlar</h3>
             <div className={styles.categoryStats}>
-              <span className={styles.questionCount}>({department.pendingActionsList.length})</span>
+              <span className={styles.actionCount}>({department.pendingActionsList.length})</span>
             </div>
           </div>
         </div>
@@ -415,7 +415,7 @@ export default function AksiyonlarPopup({
             </span>
             <h3 className={styles.categoryName}>Tamamlanan Aksiyonlar</h3>
             <div className={styles.categoryStats}>
-              <span className={styles.questionCount}>({department.completedActionsList.length})</span>
+              <span className={styles.actionCount}>({department.completedActionsList.length})</span>
             </div>
           </div>
         </div>
