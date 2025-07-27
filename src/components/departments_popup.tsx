@@ -132,7 +132,6 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
   const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(true);
   const [editedDepartmentName, setEditedDepartmentName] = useState('');
-  const [isEditingDepartment, setIsEditingDepartment] = useState(false);
 
   const handleAddDepartment = () => {
     setIsAddDepartmentOpen(true);
@@ -164,7 +163,6 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const handleDepartmentClick = (department: Department) => {
     setSelectedDepartment(department);
     setEditedDepartmentName(department.name);
-    setIsEditingDepartment(true); // Direkt düzenleme modunda aç
     setIsDepartmentDetailOpen(true);
   };
 
@@ -172,7 +170,6 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
     setIsDepartmentDetailOpen(false);
     setSelectedDepartment(null);
     setEditedDepartmentName('');
-    setIsEditingDepartment(false);
   };
 
   const handleSaveEditDepartment = () => {
@@ -186,7 +183,6 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       );
       setSelectedDepartment(prev => prev ? { ...prev, name: editedDepartmentName.trim() } : null);
     }
-    setIsEditingDepartment(false);
     // Departman detay popup'ını kapat ve ana listeye dön
     handleCloseDepartmentDetail();
   };
@@ -216,15 +212,6 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const cancelDeleteDepartment = () => {
     setShowDeleteConfirmation(false);
     setDepartmentToDelete(null);
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return '#ff4757';
-      case 'medium': return '#ffa502';
-      case 'low': return '#2ed573';
-      default: return '#747d8c';
-    }
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {

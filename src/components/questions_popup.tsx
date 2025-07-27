@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/popup.module.css';
 
 interface Question {
@@ -546,7 +546,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
             <div className={styles.content}>
               <div className={styles.confirmationContent}>
                 <p className={styles.confirmationMessage}>
-                  <strong>"{questionToDelete.question}"</strong> sorusunu silmek istediğinizden emin misiniz?
+                  <strong>&quot;{questionToDelete.question}&quot;</strong> sorusunu silmek istediğinizden emin misiniz?
                 </p>
                 <p className={styles.confirmationWarning}>
                   Bu işlem geri alınamaz.
