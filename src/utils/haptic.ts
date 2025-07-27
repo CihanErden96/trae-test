@@ -1,4 +1,12 @@
 // Haptic Feedback Utility
+
+// Window interface'ini genişletiyoruz
+declare global {
+  interface Window {
+    hapticFeedback?: (type: string) => void;
+  }
+}
+
 export const hapticFeedback = {
   // Hafif dokunma (buton tıklamaları için)
   light: () => {
@@ -6,8 +14,8 @@ export const hapticFeedback = {
       navigator.vibrate(10);
     }
     // iOS Safari için haptic feedback
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('light');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('light');
     }
   },
 
@@ -16,8 +24,8 @@ export const hapticFeedback = {
     if ('vibrate' in navigator) {
       navigator.vibrate(20);
     }
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('medium');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('medium');
     }
   },
 
@@ -26,8 +34,8 @@ export const hapticFeedback = {
     if ('vibrate' in navigator) {
       navigator.vibrate([30, 10, 30]);
     }
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('heavy');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('heavy');
     }
   },
 
@@ -36,8 +44,8 @@ export const hapticFeedback = {
     if ('vibrate' in navigator) {
       navigator.vibrate([10, 5, 10]);
     }
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('success');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('success');
     }
   },
 
@@ -46,8 +54,8 @@ export const hapticFeedback = {
     if ('vibrate' in navigator) {
       navigator.vibrate([50, 20, 50, 20, 50]);
     }
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('error');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('error');
     }
   },
 
@@ -56,8 +64,8 @@ export const hapticFeedback = {
     if ('vibrate' in navigator) {
       navigator.vibrate([30, 15, 30]);
     }
-    if ('hapticFeedback' in window) {
-      (window as any).hapticFeedback('warning');
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      window.hapticFeedback('warning');
     }
   }
 };
