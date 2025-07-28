@@ -1,0 +1,146 @@
+/* Departman Sorumluları Bölümü */
+.departmentResponsiblesSection {
+  background: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--popup-shadow);
+  transition: all 0.3s ease;
+}
+
+.departmentResponsiblesSection:hover {
+  border-color: var(--popup-header-gradient);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Departman Satırları */
+.departmentRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--popup-border);
+  align-items: center;
+  transition: all 0.3s ease;
+  background: var(--popup-background);
+  position: relative;
+}
+
+.departmentRow:last-child {
+  border-bottom: none;
+}
+
+.departmentRow:hover {
+  background: var(--popup-hover-bg);
+  transform: translateY(-1px);
+}
+
+.departmentRow::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--popup-header-gradient);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+
+.departmentRow:hover::before {
+  transform: scaleY(1);
+}
+
+/* Departman Adı */
+.departmentName {
+  font-size: 14px;
+  color: var(--popup-title-color);
+  font-weight: 600;
+  font-family: var(--font-family);
+  line-height: 1.4;
+}
+
+/* Combobox Container */
+.comboboxContainer {
+  padding-left: 16px;
+  position: relative;
+}
+
+/* Combobox */
+.combobox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 14px;
+  font-family: var(--font-family);
+  color: var(--popup-title-color);
+  transition: all 0.2s ease;
+}
+
+.combobox:hover {
+  border-color: var(--popup-header-gradient);
+}
+
+.combobox.open {
+  box-shadow: 0 0 0 2px var(--popup-header-gradient);
+  border-color: var(--popup-header-gradient);
+}
+
+/* Combobox Arrow */
+.comboboxArrow {
+  transform: rotate(0deg);
+  transition: transform 0.2s ease;
+  color: var(--popup-header-gradient);
+  font-weight: bold;
+}
+
+.comboboxArrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdown {
+  background: var(--popup-background);
+  border: 2px solid var(--popup-header-gradient);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: var(--popup-shadow);
+  z-index: 10000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Dropdown Item */
+.dropdownItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--popup-border);
+  background: transparent;
+  color: var(--popup-title-color);
+  font-size: 14px;
+  font-family: var(--font-family);
+  transition: all 0.2s ease;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background: var(--popup-hover-bg);
+}
+
+.dropdownItem.selected {
+  background: var(--popup-header-gradient);
+  color: white;
+}
+
+.dropdownItem.selected:hover {
+  background: var(--popup-header-gradient);
+}

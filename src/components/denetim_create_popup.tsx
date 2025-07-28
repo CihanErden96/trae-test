@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import calendarStyles from '../styles/calendar.module.css';
+import assignmentStyles from '../styles/denetim_assignment_popup.module.css';
 
 interface DenetimPopupProps {
   isOpen: boolean;
@@ -20,6 +21,25 @@ interface DenetimData {
   endDate: string;
   type: 'İç Denetim' | 'Dış Denetim' | 'Uygunluk Denetimi' | 'Performans Denetimi';
 }
+
+interface DenetimAssignmentPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onBack: () => void;
+  onSave: (details: DenetimAssignmentData) => void;
+  dateRange: { startDate: string; endDate: string };
+}
+
+interface DenetimAssignmentData {
+  title: string;
+  description: string;
+  department: string;
+  priority: 'Düşük' | 'Orta' | 'Yüksek' | 'Kritik';
+  type: 'İç Denetim' | 'Dış Denetim' | 'Uygunluk Denetimi' | 'Performans Denetimi';
+  departmentResponsibles: { [department: string]: string };
+}
+
+// DropdownPortal bileşenini kaldırdık - artık gerekli değil
 
 interface DateRangePickerProps {
   startDate: string;
@@ -242,7 +262,340 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
   );
 }
 
+// Yeni Denetim Atama Popup'ı
+function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange }: DenetimAssignmentPopupProps) {
+  const [errors, setErrors] = useState<Partial<DenetimAssignmentData>>({});
+  
+  // Custom dropdown state'leri
+  const [openDropdowns, setOpenDropdowns] = useState<{ [department: string]: boolean }>({});
+  const [dropdownPositions, setDropdownPositions] = useState<{ [department: string]: { top: number; left: number; width: number } }>({});
+  const comboboxRefs = useRef<{ [department: string]: HTMLDivElement | null }>({});
+
+  // Genel personel listesi (tüm departmanlar için aynı liste)
+  const allPersonnel = [
+    'Mehmet Kaya',
+    'Ayşe Demir', 
+    'Fatma Yılmaz',
+    'Ali Özkan',
+    'Zeynep Çelik',
+    'Murat Şahin',
+    'Elif Koç',
+    'Hasan Aydın',
+    'Seda Polat',
+    'Burak Arslan',
+    'Gizem Kara',
+    'Emre Doğan',
+    'Canan Öztürk',
+    'Serkan Yıldız',
+    'Pınar Güneş',
+    'Oğuz Kılıç',
+    'Merve Akgül',
+    'Tolga Erdoğan',
+    'Deniz Çakır',
+    'Ece Bayram',
+    'Kemal Usta',
+    'Sibel Taş',
+    'Onur Kaya',
+    'Gamze Özdemir'
+  ];
+
+  // Departman listesi
+  const departments = [
+    'İnsan Kaynakları',
+    'Bilgi İşlem', 
+    'Muhasebe',
+    'Pazarlama',
+    'Satış',
+    'Üretim',
+    'Kalite Kontrol',
+    'Lojistik'
+  ];
+
+  // Varsayılan departman sorumluları
+  const defaultResponsibles = useMemo(() => {
+    if (departments.length > 0 && allPersonnel.length > 0) {
+      return departments.reduce((acc, dept) => {
+        acc[dept] = allPersonnel[0];
+        return acc;
+      }, {} as { [department: string]: string });
+    }
+    return {};
+  }, [departments, allPersonnel]);
+
+  const [assignmentData, setAssignmentData] = useState<DenetimAssignmentData>({
+    title: '',
+    description: '',
+    department: '',
+    priority: 'Düşük',
+    type: 'İç Denetim',
+    departmentResponsibles: {}
+  });
+
+  // assignmentData'nın departmentResponsibles'ını varsayılan değerlerle güncelle
+  useEffect(() => {
+    if (Object.keys(defaultResponsibles).length > 0 && Object.keys(assignmentData.departmentResponsibles).length === 0) {
+      setAssignmentData(prev => ({
+        ...prev,
+        departmentResponsibles: defaultResponsibles
+      }));
+    }
+  }, [defaultResponsibles]);
+
+  // Dropdown'ların dışına tıklandığında kapatma
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      // Eğer tıklanan element combobox veya dropdown içinde değilse, tüm dropdown'ları kapat
+      if (!target.closest('[data-combobox]') && !target.closest('[data-dropdown]')) {
+        setOpenDropdowns({});
+      }
+    };
+
+    if (Object.values(openDropdowns).some(isOpen => isOpen)) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [openDropdowns]);
+
+  const handleInputChange = (field: keyof DenetimAssignmentData, value: string) => {
+    setAssignmentData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  // Departman sorumlusu seçme fonksiyonu
+  const handleResponsibleSelect = (department: string, person: string) => {
+    setAssignmentData(prev => ({
+      ...prev,
+      departmentResponsibles: {
+        ...prev.departmentResponsibles,
+        [department]: person
+      }
+    }));
+    
+    // Dropdown'ı kapat
+    setOpenDropdowns(prev => ({ ...prev, [department]: false }));
+  };
+
+  // Dropdown toggle fonksiyonu
+  const toggleDropdown = (department: string) => {
+    const isOpening = !openDropdowns[department];
+    
+    if (isOpening) {
+      // Dropdown açılırken pozisyonu hesapla
+      const comboboxElement = comboboxRefs.current[department];
+      if (comboboxElement) {
+        const rect = comboboxElement.getBoundingClientRect();
+        setDropdownPositions(prev => ({
+          ...prev,
+          [department]: {
+            top: rect.bottom + window.scrollY,
+            left: rect.left + window.scrollX,
+            width: rect.width
+          }
+        }));
+      }
+      
+      // Diğer tüm dropdown'ları kapat ve seçileni aç
+      setOpenDropdowns(prev => {
+        const newState: { [key: string]: boolean } = {};
+        Object.keys(prev).forEach(key => {
+          newState[key] = false; // Önce hepsini kapat
+        });
+        newState[department] = true; // Seçilen departmanı aç
+        return newState;
+      });
+    } else {
+      // Dropdown kapatılıyor
+      setOpenDropdowns(prev => ({ ...prev, [department]: false }));
+    }
+  };
+
+  const validateAssignmentForm = (): boolean => {
+    const newErrors: Partial<DenetimAssignmentData> = {};
+
+    if (!assignmentData.title.trim()) {
+      newErrors.title = 'Başlık gereklidir';
+    }
+    if (!assignmentData.description.trim()) {
+      newErrors.description = 'Açıklama gereklidir';
+    }
+    if (!assignmentData.department.trim()) {
+      newErrors.department = 'Departman gereklidir';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (validateAssignmentForm()) {
+      onSave(assignmentData);
+      // Form verilerini sıfırla
+      setAssignmentData({
+        title: '',
+        description: '',
+        department: '',
+        priority: 'Düşük',
+        type: 'İç Denetim',
+        departmentResponsibles: {}
+      });
+      setErrors({});
+    }
+  };
+
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  const formatDateForDisplay = (dateStr: string) => {
+    if (!dateStr) return '';
+    return new Date(dateStr).toLocaleDateString('tr-TR');
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {createPortal(
+        <div className={styles.overlay} onClick={handleOverlayClick}>
+          <div className={styles.popup}>
+            <div className={styles.header}>
+              <h2 className={styles.title}>Denetim Atama</h2>
+              <button className={styles.closeButton} onClick={onClose}>
+                ×
+              </button>
+            </div>
+            
+            <div className={styles.content}>
+              <form onSubmit={handleSave} className={styles.addQuestionForm}>
+                {/* Seçilen tarih aralığını göster */}
+                <div className={styles.formGroup}>
+                  <div className={calendarStyles.dateRangePreview}>
+                    <span className={calendarStyles.previewText}>
+                      {formatDateForDisplay(dateRange.startDate)} - {formatDateForDisplay(dateRange.endDate)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Departman-Personel Sorumlu Seçimi */}
+                <div className={styles.formGroup}>
+                  <div className={assignmentStyles.departmentResponsiblesContainer}>
+                    {/* Header */}
+                    <div className={assignmentStyles.departmentHeader}>
+                      Departman / Sorumlu Kişi
+                    </div>
+
+                    {/* Departman ve Combobox Listesi */}
+                    {departments.map((department, index) => {
+                      const selectedResponsible = assignmentData.departmentResponsibles[department];
+                      
+                      return (
+                        <div 
+                          key={index}
+                          className={assignmentStyles.departmentRow}
+                        >
+                          {/* Departman Adı */}
+                          <div className={assignmentStyles.departmentName}>
+                            {department}
+                          </div>
+
+                          {/* Modern Combobox */}
+                          <div className={assignmentStyles.comboboxContainer} data-combobox>
+                            <div
+                              ref={(el) => { comboboxRefs.current[department] = el; }}
+                              onClick={() => toggleDropdown(department)}
+                              className={`${assignmentStyles.combobox} ${openDropdowns[department] ? assignmentStyles.open : ''}`}
+                            >
+                              <span>
+                                {assignmentData.departmentResponsibles[department] || 'Sorumlu seçin'}
+                              </span>
+                              <span className={`${assignmentStyles.comboboxArrow} ${openDropdowns[department] ? assignmentStyles.open : ''}`}>
+                                ▼
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className={styles.formActions}>
+                  <button
+                    type="button"
+                    className={styles.cancelButton}
+                    onClick={onClose}
+                  >
+                    İptal
+                  </button>
+                  <div className={styles.rightActions}>
+                    <button
+                      type="button"
+                      className={styles.cancelButton}
+                      onClick={onBack}
+                    >
+                      Geri
+                    </button>
+                    <button
+                      type="submit"
+                      className={styles.deleteConfirmButton}
+                      onClick={onClose}
+                    >
+                      Kaydet
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Dropdown'lar için Portal */}
+      {Object.entries(openDropdowns).map(([department, isOpen]) => 
+        isOpen && dropdownPositions[department] && createPortal(
+          <div
+            key={department}
+            data-dropdown
+            className={assignmentStyles.dropdown}
+            style={{
+              position: 'absolute',
+              top: dropdownPositions[department].top,
+              left: dropdownPositions[department].left,
+              width: dropdownPositions[department].width
+            }}
+          >
+            {allPersonnel.map((person, personIndex) => (
+              <div
+                key={personIndex}
+                onClick={() => handleResponsibleSelect(department, person)}
+                className={`${assignmentStyles.dropdownItem} ${
+                  assignmentData.departmentResponsibles[department] === person 
+                    ? assignmentStyles.selected 
+                    : ''
+                }`}
+              >
+                {person}
+              </div>
+            ))}
+          </div>,
+          document.body
+        )
+      )}
+    </>
+  );
+}
+
 export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopupProps) {
+  const [showDetailsPopup, setShowDetailsPopup] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState({ startDate: '', endDate: '' });
   const [formData, setFormData] = useState<DenetimData>({
     title: '',
     description: '',
@@ -283,19 +636,47 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
     e.preventDefault();
     
     if (validateForm()) {
-      onSubmit(formData);
-      setFormData({
-        title: '',
-        description: '',
-        department: '',
-        priority: 'Düşük',
-        startDate: '',
-        endDate: '',
-        type: 'İç Denetim'
+      // Tarih aralığını kaydet ve detay popup'ını aç
+      setSelectedDateRange({
+        startDate: formData.startDate,
+        endDate: formData.endDate
       });
-      setErrors({});
-      onClose();
+      setShowDetailsPopup(true);
     }
+  };
+
+  const handleAssignmentSubmit = (assignment: DenetimAssignmentData) => {
+    // Tüm verileri birleştir ve ana onSubmit'e gönder
+    const completeData: DenetimData = {
+      ...assignment,
+      startDate: selectedDateRange.startDate,
+      endDate: selectedDateRange.endDate
+    };
+    
+    onSubmit(completeData);
+    
+    // Tüm popup'ları kapat ve verileri sıfırla
+    setShowDetailsPopup(false);
+    setFormData({
+      title: '',
+      description: '',
+      department: '',
+      priority: 'Düşük',
+      startDate: '',
+      endDate: '',
+      type: 'İç Denetim'
+    });
+    setErrors({});
+    onClose();
+  };
+
+  const handleAssignmentBack = () => {
+    setShowDetailsPopup(false);
+  };
+
+  const handleAssignmentClose = () => {
+    setShowDetailsPopup(false);
+    onClose();
   };
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -306,49 +687,63 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
 
   if (!isOpen) return null;
 
-  return createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.popup}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Denetim Oluştur</h2>
-          <button className={styles.closeButton} onClick={onClose}>
-            ×
-          </button>
-        </div>
-        
-        <div className={styles.content}>
-          <form onSubmit={handleSubmit} className={styles.addQuestionForm}>
-            <div className={styles.formGroup}>
-              <DateRangePicker
-                startDate={formData.startDate}
-                endDate={formData.endDate}
-                onStartDateChange={(date) => handleInputChange('startDate', date)}
-                onEndDateChange={(date) => handleInputChange('endDate', date)}
-                error={errors.startDate || errors.endDate}
-              />
-            </div>
-
-            <div className={styles.formActions}>
-              <button
-                type="button"
-                className={styles.cancelButton}
-                onClick={onClose}
-              >
-                İptal
+  return (
+    <>
+      {/* Ana Tarih Seçimi Popup'ı */}
+      {!showDetailsPopup && createPortal(
+        <div className={styles.overlay} onClick={handleOverlayClick}>
+          <div className={styles.popup}>
+            <div className={styles.header}>
+              <h2 className={styles.title}>Denetim Oluştur</h2>
+              <button className={styles.closeButton} onClick={onClose}>
+                ×
               </button>
-              <div className={styles.rightActions}>
-                <button
-                  type="submit"
-                  className={styles.deleteConfirmButton}
-                >
-                  İleri
-                </button>
-              </div>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>,
-    document.body
+            
+            <div className={styles.content}>
+              <form onSubmit={handleSubmit} className={styles.addQuestionForm}>
+                <div className={styles.formGroup}>
+                  <DateRangePicker
+                    startDate={formData.startDate}
+                    endDate={formData.endDate}
+                    onStartDateChange={(date) => handleInputChange('startDate', date)}
+                    onEndDateChange={(date) => handleInputChange('endDate', date)}
+                    error={errors.startDate || errors.endDate}
+                  />
+                </div>
+
+                <div className={styles.formActions}>
+                  <button
+                    type="button"
+                    className={styles.cancelButton}
+                    onClick={onClose}
+                  >
+                    İptal
+                  </button>
+                  <div className={styles.rightActions}>
+                    <button
+                      type="submit"
+                      className={styles.deleteConfirmButton}
+                    >
+                      İleri
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Denetim Detayları Popup'ı */}
+      <DenetimAssignmentPopup
+        isOpen={showDetailsPopup}
+        onClose={handleAssignmentClose}
+        onBack={handleAssignmentBack}
+        onSave={handleAssignmentSubmit}
+        dateRange={selectedDateRange}
+      />
+    </>
   );
 }
