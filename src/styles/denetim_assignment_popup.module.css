@@ -147,7 +147,7 @@
   padding: 10px 14px;
   cursor: pointer;
   background: transparent;
-  color: var(--popup-title-color);
+  color: var(--popup-header-text);
   font-size: 14px;
   font-family: var(--font-family);
   transition: all 0.2s ease;
@@ -159,6 +159,7 @@
 
 .dropdownItem:hover {
   background: var(--popup-hover-bg);
+  color: var(--text-secondary);
 }
 
 .dropdownItem.selected {

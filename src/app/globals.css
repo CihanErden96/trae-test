@@ -36,7 +36,7 @@
   --button-secondary-bg: #FFF3E0;
   --button-secondary-text: #8D4E00;
   --button-secondary-hover: #F5E6A8;
-  --button-danger-bg: #dc2626;
+  --button-danger-bg: #342b2b;
   --button-danger-text: #ffffff;
   --button-danger-hover: #b91c1c;
   --button-danger-gradient: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
@@ -64,6 +64,7 @@
   --border-radius-footer: 15px 15px 0px 0px;
   --shadow: 5px 6px 6px 0px rgba(255, 255, 255, 0.05);
   --shadow-up: 5px -6px 6px 0px rgba(255, 255, 255, 0.05);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 255, 255, 0.05);
   --font-family: 'Roboto', Arial, Helvetica, sans-serif;
   
   /* Popup Colors - Dark Mode */
