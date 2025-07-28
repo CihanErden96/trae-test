@@ -612,6 +612,32 @@
   gap: 12px;
 }
 
+/* Form Error Styles */
+.formError {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.formError::before {
+  content: "⚠";
+  font-size: 14px;
+}
+
+.inputError {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+.inputError:focus {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
 /* Button Styles */
 .deleteButton,
 .deleteConfirmButton {

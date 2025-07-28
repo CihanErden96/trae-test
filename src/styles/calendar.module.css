@@ -1,0 +1,268 @@
+/* DateRangePicker Styles - Always Expanded */
+.dateRangeContainer {
+  width: 100%;
+  position: relative;
+}
+
+/* Calendar Dropdown */
+.calendarDropdown {
+  position: static;
+  width: 100%;
+  background: var(--popup-background);
+  border: 2px solid var(--popup-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Calendar Header and Navigation */
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--popup-border);
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.05), rgba(var(--primary-rgb), 0.02));
+}
+
+.calendarNavButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendarNavButton:hover {
+  background: var(--popup-hover-bg);
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+.calendarTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  flex: 1;
+}
+
+/* Calendar Grid */
+.calendarGrid {
+  padding: 16px 20px 20px;
+}
+
+.calendarWeekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.calendarWeekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 8px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.calendarDays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+}
+
+/* Calendar Day Base Styles */
+.calendarDay {
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2px;
+}
+
+/* Seçili ve aralıktaki günler için margin'i kaldır */
+.calendarDay.calendarDaySelected,
+.calendarDay.calendarDayInRange {
+  margin: 4px 0; /* Sadece alt ve üstten margin */
+}
+
+/* Calendar Day States */
+.calendarDayCurrentMonth {
+  color: var(--text-primary);
+}
+
+.calendarDayOtherMonth {
+  color: var(--text-secondary);
+  opacity: 0.6;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.calendarDayOtherMonth:hover:not(.calendarDayDisabled) {
+  background: var(--popup-hover-bg);
+  color: var(--primary);
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+.calendarDayToday {
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.1));
+  color: var(--primary);
+  font-weight: 700;
+  border: 2px solid rgba(var(--primary-rgb), 0.3);
+}
+
+/* Selected Day Styles */
+.calendarDaySelected {
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+  border-radius: 0;
+  margin: 5px;
+  position: relative;
+  z-index: 2;
+  padding: 6px 4px;
+}
+
+/* İlk seçilen gün (başlangıç) */
+.calendarDaySelected:first-of-type,
+.calendarDaySelected.calendarDayRangeStart {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background: var(--primary);
+  color: white;
+  padding: 6px 4px;
+}
+
+/* Son seçilen gün (bitiş) */
+.calendarDaySelected:last-of-type,
+.calendarDaySelected.calendarDayRangeEnd {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background: var(--primary);
+  color: white;
+  padding: 6px 4px;
+}
+
+/* Tek gün seçildiğinde */
+.calendarDaySelected.calendarDayRangeSingle {
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  padding: 6px 4px;
+}
+
+/* Range Days */
+.calendarDayInRange {
+  background: var(--primary);
+  color: white;
+  border-radius: 0;
+  margin: 0;
+  position: relative;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+  z-index: 2;
+
+}
+
+.calendarDayHoverRange {
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+  color: var(--primary);
+}
+
+/* Calendar Day Interactions */
+.calendarDay:hover:not(.calendarDayDisabled) {
+  background: var(--popup-hover-bg);
+  color: var(--primary);
+  transform: scale(1.05);
+}
+
+.calendarDayDisabled {
+  color: var(--text-secondary);
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.calendarDayDisabled:hover {
+  transform: none;
+  background: none;
+}
+
+/* Date Range Preview */
+.dateRangePreview {
+  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dateRangePreview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--primary), rgba(var(--primary-rgb), 0.5), var(--primary));
+}
+
+.previewText {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.previewText::before {
+  content: '📅';
+  font-size: 16px;
+}
+
+/* Responsive Design for DateRangePicker */
+@media (max-width: 768px) {
+  .calendarDropdown {
+    position: static;
+    width: 100%;
+    margin-top: 0;
+  }
+  
+  .calendarHeader {
+    padding: 12px 16px;
+  }
+  
+  .calendarGrid {
+    padding: 12px 16px 16px;
+  }
+  
+  .calendarDay {
+    min-height: 36px;
+    padding: 8px 4px;
+    font-size: 13px;
+  }
+}
