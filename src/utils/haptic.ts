@@ -12,45 +12,45 @@ declare global {
 let isHapticEnabled = false;
 let hasUserInteracted = false;
 
+// Sayfa yüklendiğinde hemen haptic'i etkinleştir
+const initializeHapticImmediately = () => {
+  try {
+    if ('vibrate' in navigator) {
+      isHapticEnabled = true;
+      hasUserInteracted = true; // Hemen user interaction olduğunu varsay
+      console.log('Haptic feedback initialized immediately');
+    } else {
+      isHapticEnabled = true;
+      hasUserInteracted = true;
+      console.log('Haptic feedback enabled for iOS Safari');
+    }
+  } catch (error) {
+    console.warn('Haptic initialization failed:', error);
+    isHapticEnabled = false;
+  }
+};
+
 // User interaction'ı tespit etmek için
 const enableHapticOnFirstInteraction = () => {
   if (!hasUserInteracted) {
     hasUserInteracted = true;
-    // İlk user interaction'da haptic'i test et
-    testHapticSupport();
+    // İlk user interaction'da haptic'i hemen test et (senkron)
+    testHapticSupportSync();
   }
 };
 
-// Haptic desteğini test et
-const testHapticSupport = async () => {
+// Haptic desteğini senkron olarak test et
+const testHapticSupportSync = () => {
   try {
     // Navigator.vibrate desteğini kontrol et
     if ('vibrate' in navigator) {
-      // Kısa bir test vibrasyonu
-      const result = navigator.vibrate(1);
-      if (result) {
-        isHapticEnabled = true;
-        console.log('Haptic feedback enabled');
-        return;
-      }
+      isHapticEnabled = true;
+      console.log('Haptic feedback enabled');
+      return;
     }
 
-    // iOS Safari için Web API kontrol
-    if ('permissions' in navigator) {
-      try {
-        // @ts-expect-error - Experimental vibrate permission API
-        const permission = await navigator.permissions.query({ name: 'vibrate' });
-        if (permission.state === 'granted') {
-          isHapticEnabled = true;
-        }
-      } catch {
-        // Vibrate permission API desteklenmiyorsa, varsayılan olarak etkinleştir
-        isHapticEnabled = true;
-      }
-    } else {
-      // Permission API yoksa, varsayılan olarak etkinleştir
-      isHapticEnabled = true;
-    }
+    // iOS Safari veya diğer tarayıcılar için varsayılan olarak etkinleştir
+    isHapticEnabled = true;
   } catch (error) {
     console.warn('Haptic feedback test failed:', error);
     isHapticEnabled = false;
@@ -59,9 +59,9 @@ const testHapticSupport = async () => {
 
 // PWA için gelişmiş vibration patterns
 const vibrateWithFallback = (pattern: number | number[]) => {
-  if (!hasUserInteracted) {
-    console.warn('Haptic feedback requires user interaction first');
-    return false;
+  if (!isHapticEnabled) {
+    // Eğer henüz etkinleştirilmemişse, hemen etkinleştir
+    initializeHapticImmediately();
   }
 
   if (!isHapticEnabled) {
@@ -90,8 +90,6 @@ export const hapticFeedback = {
 
   // Hafif dokunma (buton tıklamaları için)
   light: () => {
-    enableHapticOnFirstInteraction();
-    
     const success = vibrateWithFallback(10);
     
     // iOS Safari için haptic feedback
@@ -108,8 +106,6 @@ export const hapticFeedback = {
 
   // Orta şiddette dokunma (önemli aksiyonlar için)
   medium: () => {
-    enableHapticOnFirstInteraction();
-    
     const success = vibrateWithFallback(20);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -125,8 +121,6 @@ export const hapticFeedback = {
 
   // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için)
   heavy: () => {
-    enableHapticOnFirstInteraction();
-    
     const pattern: number | number[] = [30, 10, 30];
     
     const success = vibrateWithFallback(pattern);
@@ -144,8 +138,6 @@ export const hapticFeedback = {
 
   // Başarı feedback'i
   success: () => {
-    enableHapticOnFirstInteraction();
-    
     const success = vibrateWithFallback([10, 5, 10]);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -161,8 +153,6 @@ export const hapticFeedback = {
 
   // Hata feedback'i
   error: () => {
-    enableHapticOnFirstInteraction();
-    
     const success = vibrateWithFallback([50, 20, 50, 20, 50]);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -178,8 +168,6 @@ export const hapticFeedback = {
 
   // Uyarı feedback'i
   warning: () => {
-    enableHapticOnFirstInteraction();
-    
     const success = vibrateWithFallback([30, 15, 30]);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -201,15 +189,18 @@ export const useHaptic = () => {
 
 // PWA için document ready'de haptic'i initialize et
 if (typeof window !== 'undefined') {
-  // İlk user interaction'ı bekle
-  const initHapticOnInteraction = () => {
-    hapticFeedback.init();
-    // Event listener'ları kaldır
-    document.removeEventListener('click', initHapticOnInteraction);
-    document.removeEventListener('keydown', initHapticOnInteraction);
+  // Sayfa yüklendiğinde hemen haptic'i etkinleştir
+  initializeHapticImmediately();
+
+  // Ek güvenlik için user interaction'da da kontrol et
+  const ensureHapticEnabled = () => {
+    if (!isHapticEnabled) {
+      initializeHapticImmediately();
+    }
   };
 
-  // Click ve keydown event'lerini dinle
-  document.addEventListener('click', initHapticOnInteraction, { once: true });
-  document.addEventListener('keydown', initHapticOnInteraction, { once: true });
+  // Çeşitli user interaction event'lerini dinle (backup olarak)
+  document.addEventListener('touchstart', ensureHapticEnabled, { once: true, passive: true });
+  document.addEventListener('click', ensureHapticEnabled, { once: true });
+  document.addEventListener('keydown', ensureHapticEnabled, { once: true });
 }

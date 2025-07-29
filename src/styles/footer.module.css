@@ -44,14 +44,8 @@
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   font-family: var(--font-family);
   touch-action: manipulation;
-  -webkit-touch-callout: none;
 }
 
 .footerButton:hover {

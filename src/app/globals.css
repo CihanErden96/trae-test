@@ -148,10 +148,34 @@ a {
 }
 
 
-div, header, footer {
+/* Tüm touch ve selection davranışlarını tek seferde kontrol et */
+* {
+  /* Text selection'ı devre dışı bırak */
   user-select: none;
   -webkit-user-select: none;
+  -moz-user-select: none;
   -ms-user-select: none;
+  
+  /* Mobile touch davranışlarını kontrol et */
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* iOS Safari için ek kontroller */
+  -webkit-text-size-adjust: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sadece text input alanları için selection'ı tekrar aç */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="search"], 
+input[type="url"], 
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
 }
 
 
