@@ -314,7 +314,7 @@
 }
 
 .categoryHeader:hover {
-  transform: translateX(2px);
+  transform: translateY(2px);
 }
 
 .categoryTitle {
@@ -393,7 +393,7 @@
 
 .questionItem:hover {
   background-color: var(--popup-hover-bg);
-  transform: translateX(4px);
+  transform:translateX(-2px);
 }
 
 .questionItem:last-child {
@@ -942,7 +942,7 @@
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(50px) scale(0.9);
   }
   to {
     opacity: 1;

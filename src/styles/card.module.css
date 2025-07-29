@@ -172,7 +172,7 @@
 }
 
 .categoryHeader:hover {
-  transform: translateX(2px);
+  transform: translateX(-2px);
 }
 
 .categoryTitle {
@@ -224,7 +224,7 @@
 
 .actionItem:hover {
   background-color: var(--popup-hover-bg);
-  transform: translateX(4px);
+  transform: translateX(-1px);
 }
 
 .actionItem:last-child {
