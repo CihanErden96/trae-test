@@ -55,25 +55,10 @@ export default function Footer() {
   const handleDepartmentsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
-    // Touch duration'ı hesapla
-    let touchDuration = 0;
-    if ('changedTouches' in e) {
-      touchDuration = hapticFeedback.trackTouch.end();
-    }
-    
-    // Touch duration'a göre haptic feedback
-    if (touchDuration > 0) {
-      hapticFeedback.touchEnd();
-    } else {
-      hapticFeedback.light();
-    }
+    // Her durumda güçlü haptic feedback ver
+    hapticFeedback.touchEnd();
     
     createRippleEffect(e, setDepartmentsRipples);
-    
-    // Haptic feedback (iOS Safari)
-    if ('vibrate' in navigator) {
-      navigator.vibrate(10);
-    }
     
     setIsDepartmentsPopupOpen(true);
   };
@@ -81,18 +66,8 @@ export default function Footer() {
   const handlePeoplesAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
-    // Touch duration'ı hesapla
-    let touchDuration = 0;
-    if ('changedTouches' in e) {
-      touchDuration = hapticFeedback.trackTouch.end();
-    }
-    
-    // Touch duration'a göre haptic feedback
-    if (touchDuration > 0) {
-      hapticFeedback.touchEnd();
-    } else {
-      hapticFeedback.light();
-    }
+    // Her durumda güçlü haptic feedback ver
+    hapticFeedback.touchEnd();
     
     createRippleEffect(e, setPeoplesRipples);
     
@@ -102,18 +77,8 @@ export default function Footer() {
   const handleQuestionsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
-    // Touch duration'ı hesapla
-    let touchDuration = 0;
-    if ('changedTouches' in e) {
-      touchDuration = hapticFeedback.trackTouch.end();
-    }
-    
-    // Touch duration'a göre haptic feedback
-    if (touchDuration > 0) {
-      hapticFeedback.touchEnd();
-    } else {
-      hapticFeedback.light();
-    }
+    // Her durumda güçlü haptic feedback ver
+    hapticFeedback.touchEnd();
     
     createRippleEffect(e, setQuestionsRipples);
     
