@@ -63,7 +63,7 @@ export default function Footer() {
     
     // Touch duration'a göre haptic feedback
     if (touchDuration > 0) {
-      hapticFeedback.touchEnd(touchDuration);
+      hapticFeedback.touchEnd();
     } else {
       hapticFeedback.light();
     }
@@ -89,7 +89,7 @@ export default function Footer() {
     
     // Touch duration'a göre haptic feedback
     if (touchDuration > 0) {
-      hapticFeedback.touchEnd(touchDuration);
+      hapticFeedback.touchEnd();
     } else {
       hapticFeedback.light();
     }
@@ -110,7 +110,7 @@ export default function Footer() {
     
     // Touch duration'a göre haptic feedback
     if (touchDuration > 0) {
-      hapticFeedback.touchEnd(touchDuration);
+      hapticFeedback.touchEnd();
     } else {
       hapticFeedback.light();
     }

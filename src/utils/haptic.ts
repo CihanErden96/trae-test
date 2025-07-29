@@ -72,7 +72,7 @@ const testHapticSupport = async () => {
 };
 
 // PWA için gelişmiş vibration patterns
-const vibrateWithFallback = (pattern: number | number[], touchDuration?: number) => {
+const vibrateWithFallback = (pattern: number | number[]) => {
   if (!hasUserInteracted) {
     console.warn('Haptic feedback requires user interaction first');
     return false;
@@ -84,15 +84,7 @@ const vibrateWithFallback = (pattern: number | number[], touchDuration?: number)
 
   try {
     if ('vibrate' in navigator) {
-      // Touch duration'a göre vibration intensity'yi ayarla
-      let adjustedPattern = pattern;
-      if (touchDuration && typeof pattern === 'number') {
-        // Uzun basma için daha güçlü haptic
-        if (touchDuration > 200) {
-          adjustedPattern = Math.min(pattern * 1.5, 50);
-        }
-      }
-      return navigator.vibrate(adjustedPattern);
+      return navigator.vibrate(pattern);
     }
     return false;
   } catch (error) {
@@ -114,10 +106,10 @@ export const hapticFeedback = {
   trackTouch: trackTouchTiming,
 
   // Hafif dokunma (buton tıklamaları için) - onTouchEnd için optimize edildi
-  light: (touchDuration?: number) => {
+  light: () => {
     enableHapticOnFirstInteraction();
     
-    const success = vibrateWithFallback(10, touchDuration);
+    const success = vibrateWithFallback(10);
     
     // iOS Safari için haptic feedback
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -132,10 +124,10 @@ export const hapticFeedback = {
   },
 
   // Orta şiddette dokunma (önemli aksiyonlar için) - onTouchEnd için optimize edildi
-  medium: (touchDuration?: number) => {
+  medium: () => {
     enableHapticOnFirstInteraction();
     
-    const success = vibrateWithFallback(20, touchDuration);
+    const success = vibrateWithFallback(20);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
@@ -149,16 +141,12 @@ export const hapticFeedback = {
   },
 
   // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için) - onTouchEnd için optimize edildi
-  heavy: (touchDuration?: number) => {
+  heavy: () => {
     enableHapticOnFirstInteraction();
     
-    let pattern: number | number[] = [30, 10, 30];
-    // Uzun basma için daha güçlü pattern
-    if (touchDuration && touchDuration > 300) {
-      pattern = [40, 15, 40, 15, 40];
-    }
+    const pattern: number | number[] = [30, 10, 30];
     
-    const success = vibrateWithFallback(pattern, touchDuration);
+    const success = vibrateWithFallback(pattern);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
@@ -171,31 +159,14 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Touch end için özel haptic feedback - Tüm dokunmalarda güçlü titreşim
-  touchEnd: (touchDuration?: number) => {
+  // Touch end için özel haptic feedback - Güçlü titreşim
+  touchEnd: () => {
     enableHapticOnFirstInteraction();
     
-    let pattern: number | number[] = [25, 10, 25]; // Varsayılan güçlü pattern
-    let hapticType = 'medium';
+    const pattern: number | number[] = [25, 10, 25]; // Güçlü pattern
+    const hapticType = 'heavy';
     
-    // Touch duration'a göre pattern ayarla - Hepsi güçlü ama farklı desenler
-    if (touchDuration) {
-      if (touchDuration < 100) {
-        pattern = [30]; // Kısa ama güçlü tek titreşim
-        hapticType = 'heavy';
-      } else if (touchDuration < 200) {
-        pattern = [25, 5, 25]; // Çift güçlü titreşim
-        hapticType = 'heavy';
-      } else if (touchDuration < 500) {
-        pattern = [30, 10, 30, 10, 20]; // Uzun basma için ritmik güçlü pattern
-        hapticType = 'heavy';
-      } else {
-        pattern = [40, 15, 40, 15, 40, 15, 30]; // Çok uzun basma için en güçlü pattern
-        hapticType = 'heavy';
-      }
-    }
-    
-    const success = vibrateWithFallback(pattern, touchDuration);
+    const success = vibrateWithFallback(pattern);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
