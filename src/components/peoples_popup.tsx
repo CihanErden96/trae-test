@@ -103,23 +103,29 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
     });
   };
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
+  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
-      hapticFeedback.light();
       onClose();
     }
   };
 
   const handleCloseButton = () => {
-    hapticFeedback.light();
     onClose();
   };
 
   if (!isOpen) return null;
 
   return createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick}>
-      <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+    <div className={styles.overlay} 
+         onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+         onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+         onTouchEnd={(e) => {e.preventDefault();handleOverlayClick(e);}}
+         onMouseUp={(e) => {e.preventDefault();handleOverlayClick(e);}}>
+      <div className={styles.popup} 
+           onTouchStart={(e) => {e.preventDefault();e.stopPropagation();}}
+           onMouseDown={(e) => {e.preventDefault();e.stopPropagation();}}
+           onTouchEnd={(e) => {e.preventDefault();e.stopPropagation();}}
+           onMouseUp={(e) => {e.preventDefault();e.stopPropagation();}}>
         <div className={styles.header}>
           <div className={styles.headerLeft}>
             <span className={styles.totalAllScore}>
@@ -127,7 +133,11 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
             </span>
           </div>
           <h2 className={styles.title}>Personel Listesi</h2>
-          <button className={styles.closeButton} onClick={handleCloseButton}>
+          <button className={styles.closeButton} 
+                  onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onTouchEnd={(e) => {e.preventDefault();handleCloseButton();}}
+                  onMouseUp={(e) => {e.preventDefault();handleCloseButton();}}>
             ×
           </button>
         </div>
@@ -148,7 +158,10 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                   </div>
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                     <button
-                      onClick={() => handleDeleteClick(person)}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleDeleteClick(person);}}
+                      onMouseUp={(e) => {e.preventDefault();handleDeleteClick(person);}}
                       style={{
                         background: '#dc2626',
                         color: 'white',
@@ -172,14 +185,25 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
 
       {/* Delete Confirmation Popup */}
       {deleteConfirmation.isOpen && (
-        <div className={styles.overlay} onClick={handleCancelDelete}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+             onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+             onTouchEnd={(e) => {e.preventDefault();handleCancelDelete();}}
+             onMouseUp={(e) => {e.preventDefault();handleCancelDelete();}}>
           <div 
             className={`${styles.popup} ${styles.confirmationPopup}`}
-            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => {e.preventDefault();e.stopPropagation();}}
+            onMouseDown={(e) => {e.preventDefault();e.stopPropagation();}}
+            onTouchEnd={(e) => {e.preventDefault();e.stopPropagation();}}
+            onMouseUp={(e) => {e.preventDefault();e.stopPropagation();}}
           >
             <div className={styles.header}>
               <h2 className={styles.title}>Emin misiniz?</h2>
-              <button className={styles.closeButton} onClick={handleCancelDelete}>
+              <button className={styles.closeButton} 
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleCancelDelete();}}
+                      onMouseUp={(e) => {e.preventDefault();handleCancelDelete();}}>
                 ×
               </button>
             </div>
@@ -196,13 +220,19 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                 <div className={styles.confirmationActions}>
                   <button
                     className={styles.cancelButton}
-                    onClick={handleCancelDelete}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onTouchEnd={(e) => {e.preventDefault();handleCancelDelete();}}
+                    onMouseUp={(e) => {e.preventDefault();handleCancelDelete();}}
                   >
                     İptal
                   </button>
                   <button
                     className={styles.deleteButton}
-                    onClick={handleConfirmDelete}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                    onTouchEnd={(e) => {e.preventDefault();handleConfirmDelete();}}
+                    onMouseUp={(e) => {e.preventDefault();handleConfirmDelete();}}
                   >
                     Sil
                   </button>

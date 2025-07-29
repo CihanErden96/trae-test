@@ -194,7 +194,25 @@ export function CardAksiyonlarMain() {
   return (
     <>
       <div className={styles.cardContainer}>
-        <div className={styles.card} onClick={handleCardClick}>
+        <div 
+          className={styles.card}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            hapticFeedback.medium();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            hapticFeedback.medium();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            handleCardClick();
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            handleCardClick();
+          }}
+        >
           <div className={styles.cardContent}>
             {/* Card Label - Sol Üst */}
             <div className={`${styles.cardLabel}`}>
@@ -255,21 +273,54 @@ export function CardAksiyonlarMain() {
 
       {/* Aksiyonlar Popup */}
       {isPopupOpen && createPortal(
-        <div className={styles.overlay} 
-        onClick={(e) => {
-          if (e.target === e.currentTarget) {
+        <div 
+          className={styles.overlay} 
+          onTouchStart={(e) => {
             e.preventDefault();
-            handleClosePopup();
-          }
-        }}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            if (e.target === e.currentTarget) {
+              handleClosePopup();
+            }
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            if (e.target === e.currentTarget) {
+              handleClosePopup();
+            }
+          }}
+        >
+          <div 
+            className={styles.popup} 
+            onTouchStart={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+          >
             <div className={styles.header}>
               <h2 className={styles.title}>
                 Aksiyonlar
               </h2>
               <button 
                 className={styles.closeButton}
-                onClick={handleClosePopup}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  handleClosePopup();
+                }}
+                onMouseUp={(e) => {
+                  e.preventDefault();
+                  handleClosePopup();
+                }}
                 aria-label="Kapat"
               >
                 ×
@@ -348,8 +399,20 @@ export default function AksiyonlarPopup({
       <div className={styles.categoryGroup}>
         <div 
           className={styles.categoryHeader}
-          onClick={() => {
-            hapticFeedback.init();
+          onTouchStart={(e) => {
+            e.preventDefault();
+            hapticFeedback.light();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            hapticFeedback.light();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
             setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
           }}
         >
@@ -370,7 +433,22 @@ export default function AksiyonlarPopup({
                 <div 
                   key={action.id} 
                   className={styles.actionItem}
-                  onClick={() => handleActionClick(action)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    hapticFeedback.light();
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    hapticFeedback.light();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleActionClick(action);
+                  }}
+                  onMouseUp={(e) => {
+                    e.preventDefault();
+                    handleActionClick(action);
+                  }}
                 >
                   <p className={styles.actionDescription}>
                     <strong>{action.question}</strong><br />
@@ -387,7 +465,22 @@ export default function AksiyonlarPopup({
                 <div className={styles.loadMoreContainer}>
                   <button 
                     className={styles.loadMoreButton}
-                    onClick={handleShowMorePending}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      hapticFeedback.light();
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      hapticFeedback.light();
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      handleShowMorePending();
+                    }}
+                    onMouseUp={(e) => {
+                      e.preventDefault();
+                      handleShowMorePending();
+                    }}
                   >
                     Daha Fazlası İçin Tıkla ({department.pendingActionsList.length - pendingDisplayCount} kalan)
                   </button>
@@ -406,8 +499,20 @@ export default function AksiyonlarPopup({
       <div className={styles.categoryGroup}>
         <div 
           className={styles.categoryHeader}
-          onClick={() => {
+          onTouchStart={(e) => {
+            e.preventDefault();
             hapticFeedback.light();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+            hapticFeedback.light();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed);
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
             setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed);
           }}
         >
@@ -428,7 +533,22 @@ export default function AksiyonlarPopup({
                 <div 
                   key={action.id} 
                   className={`${styles.actionItem} ${styles.completedAction}`}
-                  onClick={() => handleActionClick(action)}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    hapticFeedback.light();
+                  }}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    hapticFeedback.light();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    handleActionClick(action);
+                  }}
+                  onMouseUp={(e) => {
+                    e.preventDefault();
+                    handleActionClick(action);
+                  }}
                 >
                   <p className={styles.actionDescription}>
                     <strong>{action.question}</strong><br />
@@ -445,7 +565,22 @@ export default function AksiyonlarPopup({
                 <div className={styles.loadMoreContainer}>
                   <button 
                     className={styles.loadMoreButton}
-                    onClick={handleShowMoreCompleted}
+                    onTouchStart={(e) => {
+                      e.preventDefault();
+                      hapticFeedback.light();
+                    }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      hapticFeedback.light();
+                    }}
+                    onTouchEnd={(e) => {
+                      e.preventDefault();
+                      handleShowMoreCompleted();
+                    }}
+                    onMouseUp={(e) => {
+                      e.preventDefault();
+                      handleShowMoreCompleted();
+                    }}
                   >
                     Daha Fazlası İçin Tıkla ({department.completedActionsList.length - completedDisplayCount} kalan)
                   </button>
@@ -462,17 +597,52 @@ export default function AksiyonlarPopup({
 
       {/* Aksiyon Detay Popup'ı */}
       {isActionDetailOpen && selectedAction && createPortal(
-        <div className={styles.overlay} onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            handleCloseActionDetail();
-          }
-        }}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+        <div 
+          className={styles.overlay} 
+          onTouchStart={(e) => {
+            e.preventDefault();
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+          }}
+          onTouchEnd={(e) => {
+            e.preventDefault();
+            if (e.target === e.currentTarget) {
+              handleCloseActionDetail();
+            }
+          }}
+          onMouseUp={(e) => {
+            e.preventDefault();
+            if (e.target === e.currentTarget) {
+              handleCloseActionDetail();
+            }
+          }}
+        >
+          <div 
+             className={styles.popup} 
+             onTouchStart={(e) => e.stopPropagation()}
+             onMouseDown={(e) => e.stopPropagation()}
+             onTouchEnd={(e) => e.stopPropagation()}
+             onMouseUp={(e) => e.stopPropagation()}
+           >
             <div className={styles.header}>
               <h2 className={styles.title}>Aksiyon</h2>
               <button 
                 className={styles.closeButton}
-                onClick={handleCloseActionDetail}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                }}
+                onTouchEnd={(e) => {
+                  e.preventDefault();
+                  handleCloseActionDetail();
+                }}
+                onMouseUp={(e) => {
+                  e.preventDefault();
+                  handleCloseActionDetail();
+                }}
                 aria-label="Kapat"
               >
                 ×

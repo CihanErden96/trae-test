@@ -146,9 +146,8 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
     setDepartmentToDelete(null);
   };
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
+  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
-      hapticFeedback.light();
       onClose();
     }
   };
@@ -159,13 +158,26 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
   return createPortal(
     <>
-      <div className={popupStyles.overlay} onClick={handleOverlayClick}>
-        <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+      <div className={popupStyles.overlay} 
+           onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+           onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+           onTouchEnd={(e) => {e.preventDefault();handleOverlayClick(e);}}
+           onMouseUp={(e) => {e.preventDefault();handleOverlayClick(e);}}>
+        <div 
+          className={popupStyles.popup} 
+          onTouchStart={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
+          onTouchEnd={(e) => e.stopPropagation()}
+          onMouseUp={(e) => e.stopPropagation()}
+        >
           <div className={popupStyles.header}>
             <h2 className={popupStyles.title}>Departmanlar</h2>
             <button 
               className={popupStyles.closeButton}
-              onClick={onClose}
+              onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+              onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+              onTouchEnd={(e) => {e.preventDefault();onClose();}}
+              onMouseUp={(e) => {e.preventDefault();onClose();}}
               aria-label="Kapat"
             >
               ×
@@ -178,7 +190,10 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                 <div 
                   key={department.id} 
                   className={popupStyles.departmentCard}
-                  onClick={() => handleDepartmentClick(department)}
+                  onTouchStart={(e) => {e.preventDefault();hapticFeedback.medium();}}
+                  onMouseDown={(e) => {e.preventDefault();hapticFeedback.medium();}}
+                  onTouchEnd={(e) => {e.preventDefault();handleDepartmentClick(department);}}
+                  onMouseUp={(e) => {e.preventDefault();handleDepartmentClick(department);}}
                 >
                   <div className={popupStyles.departmentHeader}>
                     <h3 className={popupStyles.departmentName}>{department.name}</h3>
@@ -198,7 +213,11 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
               ))}
               
               {/* Yeni Departman Ekle Butonu */}
-              <div className={popupStyles.addDepartmentItem} onClick={handleAddDepartment}>
+              <div className={popupStyles.addDepartmentItem} 
+                   onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                   onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                   onTouchEnd={(e) => {e.preventDefault();handleAddDepartment();}}
+                   onMouseUp={(e) => {e.preventDefault();handleAddDepartment();}}>
                 <div className={popupStyles.addDepartmentContent}>
                   <div className={popupStyles.addIcon}>+</div>
                   <div className={popupStyles.addText}>
@@ -214,17 +233,26 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Yeni Departman Ekleme Popup'ı */}
         {isAddDepartmentOpen && (
-          <div className={popupStyles.overlay} onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleCloseAddDepartment();
-            }
-          }}>
-            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={popupStyles.overlay} 
+               onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+               onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+               onTouchEnd={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseAddDepartment();}}}
+               onMouseUp={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseAddDepartment();}}}>
+            <div 
+            className={popupStyles.popup} 
+            onTouchStart={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+          >
               <div className={popupStyles.header}>
                 <h2 className={popupStyles.title}>Yeni Departman Ekle</h2>
                 <button 
                   className={popupStyles.closeButton}
-                  onClick={handleCloseAddDepartment}
+                  onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onTouchEnd={(e) => {e.preventDefault();handleCloseAddDepartment();}}
+                  onMouseUp={(e) => {e.preventDefault();handleCloseAddDepartment();}}
                   aria-label="Kapat"
                 >
                   ×
@@ -247,13 +275,19 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                   <div className={popupStyles.formActions}>
                     <button 
                       className={popupStyles.cancelButton}
-                      onClick={handleCloseAddDepartment}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleCloseAddDepartment();}}
+                      onMouseUp={(e) => {e.preventDefault();handleCloseAddDepartment();}}
                     >
                       İptal
                     </button>
                     <button 
                       className={popupStyles.saveButton}
-                      onClick={handleSaveDepartment}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.success();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.success();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleSaveDepartment();}}
+                      onMouseUp={(e) => {e.preventDefault();handleSaveDepartment();}}
                       disabled={!newDepartmentName.trim()}
                     >
                       Kaydet
@@ -267,17 +301,26 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Departman Detay Popup'ı */}
         {isDepartmentDetailOpen && selectedDepartment && (
-          <div className={popupStyles.overlay} onClick={(e) => {
-            if (e.target === e.currentTarget) {
-              handleCloseDepartmentDetail();
-            }
-          }}>
-            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+          <div className={popupStyles.overlay} 
+               onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+               onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+               onTouchEnd={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseDepartmentDetail();}}}
+               onMouseUp={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseDepartmentDetail();}}}>
+            <div 
+            className={popupStyles.popup} 
+            onTouchStart={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
+          >
               <div className={popupStyles.header}>
                 <h2 className={popupStyles.title}>{selectedDepartment.name} Detayları</h2>
                 <button 
                   className={popupStyles.closeButton}
-                  onClick={handleCloseDepartmentDetail}
+                  onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                  onTouchEnd={(e) => {e.preventDefault();handleCloseDepartmentDetail();}}
+                  onMouseUp={(e) => {e.preventDefault();handleCloseDepartmentDetail();}}
                   aria-label="Kapat"
                 >
                   ×
@@ -309,20 +352,29 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                     <div className={popupStyles.formActions}>
                       <button 
                         className={popupStyles.deleteButton}
-                        onClick={() => handleDeleteDepartment(selectedDepartment)}
+                        onTouchStart={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                        onMouseDown={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                        onTouchEnd={(e) => {e.preventDefault();handleDeleteDepartment(selectedDepartment);}}
+                        onMouseUp={(e) => {e.preventDefault();handleDeleteDepartment(selectedDepartment);}}
                       >
                         Sil
                       </button>
                       <div className={popupStyles.rightActions}>
                         <button 
                           className={popupStyles.cancelButton}
-                          onClick={handleCancelEditDepartment}
+                          onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                          onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                          onTouchEnd={(e) => {e.preventDefault();handleCancelEditDepartment();}}
+                          onMouseUp={(e) => {e.preventDefault();handleCancelEditDepartment();}}
                         >
                           İptal
                         </button>
                         <button 
                           className={popupStyles.saveButton}
-                          onClick={handleSaveEditDepartment}
+                          onTouchStart={(e) => {e.preventDefault();hapticFeedback.success();}}
+                          onMouseDown={(e) => {e.preventDefault();hapticFeedback.success();}}
+                          onTouchEnd={(e) => {e.preventDefault();handleSaveEditDepartment();}}
+                          onMouseUp={(e) => {e.preventDefault();handleSaveEditDepartment();}}
                           disabled={!editedDepartmentName.trim()}
                         >
                           Güncelle
@@ -339,7 +391,13 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
         {/* Silme Onay Popup'ı */}
         {showDeleteConfirmation && departmentToDelete && (
           <div className={popupStyles.overlay}>
-            <div className={popupStyles.popup} onClick={(e) => e.stopPropagation()}>
+            <div 
+              className={popupStyles.popup}
+              onTouchStart={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
+            >
               <div className={popupStyles.header}>
                 <h2 className={popupStyles.title}>Departmanı Sil</h2>
               </div>
@@ -355,13 +413,19 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                   <div className={popupStyles.confirmationActions}>
                     <button 
                       className={popupStyles.cancelButton}
-                      onClick={cancelDeleteDepartment}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchEnd={(e) => {e.preventDefault();cancelDeleteDepartment();}}
+                      onMouseUp={(e) => {e.preventDefault();cancelDeleteDepartment();}}
                     >
                       İptal
                     </button>
                     <button 
                       className={popupStyles.deleteConfirmButton}
-                      onClick={confirmDeleteDepartment}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                      onTouchEnd={(e) => {e.preventDefault();confirmDeleteDepartment();}}
+                      onMouseUp={(e) => {e.preventDefault();confirmDeleteDepartment();}}
                     >
                       Sil
                     </button>

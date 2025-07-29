@@ -264,9 +264,8 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     });
   }, [newQuestion.question, newQuestion.description, isAddQuestionOpen, isEditQuestionOpen]);
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
+  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
-      hapticFeedback.light();
       onClose();
     }
   };
@@ -277,7 +276,11 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
   const totalAllScore = questions.reduce((sum, question) => sum + question.score, 0);
 
   return createPortal(
-    <div className={styles.overlay} onClick={handleOverlayClick}>
+    <div className={styles.overlay} 
+         onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+         onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+         onTouchEnd={(e) => {e.preventDefault();handleOverlayClick(e);}}
+         onMouseUp={(e) => {e.preventDefault();handleOverlayClick(e);}}>
       <div className={styles.popup}>
         <div className={styles.header}>
           <div className={styles.headerLeft}>
@@ -286,7 +289,10 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
           <h2 className={styles.title}>5S Soruları</h2>
           <button 
             className={styles.closeButton}
-            onClick={onClose}
+            onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+            onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+            onTouchEnd={(e) => {e.preventDefault();onClose();}}
+            onMouseUp={(e) => {e.preventDefault();onClose();}}
             aria-label="Kapat"
           >
             ×
@@ -303,7 +309,10 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 <div key={category} className={styles.categoryGroup}>
                   <div 
                     className={styles.categoryHeader}
-                    onClick={() => toggleCategory(category)}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onTouchEnd={(e) => {e.preventDefault();toggleCategory(category);}}
+                    onMouseUp={(e) => {e.preventDefault();toggleCategory(category);}}
                   >
                     <div className={styles.categoryTitle}>
                       <span className={styles.categoryIcon}>
@@ -323,7 +332,10 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                         <div 
                           key={question.id}
                           className={styles.questionItem}
-                          onClick={() => handleQuestionClick(question)}
+                          onTouchStart={(e) => {e.preventDefault();hapticFeedback.medium();}}
+                          onMouseDown={(e) => {e.preventDefault();hapticFeedback.medium();}}
+                          onTouchEnd={(e) => {e.preventDefault();handleQuestionClick(question);}}
+                          onMouseUp={(e) => {e.preventDefault();handleQuestionClick(question);}}
                         >
                           <div className={styles.questionHeader}>
                             <h3 className={styles.questionTitle}>{question.question}</h3>
@@ -338,7 +350,11 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
               );
             })}
             
-            <div className={styles.addQuestionItem} onClick={handleAddQuestion}>
+            <div className={styles.addQuestionItem} 
+                 onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                 onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                 onTouchEnd={(e) => {e.preventDefault();handleAddQuestion();}}
+                 onMouseUp={(e) => {e.preventDefault();handleAddQuestion();}}>
               <div className={styles.addQuestionContent}>
                 <div className={styles.addIcon}>+</div>
                 <div className={styles.addText}>
@@ -353,17 +369,20 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
       {/* Soru Düzenleme Popup'ı */}
       {isEditQuestionOpen && (
-        <div className={styles.overlay} onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            handleCloseEditQuestion();
-          }
-        }}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onTouchEnd={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseEditQuestion();}}}
+             onMouseUp={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseEditQuestion();}}}>
           <div className={styles.popup}>
             <div className={styles.header}>
               <h2 className={styles.title}>Soru Düzenle</h2>
               <button 
                 className={styles.closeButton}
-                onClick={handleCloseEditQuestion}
+                onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                onTouchEnd={(e) => {e.preventDefault();handleCloseEditQuestion();}}
+                onMouseUp={(e) => {e.preventDefault();handleCloseEditQuestion();}}
                 aria-label="Kapat"
               >
                 ×
@@ -430,20 +449,29 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 <div className={styles.formActions}>
                   <button 
                     className={styles.deleteButton}
-                    onClick={handleDeleteQuestion}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                    onTouchEnd={(e) => {e.preventDefault();handleDeleteQuestion();}}
+                    onMouseUp={(e) => {e.preventDefault();handleDeleteQuestion();}}
                   >
                     Sil
                   </button>
                   <div className={styles.rightActions}>
                     <button 
                       className={styles.cancelButton}
-                      onClick={handleCloseEditQuestion}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleCloseEditQuestion();}}
+                      onMouseUp={(e) => {e.preventDefault();handleCloseEditQuestion();}}
                     >
                       İptal
                     </button>
                     <button 
                       className={styles.saveButton}
-                      onClick={handleUpdateQuestion}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.success();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.success();}}
+                      onTouchEnd={(e) => {e.preventDefault();handleUpdateQuestion();}}
+                      onMouseUp={(e) => {e.preventDefault();handleUpdateQuestion();}}
                       disabled={!newQuestion.category || !newQuestion.question || !newQuestion.description || !newQuestion.score}
                     >
                       Güncelle
@@ -456,19 +484,22 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
         </div>
       )}
 
-      {/* Yeni Soru Ekleme Popup'ı */}
+      {/* Soru Ekleme Popup'ı */}
       {isAddQuestionOpen && (
-        <div className={styles.overlay} onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            handleCloseAddQuestion();
-          }
-        }}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onTouchEnd={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseAddQuestion();}}}
+             onMouseUp={(e) => {e.preventDefault();if (e.target === e.currentTarget) {handleCloseAddQuestion();}}}>
           <div className={styles.popup}>
             <div className={styles.header}>
               <h2 className={styles.title}>Yeni Soru Ekle</h2>
               <button 
                 className={styles.closeButton}
-                onClick={handleCloseAddQuestion}
+                onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                onTouchEnd={(e) => {e.preventDefault();handleCloseAddQuestion();}}
+                onMouseUp={(e) => {e.preventDefault();handleCloseAddQuestion();}}
                 aria-label="Kapat"
               >
                 ×
@@ -535,13 +566,19 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 <div className={styles.formActions}>
                   <button 
                     className={styles.cancelButton}
-                    onClick={handleCloseAddQuestion}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onTouchEnd={(e) => {e.preventDefault();handleCloseAddQuestion();}}
+                    onMouseUp={(e) => {e.preventDefault();handleCloseAddQuestion();}}
                   >
                     İptal
                   </button>
                   <button 
                     className={styles.saveButton}
-                    onClick={handleSaveQuestion}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.success();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.success();}}
+                    onTouchEnd={(e) => {e.preventDefault();handleSaveQuestion();}}
+                    onMouseUp={(e) => {e.preventDefault();handleSaveQuestion();}}
                     disabled={!newQuestion.category || !newQuestion.question || !newQuestion.description || !newQuestion.score}
                   >
                     Kaydet
@@ -555,14 +592,25 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
       {/* Silme Onayı Popup'ı */}
       {showDeleteConfirmation && questionToDelete && (
-        <div className={styles.overlay} onClick={cancelDeleteQuestion}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();}}}
+             onTouchEnd={(e) => {e.preventDefault();if (e.target === e.currentTarget) {cancelDeleteQuestion();}}}
+             onMouseUp={(e) => {e.preventDefault();if (e.target === e.currentTarget) {cancelDeleteQuestion();}}}>
           <div 
             className={`${styles.popup} ${styles.confirmationPopup}`}
-            onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
+            onTouchEnd={(e) => e.stopPropagation()}
+            onMouseUp={(e) => e.stopPropagation()}
           >
             <div className={styles.header}>
               <h2 className={styles.title}>Emin misiniz?</h2>
-              <button className={styles.closeButton} onClick={cancelDeleteQuestion}>
+              <button className={styles.closeButton} 
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchEnd={(e) => {e.preventDefault();cancelDeleteQuestion();}}
+                      onMouseUp={(e) => {e.preventDefault();cancelDeleteQuestion();}}>
                 ×
               </button>
             </div>
@@ -577,13 +625,19 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 <div className={styles.confirmationActions}>
                   <button 
                     className={styles.cancelButton}
-                    onClick={cancelDeleteQuestion}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onTouchEnd={(e) => {e.preventDefault();cancelDeleteQuestion();}}
+                    onMouseUp={(e) => {e.preventDefault();cancelDeleteQuestion();}}
                   >
                     İptal
                   </button>
                   <button 
                     className={styles.deleteButton}
-                    onClick={confirmDeleteQuestion}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                    onTouchEnd={(e) => {e.preventDefault();confirmDeleteQuestion();}}
+                    onMouseUp={(e) => {e.preventDefault();confirmDeleteQuestion();}}
                   >
                     Sil
                   </button>
