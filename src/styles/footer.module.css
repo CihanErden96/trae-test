@@ -50,6 +50,8 @@
   -moz-user-select: none;
   -ms-user-select: none;
   font-family: var(--font-family);
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
 }
 
 .questionsButton:hover {

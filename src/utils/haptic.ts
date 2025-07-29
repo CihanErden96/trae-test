@@ -11,6 +11,20 @@ declare global {
 // PWA için haptic feedback durumunu takip etmek
 let isHapticEnabled = false;
 let hasUserInteracted = false;
+let touchStartTime = 0;
+let touchEndTime = 0;
+
+// Touch event timing'i için
+const trackTouchTiming = {
+  start: () => {
+    touchStartTime = Date.now();
+  },
+  end: () => {
+    touchEndTime = Date.now();
+    return touchEndTime - touchStartTime;
+  },
+  getDuration: () => touchEndTime - touchStartTime
+};
 
 // User interaction'ı tespit etmek için
 const enableHapticOnFirstInteraction = () => {
@@ -58,7 +72,7 @@ const testHapticSupport = async () => {
 };
 
 // PWA için gelişmiş vibration patterns
-const vibrateWithFallback = (pattern: number | number[]) => {
+const vibrateWithFallback = (pattern: number | number[], touchDuration?: number) => {
   if (!hasUserInteracted) {
     console.warn('Haptic feedback requires user interaction first');
     return false;
@@ -70,7 +84,15 @@ const vibrateWithFallback = (pattern: number | number[]) => {
 
   try {
     if ('vibrate' in navigator) {
-      return navigator.vibrate(pattern);
+      // Touch duration'a göre vibration intensity'yi ayarla
+      let adjustedPattern = pattern;
+      if (touchDuration && typeof pattern === 'number') {
+        // Uzun basma için daha güçlü haptic
+        if (touchDuration > 200) {
+          adjustedPattern = Math.min(pattern * 1.5, 50);
+        }
+      }
+      return navigator.vibrate(adjustedPattern);
     }
     return false;
   } catch (error) {
@@ -88,11 +110,14 @@ export const hapticFeedback = {
   // Haptic durumunu kontrol et
   isEnabled: () => isHapticEnabled,
 
-  // Hafif dokunma (buton tıklamaları için)
-  light: () => {
+  // Touch timing'i track et
+  trackTouch: trackTouchTiming,
+
+  // Hafif dokunma (buton tıklamaları için) - onTouchEnd için optimize edildi
+  light: (touchDuration?: number) => {
     enableHapticOnFirstInteraction();
     
-    const success = vibrateWithFallback(10);
+    const success = vibrateWithFallback(10, touchDuration);
     
     // iOS Safari için haptic feedback
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -106,11 +131,11 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Orta şiddette dokunma (önemli aksiyonlar için)
-  medium: () => {
+  // Orta şiddette dokunma (önemli aksiyonlar için) - onTouchEnd için optimize edildi
+  medium: (touchDuration?: number) => {
     enableHapticOnFirstInteraction();
     
-    const success = vibrateWithFallback(20);
+    const success = vibrateWithFallback(20, touchDuration);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
@@ -123,15 +148,41 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için)
-  heavy: () => {
+  // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için) - onTouchEnd için optimize edildi
+  heavy: (touchDuration?: number) => {
     enableHapticOnFirstInteraction();
     
-    const success = vibrateWithFallback([30, 10, 30]);
+    let pattern: number | number[] = [30, 10, 30];
+    // Uzun basma için daha güçlü pattern
+    if (touchDuration && touchDuration > 300) {
+      pattern = [40, 15, 40, 15, 40];
+    }
+    
+    const success = vibrateWithFallback(pattern, touchDuration);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
         window.hapticFeedback('heavy');
+      } catch (error) {
+        console.warn('iOS haptic feedback failed:', error);
+      }
+    }
+    
+    return success;
+  },
+
+  // Touch end için özel haptic feedback
+  touchEnd: (touchDuration?: number) => {
+    enableHapticOnFirstInteraction();
+    
+    let intensity = 25; // Varsayılan hafif
+  
+    
+    const success = vibrateWithFallback(intensity, touchDuration);
+    
+    if ('hapticFeedback' in window && window.hapticFeedback) {
+      try {
+        window.hapticFeedback('light');
       } catch (error) {
         console.warn('iOS haptic feedback failed:', error);
       }
@@ -199,17 +250,15 @@ export const useHaptic = () => {
 
 // PWA için document ready'de haptic'i initialize et
 if (typeof window !== 'undefined') {
-  // İlk user interaction'ı bekle
+  // İlk user interaction'ı bekle - touchend hariç
   const initHapticOnInteraction = () => {
     hapticFeedback.init();
     // Event listener'ları kaldır
-    document.removeEventListener('touchstart', initHapticOnInteraction);
     document.removeEventListener('click', initHapticOnInteraction);
     document.removeEventListener('keydown', initHapticOnInteraction);
   };
 
-  // Çeşitli user interaction event'lerini dinle
-  document.addEventListener('touchstart', initHapticOnInteraction, { once: true, passive: true });
+  // Sadece click ve keydown event'lerini dinle - touchend kaldırıldı
   document.addEventListener('click', initHapticOnInteraction, { once: true });
   document.addEventListener('keydown', initHapticOnInteraction, { once: true });
 }

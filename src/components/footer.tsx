@@ -16,13 +16,27 @@ export default function Footer() {
   const [isPeoplesPopupOpen, setIsPeoplesPopupOpen] = useState(false);
   const [isDepartmentsPopupOpen, setIsDepartmentsPopupOpen] = useState(false);
 
-  const handleDepartmentsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Haptic feedback ekle
-    hapticFeedback.light();
-    
+  // Generic function to handle both click and touch events
+  const createRippleEffect = (
+    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>,
+    setRipples: React.Dispatch<React.SetStateAction<Array<{id: number, x: number, y: number}>>>
+  ) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    let x, y;
+    
+    if ('changedTouches' in e && e.changedTouches.length > 0) {
+      // Touch event (touchend uses changedTouches)
+      x = e.changedTouches[0].clientX - rect.left;
+      y = e.changedTouches[0].clientY - rect.top;
+    } else if ('clientX' in e) {
+      // Mouse event
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+    } else {
+      // Fallback to center
+      x = rect.width / 2;
+      y = rect.height / 2;
+    }
     
     const newRipple = {
       id: Date.now(),
@@ -30,68 +44,86 @@ export default function Footer() {
       y
     };
     
-    setDepartmentsRipples(prev => [...prev, newRipple]);
+    setRipples(prev => [...prev, newRipple]);
+    
+    // Ripple'ı temizle
+    setTimeout(() => {
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+    }, 600);
+  };
+
+  const handleDepartmentsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    
+    // Touch duration'ı hesapla
+    let touchDuration = 0;
+    if ('changedTouches' in e) {
+      touchDuration = hapticFeedback.trackTouch.end();
+    }
+    
+    // Touch duration'a göre haptic feedback
+    if (touchDuration > 0) {
+      hapticFeedback.touchEnd(touchDuration);
+    } else {
+      hapticFeedback.light();
+    }
+    
+    createRippleEffect(e, setDepartmentsRipples);
     
     // Haptic feedback (iOS Safari)
     if ('vibrate' in navigator) {
       navigator.vibrate(10);
     }
     
-    // Ripple'ı temizle
-    setTimeout(() => {
-      setDepartmentsRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, 600);
-    
     setIsDepartmentsPopupOpen(true);
   };
 
-  const handlePeoplesClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Haptic feedback ekle
-    hapticFeedback.light();
+  const handlePeoplesAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // Touch duration'ı hesapla
+    let touchDuration = 0;
+    if ('changedTouches' in e) {
+      touchDuration = hapticFeedback.trackTouch.end();
+    }
     
-    const newRipple = {
-      id: Date.now(),
-      x,
-      y
-    };
+    // Touch duration'a göre haptic feedback
+    if (touchDuration > 0) {
+      hapticFeedback.touchEnd(touchDuration);
+    } else {
+      hapticFeedback.light();
+    }
     
-    setPeoplesRipples(prev => [...prev, newRipple]);
-    
-    // Ripple'ı temizle
-    setTimeout(() => {
-      setPeoplesRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, 600);
+    createRippleEffect(e, setPeoplesRipples);
     
     setIsPeoplesPopupOpen(true);
   };
 
-  const handleQuestionsClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // Haptic feedback ekle
-    hapticFeedback.light();
+  const handleQuestionsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // Touch duration'ı hesapla
+    let touchDuration = 0;
+    if ('changedTouches' in e) {
+      touchDuration = hapticFeedback.trackTouch.end();
+    }
     
-    const newRipple = {
-      id: Date.now(),
-      x,
-      y
-    };
+    // Touch duration'a göre haptic feedback
+    if (touchDuration > 0) {
+      hapticFeedback.touchEnd(touchDuration);
+    } else {
+      hapticFeedback.light();
+    }
     
-    setQuestionsRipples(prev => [...prev, newRipple]);
-    
-    // Ripple'ı temizle
-    setTimeout(() => {
-      setQuestionsRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
-    }, 600);
+    createRippleEffect(e, setQuestionsRipples);
     
     setIsQuestionsPopupOpen(true);
   };
+
+  // Legacy click handlers for backward compatibility
+  const handleDepartmentsClick = (e: React.MouseEvent<HTMLButtonElement>) => handleDepartmentsAction(e);
+  const handlePeoplesClick = (e: React.MouseEvent<HTMLButtonElement>) => handlePeoplesAction(e);
+  const handleQuestionsClick = (e: React.MouseEvent<HTMLButtonElement>) => handleQuestionsAction(e);
 
   const handleCloseDepartmentsPopup = () => {
     setIsDepartmentsPopupOpen(false);
@@ -110,6 +142,8 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handlePeoplesClick}
+        onTouchStart={(e) => hapticFeedback.trackTouch.start()}
+        onTouchEnd={handlePeoplesAction}
         type="button"
         aria-label="Peoples"
       >
@@ -128,6 +162,8 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handleDepartmentsClick}
+        onTouchStart={(e) => hapticFeedback.trackTouch.start()}
+        onTouchEnd={handleDepartmentsAction}
         type="button"
         aria-label="Departments"
       >
@@ -147,6 +183,8 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handleQuestionsClick}
+        onTouchStart={(e) => hapticFeedback.trackTouch.start()}
+        onTouchEnd={handleQuestionsAction}
         type="button"
         aria-label="Questions"
       >
