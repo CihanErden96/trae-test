@@ -11,20 +11,6 @@ declare global {
 // PWA için haptic feedback durumunu takip etmek
 let isHapticEnabled = false;
 let hasUserInteracted = false;
-let touchStartTime = 0;
-let touchEndTime = 0;
-
-// Touch event timing'i için
-const trackTouchTiming = {
-  start: () => {
-    touchStartTime = Date.now();
-  },
-  end: () => {
-    touchEndTime = Date.now();
-    return touchEndTime - touchStartTime;
-  },
-  getDuration: () => touchEndTime - touchStartTime
-};
 
 // User interaction'ı tespit etmek için
 const enableHapticOnFirstInteraction = () => {
@@ -101,9 +87,6 @@ export const hapticFeedback = {
 
   // Haptic durumunu kontrol et
   isEnabled: () => isHapticEnabled,
-
-  // Touch timing'i track et
-  trackTouch: trackTouchTiming,
 
   // Hafif dokunma (buton tıklamaları için) - onTouchEnd için optimize edildi
   light: () => {

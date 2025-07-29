@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import styles from '../styles/card.module.css';
 import DenetimPopup from './denetim_create_popup';
+import { hapticFeedback } from '../utils/haptic';
 
 interface DenetimData {
   title: string;
@@ -18,6 +19,7 @@ export default function CardDenetimler() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleAddDenetim = () => {
+    hapticFeedback.success();
     setIsPopupOpen(true);
   };
 

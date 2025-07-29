@@ -168,13 +168,13 @@ export function CardAksiyonlarMain() {
 
   // Popup'ı kapatma
   const handleClosePopup = () => {
-    hapticFeedback.light();
+    hapticFeedback.success();
     setIsPopupOpen(false);
   };
 
   // Card'a tıklama - bekleyen aksiyonları göster, tamamlananları kapalı tut
   const handleCardClick = () => {
-    hapticFeedback.light();
+    hapticFeedback.success();
     setIsPendingActionsCollapsed(false);
     setIsCompletedActionsCollapsed(true);
     setIsPopupOpen(true);
@@ -309,26 +309,26 @@ export default function AksiyonlarPopup({
   const ITEMS_PER_PAGE = 10;
 
   const handleActionClick = (action: Action) => {
-    hapticFeedback.medium();
+    hapticFeedback.success();
     setSelectedAction(action);
     setIsActionDetailOpen(true);
   };
 
   const handleCloseActionDetail = () => {
-    hapticFeedback.light();
+    hapticFeedback.warning();
     setIsActionDetailOpen(false);
     setSelectedAction(null);
   };
 
   // Bekleyen aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMorePending = () => {
-    hapticFeedback.light();
+    hapticFeedback.success();
     setPendingDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
   // Tamamlanan aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMoreCompleted = () => {
-    hapticFeedback.light();
+    hapticFeedback.success();
     setCompletedDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
@@ -347,7 +347,7 @@ export default function AksiyonlarPopup({
         <div 
           className={styles.categoryHeader}
           onClick={() => {
-            hapticFeedback.light();
+            hapticFeedback.init();
             setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
           }}
         >

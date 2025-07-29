@@ -107,7 +107,6 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handlePeoplesClick}
-        onTouchStart={() => hapticFeedback.trackTouch.start()}
         onTouchEnd={handlePeoplesAction}
         type="button"
         aria-label="Peoples"
@@ -127,7 +126,7 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handleDepartmentsClick}
-        onTouchStart={() => hapticFeedback.trackTouch.start()}
+        
         onTouchEnd={handleDepartmentsAction}
         type="button"
         aria-label="Departments"
@@ -148,7 +147,6 @@ export default function Footer() {
       <button 
         className={`${styles.navIcon} ${styles.questionsButton}`}
         onClick={handleQuestionsClick}
-        onTouchStart={() => hapticFeedback.trackTouch.start()}
         onTouchEnd={handleQuestionsAction}
         type="button"
         aria-label="Questions"
