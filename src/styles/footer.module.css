@@ -40,7 +40,7 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-.questionsButton {
+.footerButton {
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -54,19 +54,19 @@
   -webkit-touch-callout: none;
 }
 
-.questionsButton:hover {
+.footerButton:hover {
   transform: translateY(-36px) scale(1.08);
   box-shadow: var(--popup-shadow);
   background: var(--popup-header-gradient);
 }
 
-.questionsButton:active {
+.footerButton:active {
   transform: translateY(-30px) scale(0.96);
   transition: all 0.15s ease;
   box-shadow: var(--shadow);
 }
 
-.questionsButton:focus {
+.footerButton:focus {
   outline: none;
   box-shadow: var(--popup-shadow), 0 0 0 3px var(--popup-button-hover);
 }
@@ -99,12 +99,12 @@
 
 /* Touch feedback for mobile */
 @media (hover: none) and (pointer: coarse) {
-  .questionsButton:hover {
+  .footerButton:hover {
     transform: translateY(-32px) scale(1);
     background: var(--popup-header-gradient);
   }
   
-  .questionsButton:active {
+  .footerButton:active {
     transform: translateY(-28px) scale(0.94);
     background: var(--popup-header-gradient);
     box-shadow: var(--shadow);

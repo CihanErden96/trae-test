@@ -16,7 +16,7 @@ export default function Footer() {
   const [isPeoplesPopupOpen, setIsPeoplesPopupOpen] = useState(false);
   const [isDepartmentsPopupOpen, setIsDepartmentsPopupOpen] = useState(false);
 
-  // Generic function to handle both click and touch events
+  // Generic function to handle click and touch events
   const createRippleEffect = (
     e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>,
     setRipples: React.Dispatch<React.SetStateAction<Array<{id: number, x: number, y: number}>>>
@@ -24,18 +24,14 @@ export default function Footer() {
     const rect = e.currentTarget.getBoundingClientRect();
     let x, y;
     
-    if ('changedTouches' in e && e.changedTouches.length > 0) {
-      // Touch event (touchend uses changedTouches)
-      x = e.changedTouches[0].clientX - rect.left;
-      y = e.changedTouches[0].clientY - rect.top;
-    } else if ('clientX' in e) {
-      // Mouse event
-      x = e.clientX - rect.left;
-      y = e.clientY - rect.top;
+    // Touch event için koordinatları al
+    if ('touches' in e && e.touches.length > 0) {
+      x = e.touches[0].clientX - rect.left;
+      y = e.touches[0].clientY - rect.top;
     } else {
-      // Fallback to center
-      x = rect.width / 2;
-      y = rect.height / 2;
+      // Mouse event için koordinatları al
+      x = (e as React.MouseEvent<HTMLButtonElement>).clientX - rect.left;
+      y = (e as React.MouseEvent<HTMLButtonElement>).clientY - rect.top;
     }
     
     const newRipple = {
@@ -52,43 +48,14 @@ export default function Footer() {
     }, 600);
   };
 
-  const handleDepartmentsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
+  const handleClickStart = (
+    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>,
+    setRipples: React.Dispatch<React.SetStateAction<Array<{id: number, x: number, y: number}>>>
+  ) => {
     e.preventDefault();
-    
-    // Her durumda güçlü haptic feedback ver
-    hapticFeedback.touchEnd();
-    
-    createRippleEffect(e, setDepartmentsRipples);
-    
-    setIsDepartmentsPopupOpen(true);
+    createRippleEffect(e, setRipples);
+    hapticFeedback.heavy();
   };
-
-  const handlePeoplesAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    
-    // Her durumda güçlü haptic feedback ver
-    hapticFeedback.touchEnd();
-    
-    createRippleEffect(e, setPeoplesRipples);
-    
-    setIsPeoplesPopupOpen(true);
-  };
-
-  const handleQuestionsAction = (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    
-    // Her durumda güçlü haptic feedback ver
-    hapticFeedback.touchEnd();
-    
-    createRippleEffect(e, setQuestionsRipples);
-    
-    setIsQuestionsPopupOpen(true);
-  };
-
-  // Legacy click handlers for backward compatibility
-  const handleDepartmentsClick = (e: React.MouseEvent<HTMLButtonElement>) => handleDepartmentsAction(e);
-  const handlePeoplesClick = (e: React.MouseEvent<HTMLButtonElement>) => handlePeoplesAction(e);
-  const handleQuestionsClick = (e: React.MouseEvent<HTMLButtonElement>) => handleQuestionsAction(e);
 
   const handleCloseDepartmentsPopup = () => {
     setIsDepartmentsPopupOpen(false);
@@ -102,12 +69,15 @@ export default function Footer() {
     setIsPeoplesPopupOpen(false);
   };
 
+
   return (
     <footer className={styles.footer}>
       <button 
-        className={`${styles.navIcon} ${styles.questionsButton}`}
-        onClick={handlePeoplesClick}
-        onTouchEnd={handlePeoplesAction}
+        className={`${styles.navIcon} ${styles.footerButton}`}
+        onTouchStart={(e)=>handleClickStart(e, setPeoplesRipples)}
+        onMouseDown={(e)=>handleClickStart(e, setPeoplesRipples)}
+        onTouchEnd={() => setIsPeoplesPopupOpen(true)}
+        onMouseUp={() => setIsPeoplesPopupOpen(true)}
         type="button"
         aria-label="Peoples"
       >
@@ -124,10 +94,11 @@ export default function Footer() {
         ))}
       </button>
       <button 
-        className={`${styles.navIcon} ${styles.questionsButton}`}
-        onClick={handleDepartmentsClick}
-        
-        onTouchEnd={handleDepartmentsAction}
+        className={`${styles.navIcon} ${styles.footerButton}`}
+        onTouchStart={(e)=>handleClickStart(e, setDepartmentsRipples)}
+        onMouseDown={(e)=>handleClickStart(e, setDepartmentsRipples)}
+        onTouchEnd={() => setIsDepartmentsPopupOpen(true)}
+        onMouseUp={() => setIsDepartmentsPopupOpen(true)}
         type="button"
         aria-label="Departments"
       >
@@ -145,9 +116,12 @@ export default function Footer() {
       </button>
 
       <button 
-        className={`${styles.navIcon} ${styles.questionsButton}`}
-        onClick={handleQuestionsClick}
-        onTouchEnd={handleQuestionsAction}
+        className={`${styles.navIcon} ${styles.footerButton}`}
+
+        onTouchStart={(e)=>handleClickStart(e, setQuestionsRipples)}
+        onMouseDown={(e)=>handleClickStart(e, setQuestionsRipples)}
+        onTouchEnd={() => setIsQuestionsPopupOpen(true)}
+        onMouseUp={() => setIsQuestionsPopupOpen(true)}
         type="button"
         aria-label="Questions"
       >

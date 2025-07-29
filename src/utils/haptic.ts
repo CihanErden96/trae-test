@@ -88,7 +88,7 @@ export const hapticFeedback = {
   // Haptic durumunu kontrol et
   isEnabled: () => isHapticEnabled,
 
-  // Hafif dokunma (buton tıklamaları için) - onTouchEnd için optimize edildi
+  // Hafif dokunma (buton tıklamaları için)
   light: () => {
     enableHapticOnFirstInteraction();
     
@@ -106,7 +106,7 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Orta şiddette dokunma (önemli aksiyonlar için) - onTouchEnd için optimize edildi
+  // Orta şiddette dokunma (önemli aksiyonlar için)
   medium: () => {
     enableHapticOnFirstInteraction();
     
@@ -123,7 +123,7 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için) - onTouchEnd için optimize edildi
+  // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için)
   heavy: () => {
     enableHapticOnFirstInteraction();
     
@@ -134,26 +134,6 @@ export const hapticFeedback = {
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
         window.hapticFeedback('heavy');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
-  },
-
-  // Touch end için özel haptic feedback - Güçlü titreşim
-  touchEnd: () => {
-    enableHapticOnFirstInteraction();
-    
-    const pattern: number | number[] = [25, 10, 25]; // Güçlü pattern
-    const hapticType = 'heavy';
-    
-    const success = vibrateWithFallback(pattern);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback(hapticType);
       } catch (error) {
         console.warn('iOS haptic feedback failed:', error);
       }
@@ -221,7 +201,7 @@ export const useHaptic = () => {
 
 // PWA için document ready'de haptic'i initialize et
 if (typeof window !== 'undefined') {
-  // İlk user interaction'ı bekle - touchend hariç
+  // İlk user interaction'ı bekle
   const initHapticOnInteraction = () => {
     hapticFeedback.init();
     // Event listener'ları kaldır
@@ -229,7 +209,7 @@ if (typeof window !== 'undefined') {
     document.removeEventListener('keydown', initHapticOnInteraction);
   };
 
-  // Sadece click ve keydown event'lerini dinle - touchend kaldırıldı
+  // Click ve keydown event'lerini dinle
   document.addEventListener('click', initHapticOnInteraction, { once: true });
   document.addEventListener('keydown', initHapticOnInteraction, { once: true });
 }
