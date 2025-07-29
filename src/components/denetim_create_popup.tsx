@@ -28,6 +28,8 @@ interface DenetimAssignmentPopupProps {
   onBack: () => void;
   onSave: (details: DenetimAssignmentData) => void;
   dateRange: { startDate: string; endDate: string };
+  isSliding?: boolean;
+  slideDirection?: 'forward' | 'backward';
 }
 
 interface DenetimAssignmentData {
@@ -263,7 +265,7 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
 }
 
 // Yeni Denetim Atama Popup'ı
-function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange }: DenetimAssignmentPopupProps) {
+function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, isSliding = false, slideDirection = 'forward' }: DenetimAssignmentPopupProps) {
   const [errors, setErrors] = useState<Partial<DenetimAssignmentData>>({});
   
   // Custom dropdown state'leri
@@ -464,7 +466,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange }: 
     <>
       {createPortal(
         <div className={styles.overlay} onClick={handleOverlayClick}>
-          <div className={styles.popup}>
+          <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideInRight : styles.slideOutRight) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Atama</h2>
               <button className={styles.closeButton} onClick={onClose}>
@@ -595,6 +597,8 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange }: 
 
 export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopupProps) {
   const [showDetailsPopup, setShowDetailsPopup] = useState(false);
+  const [isSliding, setIsSliding] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'forward' | 'backward'>('forward');
   const [selectedDateRange, setSelectedDateRange] = useState({ startDate: '', endDate: '' });
   const [formData, setFormData] = useState<DenetimData>({
     title: '',
@@ -636,12 +640,21 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
     e.preventDefault();
     
     if (validateForm()) {
-      // Tarih aralığını kaydet ve detay popup'ını aç
+      // Slide animasyonunu başlat
+      setIsSliding(true);
+      setSlideDirection('forward');
+      
+      // Tarih aralığını kaydet
       setSelectedDateRange({
         startDate: formData.startDate,
         endDate: formData.endDate
       });
-      setShowDetailsPopup(true);
+      
+      // Animasyon tamamlandıktan sonra detay popup'ını aç
+      setTimeout(() => {
+        setShowDetailsPopup(true);
+        setIsSliding(false);
+      }, 300);
     }
   };
 
@@ -671,7 +684,15 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
   };
 
   const handleAssignmentBack = () => {
-    setShowDetailsPopup(false);
+    // Geri slide animasyonunu başlat
+    setIsSliding(true);
+    setSlideDirection('backward');
+    
+    // Animasyon tamamlandıktan sonra ana popup'a dön
+    setTimeout(() => {
+      setShowDetailsPopup(false);
+      setIsSliding(false);
+    }, 300);
   };
 
   const handleAssignmentClose = () => {
@@ -692,7 +713,7 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
       {/* Ana Tarih Seçimi Popup'ı */}
       {!showDetailsPopup && createPortal(
         <div className={styles.overlay} onClick={handleOverlayClick}>
-          <div className={styles.popup}>
+          <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideOutLeft : styles.slideInLeft) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Oluştur</h2>
               <button className={styles.closeButton} onClick={onClose}>
@@ -743,6 +764,8 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
         onBack={handleAssignmentBack}
         onSave={handleAssignmentSubmit}
         dateRange={selectedDateRange}
+        isSliding={isSliding}
+        slideDirection={slideDirection}
       />
     </>
   );
