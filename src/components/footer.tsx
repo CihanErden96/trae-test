@@ -49,11 +49,8 @@ export default function Footer() {
   };
 
   const handleClickStart = (
-    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>,
-    setRipples: React.Dispatch<React.SetStateAction<Array<{id: number, x: number, y: number}>>>
   ) => {
-    e.preventDefault();
-    createRippleEffect(e, setRipples);
+    setIsQuestionsPopupOpen(true)
     hapticFeedback.heavy();
   };
 
@@ -74,10 +71,10 @@ export default function Footer() {
     <footer className={styles.footer}>
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e)=>handleClickStart(e, setPeoplesRipples)}
-        onMouseDown={(e)=>handleClickStart(e, setPeoplesRipples)}
-        onTouchEnd={() => setIsPeoplesPopupOpen(true)}
-        onMouseUp={() => setIsPeoplesPopupOpen(true)}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.heavy();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.heavy();}}
+        onTouchEnd={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
+        onMouseUp={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
         type="button"
         aria-label="Peoples"
       >
@@ -95,10 +92,10 @@ export default function Footer() {
       </button>
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e)=>handleClickStart(e, setDepartmentsRipples)}
-        onMouseDown={(e)=>handleClickStart(e, setDepartmentsRipples)}
-        onTouchEnd={() => setIsDepartmentsPopupOpen(true)}
-        onMouseUp={() => setIsDepartmentsPopupOpen(true)}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.heavy();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.heavy();}}
+        onTouchEnd={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
+        onMouseUp={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
         type="button"
         aria-label="Departments"
       >
@@ -117,11 +114,10 @@ export default function Footer() {
 
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-
-        onTouchStart={(e)=>handleClickStart(e, setQuestionsRipples)}
-        onMouseDown={(e)=>handleClickStart(e, setQuestionsRipples)}
-        onTouchEnd={() => setIsQuestionsPopupOpen(true)}
-        onMouseUp={() => setIsQuestionsPopupOpen(true)}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.heavy();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.heavy();}}
+        onTouchEnd={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
+        onMouseUp={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
         type="button"
         aria-label="Questions"
       >
