@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Image from "next/image";
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
@@ -526,10 +527,13 @@ export default function AksiyonlarPopup({
                   <h4 className={styles.detailLabel}>Fotoğraf</h4>
                   {selectedAction.image ? (
                     <div className={styles.imageContainer}>
-                      <img 
+                      <Image 
                         src={selectedAction.image} 
                         alt="Aksiyon fotoğrafı"
                         className={styles.actionImage}
+                        width={400}
+                        height={300}
+                        style={{ objectFit: 'cover' }}
                       />
                     </div>
                   ) : (

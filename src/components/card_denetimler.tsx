@@ -16,7 +16,6 @@ interface DenetimData {
 
 export default function CardDenetimler() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [denetimler, setDenetimler] = useState<DenetimData[]>([]);
 
   const handleAddDenetim = () => {
     setIsPopupOpen(true);
@@ -27,7 +26,6 @@ export default function CardDenetimler() {
   };
 
   const handleSubmitDenetim = (denetim: DenetimData) => {
-    setDenetimler(prev => [...prev, denetim]);
     console.log('Yeni denetim oluşturuldu:', denetim);
   };
 

@@ -171,18 +171,35 @@ export const hapticFeedback = {
     return success;
   },
 
-  // Touch end için özel haptic feedback
+  // Touch end için özel haptic feedback - Tüm dokunmalarda güçlü titreşim
   touchEnd: (touchDuration?: number) => {
     enableHapticOnFirstInteraction();
     
-    let intensity = 25; // Varsayılan hafif
-  
+    let pattern: number | number[] = [25, 10, 25]; // Varsayılan güçlü pattern
+    let hapticType = 'medium';
     
-    const success = vibrateWithFallback(intensity, touchDuration);
+    // Touch duration'a göre pattern ayarla - Hepsi güçlü ama farklı desenler
+    if (touchDuration) {
+      if (touchDuration < 100) {
+        pattern = [30]; // Kısa ama güçlü tek titreşim
+        hapticType = 'heavy';
+      } else if (touchDuration < 200) {
+        pattern = [25, 5, 25]; // Çift güçlü titreşim
+        hapticType = 'heavy';
+      } else if (touchDuration < 500) {
+        pattern = [30, 10, 30, 10, 20]; // Uzun basma için ritmik güçlü pattern
+        hapticType = 'heavy';
+      } else {
+        pattern = [40, 15, 40, 15, 40, 15, 30]; // Çok uzun basma için en güçlü pattern
+        hapticType = 'heavy';
+      }
+    }
+    
+    const success = vibrateWithFallback(pattern, touchDuration);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {
-        window.hapticFeedback('light');
+        window.hapticFeedback(hapticType);
       } catch (error) {
         console.warn('iOS haptic feedback failed:', error);
       }

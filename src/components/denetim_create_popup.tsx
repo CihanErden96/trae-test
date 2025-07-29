@@ -274,7 +274,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
   const comboboxRefs = useRef<{ [department: string]: HTMLDivElement | null }>({});
 
   // Genel personel listesi (tüm departmanlar için aynı liste)
-  const allPersonnel = [
+  const allPersonnel = useMemo(() => [
     'Mehmet Kaya',
     'Ayşe Demir', 
     'Fatma Yılmaz',
@@ -299,10 +299,10 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Sibel Taş',
     'Onur Kaya',
     'Gamze Özdemir'
-  ];
+  ], []);
 
   // Departman listesi
-  const departments = [
+  const departments = useMemo(() => [
     'İnsan Kaynakları',
     'Bilgi İşlem', 
     'Muhasebe',
@@ -311,7 +311,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Üretim',
     'Kalite Kontrol',
     'Lojistik'
-  ];
+  ], []);
 
   // Varsayılan departman sorumluları
   const defaultResponsibles = useMemo(() => {
@@ -341,7 +341,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
         departmentResponsibles: defaultResponsibles
       }));
     }
-  }, [defaultResponsibles]);
+  }, [defaultResponsibles, assignmentData.departmentResponsibles]);
 
   // Dropdown'ların dışına tıklandığında kapatma
   useEffect(() => {
@@ -358,13 +358,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [openDropdowns]);
-
-  const handleInputChange = (field: keyof DenetimAssignmentData, value: string) => {
-    setAssignmentData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
 
   // Departman sorumlusu seçme fonksiyonu
   const handleResponsibleSelect = (department: string, person: string) => {
@@ -495,8 +488,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
 
                     {/* Departman ve Combobox Listesi */}
                     {departments.map((department, index) => {
-                      const selectedResponsible = assignmentData.departmentResponsibles[department];
-                      
                       return (
                         <div 
                           key={index}
