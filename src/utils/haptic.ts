@@ -90,7 +90,7 @@ export const hapticFeedback = {
 
   // Hafif dokunma (buton tıklamaları için)
   light: () => {
-    const success = vibrateWithFallback(10);
+    const success = vibrateWithFallback([15, 10, 15]);
     
     // iOS Safari için haptic feedback
     if ('hapticFeedback' in window && window.hapticFeedback) {
@@ -106,7 +106,7 @@ export const hapticFeedback = {
 
   // Orta şiddette dokunma (önemli aksiyonlar için)
   medium: () => {
-    const success = vibrateWithFallback(20);
+    const success = vibrateWithFallback([20, 10, 20]);
     
     if ('hapticFeedback' in window && window.hapticFeedback) {
       try {

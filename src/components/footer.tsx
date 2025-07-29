@@ -71,8 +71,8 @@ export default function Footer() {
     <footer className={styles.footer}>
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.heavy();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.heavy();}}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.light();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.light();}}
         onTouchEnd={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
         onMouseUp={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
         type="button"
@@ -92,8 +92,8 @@ export default function Footer() {
       </button>
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.heavy();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.heavy();}}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.light();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.light();}}
         onTouchEnd={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
         onMouseUp={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
         type="button"
@@ -114,8 +114,8 @@ export default function Footer() {
 
       <button 
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.heavy();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.heavy();}}
+        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.light();}}
+        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.light();}}
         onTouchEnd={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
         onMouseUp={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
         type="button"

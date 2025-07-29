@@ -255,8 +255,10 @@ export function CardAksiyonlarMain() {
 
       {/* Aksiyonlar Popup */}
       {isPopupOpen && createPortal(
-        <div className={styles.overlay} onClick={(e) => {
+        <div className={styles.overlay} 
+        onClick={(e) => {
           if (e.target === e.currentTarget) {
+            e.preventDefault();
             handleClosePopup();
           }
         }}>
