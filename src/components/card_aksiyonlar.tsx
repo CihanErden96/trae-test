@@ -204,11 +204,7 @@ export function CardAksiyonlarMain() {
             e.preventDefault();
             hapticFeedback.medium();
           }}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            handleCardClick();
-          }}
-          onMouseUp={(e) => {
+          onClick={(e) => {
             e.preventDefault();
             handleCardClick();
           }}
@@ -281,13 +277,7 @@ export function CardAksiyonlarMain() {
           onMouseDown={(e) => {
             e.preventDefault();
           }}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            if (e.target === e.currentTarget) {
-              handleClosePopup();
-            }
-          }}
-          onMouseUp={(e) => {
+          onClick={(e) => {
             e.preventDefault();
             if (e.target === e.currentTarget) {
               handleClosePopup();
@@ -298,8 +288,7 @@ export function CardAksiyonlarMain() {
             className={styles.popup} 
             onTouchStart={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
-            onTouchEnd={(e) => e.stopPropagation()}
-            onMouseUp={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.header}>
               <h2 className={styles.title}>
@@ -313,11 +302,7 @@ export function CardAksiyonlarMain() {
                 onMouseDown={(e) => {
                   e.preventDefault();
                 }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  handleClosePopup();
-                }}
-                onMouseUp={(e) => {
+                onClick={(e) => {
                   e.preventDefault();
                   handleClosePopup();
                 }}
@@ -407,11 +392,7 @@ export default function AksiyonlarPopup({
             e.preventDefault();
             hapticFeedback.light();
           }}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
-          }}
-          onMouseUp={(e) => {
+          onClick={(e) => {
             e.preventDefault();
             setIsPendingActionsCollapsed(!isPendingActionsCollapsed);
           }}
@@ -436,16 +417,15 @@ export default function AksiyonlarPopup({
                   onTouchStart={(e) => {
                     e.preventDefault();
                     hapticFeedback.light();
+                    setSelectedAction(action);
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
+                    setSelectedAction(action);
                     hapticFeedback.light();
                   }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault();
-                    handleActionClick(action);
-                  }}
-                  onMouseUp={(e) => {
+
+                  onClick={(e) => {
                     e.preventDefault();
                     handleActionClick(action);
                   }}
@@ -473,11 +453,7 @@ export default function AksiyonlarPopup({
                       e.preventDefault();
                       hapticFeedback.light();
                     }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      handleShowMorePending();
-                    }}
-                    onMouseUp={(e) => {
+                    onClick={(e) => {
                       e.preventDefault();
                       handleShowMorePending();
                     }}
@@ -507,11 +483,7 @@ export default function AksiyonlarPopup({
             e.preventDefault();
             hapticFeedback.light();
           }}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed);
-          }}
-          onMouseUp={(e) => {
+          onClick={(e) => {
             e.preventDefault();
             setIsCompletedActionsCollapsed(!isCompletedActionsCollapsed);
           }}
@@ -541,11 +513,7 @@ export default function AksiyonlarPopup({
                     e.preventDefault();
                     hapticFeedback.light();
                   }}
-                  onTouchEnd={(e) => {
-                    e.preventDefault();
-                    handleActionClick(action);
-                  }}
-                  onMouseUp={(e) => {
+                  onClick={(e) => {
                     e.preventDefault();
                     handleActionClick(action);
                   }}
@@ -573,11 +541,7 @@ export default function AksiyonlarPopup({
                       e.preventDefault();
                       hapticFeedback.light();
                     }}
-                    onTouchEnd={(e) => {
-                      e.preventDefault();
-                      handleShowMoreCompleted();
-                    }}
-                    onMouseUp={(e) => {
+                    onClick={(e) => {
                       e.preventDefault();
                       handleShowMoreCompleted();
                     }}
@@ -605,13 +569,7 @@ export default function AksiyonlarPopup({
           onMouseDown={(e) => {
             e.preventDefault();
           }}
-          onTouchEnd={(e) => {
-            e.preventDefault();
-            if (e.target === e.currentTarget) {
-              handleCloseActionDetail();
-            }
-          }}
-          onMouseUp={(e) => {
+          onClick={(e) => {
             e.preventDefault();
             if (e.target === e.currentTarget) {
               handleCloseActionDetail();
@@ -622,8 +580,7 @@ export default function AksiyonlarPopup({
              className={styles.popup} 
              onTouchStart={(e) => e.stopPropagation()}
              onMouseDown={(e) => e.stopPropagation()}
-             onTouchEnd={(e) => e.stopPropagation()}
-             onMouseUp={(e) => e.stopPropagation()}
+             onClick={(e) => e.stopPropagation()}
            >
             <div className={styles.header}>
               <h2 className={styles.title}>Aksiyon</h2>
@@ -635,11 +592,7 @@ export default function AksiyonlarPopup({
                 onMouseDown={(e) => {
                   e.preventDefault();
                 }}
-                onTouchEnd={(e) => {
-                  e.preventDefault();
-                  handleCloseActionDetail();
-                }}
-                onMouseUp={(e) => {
+                onClick={(e) => {
                   e.preventDefault();
                   handleCloseActionDetail();
                 }}

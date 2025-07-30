@@ -172,8 +172,7 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
           <button type="button" className={calendarStyles.calendarNavButton} 
                   onTouchStart={(e) => {e.preventDefault();}}
                   onMouseDown={(e) => {e.preventDefault();}}
-                  onTouchEnd={(e) => {e.preventDefault();navigateMonth('prev');}}
-                  onMouseUp={(e) => {e.preventDefault();navigateMonth('prev');}}>
+                  onClick={(e) => {e.preventDefault();navigateMonth('prev');}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -184,8 +183,7 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
           <button type="button" className={calendarStyles.calendarNavButton} 
                   onTouchStart={(e) => {e.preventDefault();}}
                   onMouseDown={(e) => {e.preventDefault();}}
-                  onTouchEnd={(e) => {e.preventDefault();navigateMonth('next');}}
-                  onMouseUp={(e) => {e.preventDefault();navigateMonth('next');}}>
+                  onClick={(e) => {e.preventDefault();navigateMonth('next');}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -229,8 +227,7 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
                   `}
                   onTouchStart={(e) => {e.preventDefault();if (!isDisabled) setHoveredDate(date);}}
                   onMouseDown={(e) => {e.preventDefault();if (!isDisabled) setHoveredDate(date);}}
-                  onTouchEnd={(e) => {e.preventDefault();if (!isDisabled) handleDateClick(date);}}
-                  onMouseUp={(e) => {e.preventDefault();if (!isDisabled) handleDateClick(date);}}
+                  onClick={(e) => {e.preventDefault();if (!isDisabled) handleDateClick(date);}}
                   onMouseEnter={() => !isDisabled && setHoveredDate(date)}
                   onMouseLeave={() => setHoveredDate(null)}
                   disabled={isDisabled}
@@ -472,16 +469,14 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
         <div className={styles.overlay} 
              onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
              onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
-             onTouchEnd={(e) => {e.preventDefault();handleOverlayClick(e);}}
-             onMouseUp={(e) => {e.preventDefault();handleOverlayClick(e);}}>
+             onClick={(e) => {e.preventDefault();handleOverlayClick(e);}}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideInRight : styles.slideOutRight) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Atama</h2>
               <button className={styles.closeButton} 
                       onTouchStart={(e) => {e.preventDefault();}}
                       onMouseDown={(e) => {e.preventDefault();}}
-                      onTouchEnd={(e) => {e.preventDefault();onClose();}}
-                      onMouseUp={(e) => {e.preventDefault();onClose();}}>
+                      onClick={(e) => {e.preventDefault();onClose();}}>
                 ×
               </button>
             </div>
@@ -523,8 +518,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                               ref={(el) => { comboboxRefs.current[department] = el; }}
                               onTouchStart={(e) => {e.preventDefault();}}
                               onMouseDown={(e) => {e.preventDefault();}}
-                              onTouchEnd={(e) => {e.preventDefault();toggleDropdown(department);}}
-                              onMouseUp={(e) => {e.preventDefault();toggleDropdown(department);}}
+                              onClick={(e) => {e.preventDefault();toggleDropdown(department);}}
                               className={`${assignmentStyles.combobox} ${openDropdowns[department] ? assignmentStyles.open : ''}`}
                             >
                               <span>
@@ -547,8 +541,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                     className={styles.cancelButton}
                     onTouchStart={(e) => {e.preventDefault();}}
                     onMouseDown={(e) => {e.preventDefault();}}
-                    onTouchEnd={(e) => {e.preventDefault();onClose();}}
-                    onMouseUp={(e) => {e.preventDefault();onClose();}}
+                    onClick={(e) => {e.preventDefault();onClose();}}
                   >
                     İptal
                   </button>
@@ -558,8 +551,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                       className={styles.cancelButton}
                       onTouchStart={(e) => {e.preventDefault();}}
                       onMouseDown={(e) => {e.preventDefault();}}
-                      onTouchEnd={(e) => {e.preventDefault();onBack();}}
-                      onMouseUp={(e) => {e.preventDefault();onBack();}}
+                      onClick={(e) => {e.preventDefault();onBack();}}
                     >
                       Geri
                     </button>
@@ -568,8 +560,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                       className={styles.deleteConfirmButton}
                       onTouchStart={(e) => {e.preventDefault();}}
                       onMouseDown={(e) => {e.preventDefault();}}
-                      onTouchEnd={(e) => {e.preventDefault();onClose();}}
-                      onMouseUp={(e) => {e.preventDefault();onClose();}}
+                      onClick={(e) => {e.preventDefault();onClose();}}
                     >
                       Kaydet
                     </button>
@@ -597,21 +588,20 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
             }}
           >
             {allPersonnel.map((person, personIndex) => (
-              <div
-                key={personIndex}
-                onTouchStart={(e) => {e.preventDefault();}}
-                onMouseDown={(e) => {e.preventDefault();}}
-                onTouchEnd={(e) => {e.preventDefault();handleResponsibleSelect(department, person);}}
-                onMouseUp={(e) => {e.preventDefault();handleResponsibleSelect(department, person);}}
-                className={`${assignmentStyles.dropdownItem} ${
-                  assignmentData.departmentResponsibles[department] === person 
-                    ? assignmentStyles.selected 
-                    : ''
-                }`}
-              >
-                {person}
-              </div>
-            ))}
+                <div
+                  key={personIndex}
+                  onTouchStart={(e) => {e.preventDefault();}}
+                  onMouseDown={(e) => {e.preventDefault();}}
+                  onClick={(e) => {e.preventDefault();handleResponsibleSelect(department, person);}}
+                  className={`${assignmentStyles.dropdownItem} ${
+                    assignmentData.departmentResponsibles[department] === person 
+                      ? assignmentStyles.selected 
+                      : ''
+                  }`}
+                >
+                  {person}
+                </div>
+              ))}
           </div>,
           document.body
         )
@@ -740,16 +730,14 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
         <div className={styles.overlay} 
              onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
              onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
-             onTouchEnd={(e) => {e.preventDefault();handleOverlayClick(e);}}
-             onMouseUp={(e) => {e.preventDefault();handleOverlayClick(e);}}>
+             onClick={(e) => {e.preventDefault();handleOverlayClick(e);}}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideOutLeft : styles.slideInLeft) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Oluştur</h2>
               <button className={styles.closeButton} 
                       onTouchStart={(e) => {e.preventDefault();}}
                       onMouseDown={(e) => {e.preventDefault();}}
-                      onTouchEnd={(e) => {e.preventDefault();onClose();}}
-                      onMouseUp={(e) => {e.preventDefault();onClose();}}>
+                      onClick={(e) => {e.preventDefault();onClose();}}>
                 ×
               </button>
             </div>
@@ -772,8 +760,7 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
                     className={styles.cancelButton}
                     onTouchStart={(e) => {e.preventDefault();}}
                     onMouseDown={(e) => {e.preventDefault();}}
-                    onTouchEnd={(e) => {e.preventDefault();onClose();}}
-                    onMouseUp={(e) => {e.preventDefault();onClose();}}
+                    onClick={(e) => {e.preventDefault();onClose();}}
                   >
                     İptal
                   </button>

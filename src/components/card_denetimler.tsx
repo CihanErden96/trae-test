@@ -79,10 +79,7 @@ export default function CardDenetimler() {
             {/* Add Button - Sağ Alt */}
             <div 
               className={`${styles.addButton}`}
-              onTouchStart={(e) => {e.preventDefault();hapticFeedback.success();}}
-              onMouseDown={(e) => {e.preventDefault();hapticFeedback.success();}}
-              onTouchEnd={(e) => {e.preventDefault();setIsPopupOpen(true);}}
-              onMouseUp={(e) => {e.preventDefault();setIsPopupOpen(true);}}
+              onClick={(e) => {e.preventDefault();hapticFeedback.success();setIsPopupOpen(true);}}
               style={{ cursor: 'pointer' }}
             >
               +

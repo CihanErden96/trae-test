@@ -73,8 +73,7 @@ export default function Footer() {
         className={`${styles.navIcon} ${styles.footerButton}`}
         onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.light();}}
         onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.light();}}
-        onTouchEnd={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
-        onMouseUp={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
+        onClick={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
         type="button"
         aria-label="Peoples"
       >
@@ -94,8 +93,7 @@ export default function Footer() {
         className={`${styles.navIcon} ${styles.footerButton}`}
         onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.light();}}
         onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.light();}}
-        onTouchEnd={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
-        onMouseUp={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
+        onClick={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
         type="button"
         aria-label="Departments"
       >
@@ -116,8 +114,7 @@ export default function Footer() {
         className={`${styles.navIcon} ${styles.footerButton}`}
         onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.light();}}
         onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.light();}}
-        onTouchEnd={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
-        onMouseUp={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
+        onClick={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
         type="button"
         aria-label="Questions"
       >
