@@ -38,6 +38,11 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     score: ''
   });
 
+  // Kaydırma algılama için state'ler
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
   const [questions, setQuestions] = useState<Question[]>([
     {
       id: 1,
@@ -135,7 +140,40 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     setExpandedCategories(newExpanded);
   };
 
+  // Kaydırma algılama fonksiyonları
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    setTouchStartY(touch.clientY);
+    setTouchStartX(touch.clientX);
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartY === null || touchStartX === null) return;
+    
+    const touch = e.touches[0];
+    const deltaY = Math.abs(touch.clientY - touchStartY);
+    const deltaX = Math.abs(touch.clientX - touchStartX);
+    
+    // Eğer 10px'den fazla hareket varsa kaydırma olarak algıla
+    if (deltaY > 10 || deltaX > 10) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchStartY(null);
+    setTouchStartX(null);
+    // isDragging'i biraz gecikmeyle sıfırla ki click event'i doğru çalışsın
+    setTimeout(() => setIsDragging(false), 100);
+  };
+
   const handleQuestionClick = (question: Question) => {
+    // Eğer kaydırma yapılıyorsa popup'ı açma
+    if (isDragging) {
+      return;
+    }
+    
     hapticFeedback.medium();
     setEditingQuestion(question);
     setNewQuestion({
@@ -332,9 +370,20 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                         <div 
                           key={question.id}
                           className={styles.questionItem}
-                          onTouchStart={(e) => {e.preventDefault();hapticFeedback.medium();}}
+                          onTouchStart={(e) => {
+                            e.preventDefault();
+                            hapticFeedback.medium();
+                            handleTouchStart(e);
+                          }}
+                          onTouchMove={(e) => {
+                            handleTouchMove(e);
+                          }}
+                          onTouchEnd={(e) => {
+                            e.preventDefault();
+                            handleTouchEnd();
+                            handleQuestionClick(question);
+                          }}
                           onMouseDown={(e) => {e.preventDefault();hapticFeedback.medium();}}
-                          onTouchEnd={(e) => {e.preventDefault();handleQuestionClick(question);}}
                           onMouseUp={(e) => {e.preventDefault();handleQuestionClick(question);}}
                         >
                           <div className={styles.questionHeader}>
