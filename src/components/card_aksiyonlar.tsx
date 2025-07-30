@@ -168,13 +168,13 @@ export function CardAksiyonlarMain() {
 
   // Popup'ı kapatma
   const handleClosePopup = () => {
-    hapticFeedback.success();
+    hapticFeedback.navigation.close();
     setIsPopupOpen(false);
   };
 
   // Card'a tıklama - bekleyen aksiyonları göster, tamamlananları kapalı tut
   const handleCardClick = () => {
-    hapticFeedback.success();
+    hapticFeedback.navigation.open();
     setIsPendingActionsCollapsed(false);
     setIsCompletedActionsCollapsed(true);
     setIsPopupOpen(true);
@@ -198,11 +198,11 @@ export function CardAksiyonlarMain() {
           className={styles.card}
           onTouchStart={(e) => {
             e.preventDefault();
-            hapticFeedback.medium();
+            hapticFeedback.button.primary();
           }}
           onMouseDown={(e) => {
             e.preventDefault();
-            hapticFeedback.medium();
+            hapticFeedback.button.primary();
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -347,26 +347,26 @@ export default function AksiyonlarPopup({
   const ITEMS_PER_PAGE = 10;
 
   const handleActionClick = (action: Action) => {
-    hapticFeedback.success();
+    hapticFeedback.navigation.select();
     setSelectedAction(action);
     setIsActionDetailOpen(true);
   };
 
   const handleCloseActionDetail = () => {
-    hapticFeedback.warning();
+    hapticFeedback.navigation.close();
     setIsActionDetailOpen(false);
     setSelectedAction(null);
   };
 
   // Bekleyen aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMorePending = () => {
-    hapticFeedback.success();
+    hapticFeedback.button.secondary();
     setPendingDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
   // Tamamlanan aksiyonlar için "daha fazla göster" fonksiyonu
   const handleShowMoreCompleted = () => {
-    hapticFeedback.success();
+    hapticFeedback.button.secondary();
     setCompletedDisplayCount(prev => prev + ITEMS_PER_PAGE);
   };
 
@@ -386,11 +386,11 @@ export default function AksiyonlarPopup({
           className={styles.categoryHeader}
           onTouchStart={(e) => {
             e.preventDefault();
-            hapticFeedback.light();
+            hapticFeedback.navigation.select();
           }}
           onMouseDown={(e) => {
             e.preventDefault();
-            hapticFeedback.light();
+            hapticFeedback.navigation.select();
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -416,13 +416,13 @@ export default function AksiyonlarPopup({
                   className={styles.actionItem}
                   onTouchStart={(e) => {
                     e.preventDefault();
-                    hapticFeedback.light();
+                    hapticFeedback.button.primary();
                     setSelectedAction(action);
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
                     setSelectedAction(action);
-                    hapticFeedback.light();
+                    hapticFeedback.button.primary();
                   }}
 
                   onClick={(e) => {
@@ -447,11 +447,11 @@ export default function AksiyonlarPopup({
                     className={styles.loadMoreButton}
                     onTouchStart={(e) => {
                       e.preventDefault();
-                      hapticFeedback.light();
+                      hapticFeedback.button.secondary();
                     }}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      hapticFeedback.light();
+                      hapticFeedback.button.secondary();
                     }}
                     onClick={(e) => {
                       e.preventDefault();
@@ -477,11 +477,11 @@ export default function AksiyonlarPopup({
           className={styles.categoryHeader}
           onTouchStart={(e) => {
             e.preventDefault();
-            hapticFeedback.light();
+            hapticFeedback.navigation.select();
           }}
           onMouseDown={(e) => {
             e.preventDefault();
-            hapticFeedback.light();
+            hapticFeedback.navigation.select();
           }}
           onClick={(e) => {
             e.preventDefault();
@@ -507,11 +507,11 @@ export default function AksiyonlarPopup({
                   className={`${styles.actionItem} ${styles.completedAction}`}
                   onTouchStart={(e) => {
                     e.preventDefault();
-                    hapticFeedback.light();
+                    hapticFeedback.button.primary();
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    hapticFeedback.light();
+                    hapticFeedback.button.primary();
                   }}
                   onClick={(e) => {
                     e.preventDefault();
@@ -535,11 +535,11 @@ export default function AksiyonlarPopup({
                     className={styles.loadMoreButton}
                     onTouchStart={(e) => {
                       e.preventDefault();
-                      hapticFeedback.light();
+                      hapticFeedback.button.secondary();
                     }}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      hapticFeedback.light();
+                      hapticFeedback.button.secondary();
                     }}
                     onClick={(e) => {
                       e.preventDefault();

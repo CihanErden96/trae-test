@@ -74,7 +74,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   });
 
   const handleDeleteClick = (person: Person) => {
-    hapticFeedback.warning();
+    hapticFeedback.button.danger();
     setDeleteConfirmation({
       isOpen: true,
       personId: person.id,
@@ -83,7 +83,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   };
 
   const handleConfirmDelete = () => {
-    hapticFeedback.heavy();
+    hapticFeedback.action.delete();
     if (deleteConfirmation.personId) {
       setPeoples(prev => prev.filter(person => person.id !== deleteConfirmation.personId));
     }
@@ -95,7 +95,7 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
   };
 
   const handleCancelDelete = () => {
-    hapticFeedback.light();
+    hapticFeedback.action.cancel();
     setDeleteConfirmation({
       isOpen: false,
       personId: null,
@@ -117,8 +117,8 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
 
   return createPortal(
     <div className={styles.overlay} 
-         onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
-         onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+         onTouchStart={(e) => {e.preventDefault();hapticFeedback.navigation.open();}}
+         onMouseDown={(e) => {e.preventDefault();hapticFeedback.navigation.open();}}
          onClick={(e) => {e.preventDefault();handleOverlayClick(e);}}>
       <div className={styles.popup} 
            onTouchStart={(e) => {e.preventDefault();e.stopPropagation();}}
@@ -155,8 +155,8 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                   </div>
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                     <button
-                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.warning();}}
-                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.warning();}}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.button.danger();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.button.danger();}}
                       onClick={(e) => {e.preventDefault();handleDeleteClick(person);}}
                       style={{
                         background: '#dc2626',
@@ -182,8 +182,8 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
       {/* Delete Confirmation Popup */}
       {deleteConfirmation.isOpen && (
         <div className={styles.overlay} 
-             onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
-             onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+             onTouchStart={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
+             onMouseDown={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
              onClick={(e) => {e.preventDefault();handleCancelDelete();}}>
           <div 
             className={`${styles.popup} ${styles.confirmationPopup}`}
@@ -194,8 +194,8 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
             <div className={styles.header}>
               <h2 className={styles.title}>Emin misiniz?</h2>
               <button className={styles.closeButton} 
-                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
-                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
+                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
                       onClick={(e) => {e.preventDefault();handleCancelDelete();}}>
                 ×
               </button>
@@ -213,16 +213,16 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                 <div className={styles.confirmationActions}>
                   <button
                     className={styles.cancelButton}
-                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
-                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.action.cancel();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.action.cancel();}}
                     onClick={(e) => {e.preventDefault();handleCancelDelete();}}
                   >
                     İptal
                   </button>
                   <button
                     className={styles.deleteButton}
-                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.heavy();}}
-                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.heavy();}}
+                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.action.delete();}}
+                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.action.delete();}}
                     onClick={(e) => {e.preventDefault();handleConfirmDelete();}}
                   >
                     Sil

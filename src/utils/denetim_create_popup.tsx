@@ -169,7 +169,10 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
     <div className={calendarStyles.dateRangeContainer}>
       <div className={calendarStyles.calendarDropdown}>
         <div className={calendarStyles.calendarHeader}>
-          <button type="button" className={calendarStyles.calendarNavButton} onClick={() => navigateMonth('prev')}>
+          <button type="button" className={calendarStyles.calendarNavButton} 
+                  onTouchStart={(e) => {e.preventDefault();}}
+                  onMouseDown={(e) => {e.preventDefault();}}
+                  onClick={(e) => {e.preventDefault();navigateMonth('prev');}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -177,7 +180,10 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
           <span className={calendarStyles.calendarTitle}>
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </span>
-          <button type="button" className={calendarStyles.calendarNavButton} onClick={() => navigateMonth('next')}>
+          <button type="button" className={calendarStyles.calendarNavButton} 
+                  onTouchStart={(e) => {e.preventDefault();}}
+                  onMouseDown={(e) => {e.preventDefault();}}
+                  onClick={(e) => {e.preventDefault();navigateMonth('next');}}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -219,7 +225,9 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
                     ${isRangeStart ? calendarStyles.calendarDayRangeStart : ''}
                     ${isRangeEnd ? calendarStyles.calendarDayRangeEnd : ''}
                   `}
-                  onClick={() => !isDisabled && handleDateClick(date)}
+                  onTouchStart={(e) => {e.preventDefault();if (!isDisabled) setHoveredDate(date);}}
+                  onMouseDown={(e) => {e.preventDefault();if (!isDisabled) setHoveredDate(date);}}
+                  onClick={(e) => {e.preventDefault();if (!isDisabled) handleDateClick(date);}}
                   onMouseEnter={() => !isDisabled && setHoveredDate(date)}
                   onMouseLeave={() => setHoveredDate(null)}
                   disabled={isDisabled}
@@ -274,7 +282,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
   const comboboxRefs = useRef<{ [department: string]: HTMLDivElement | null }>({});
 
   // Genel personel listesi (tüm departmanlar için aynı liste)
-  const allPersonnel = [
+  const allPersonnel = useMemo(() => [
     'Mehmet Kaya',
     'Ayşe Demir', 
     'Fatma Yılmaz',
@@ -299,10 +307,10 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Sibel Taş',
     'Onur Kaya',
     'Gamze Özdemir'
-  ];
+  ], []);
 
   // Departman listesi
-  const departments = [
+  const departments = useMemo(() => [
     'İnsan Kaynakları',
     'Bilgi İşlem', 
     'Muhasebe',
@@ -311,7 +319,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Üretim',
     'Kalite Kontrol',
     'Lojistik'
-  ];
+  ], []);
 
   // Varsayılan departman sorumluları
   const defaultResponsibles = useMemo(() => {
@@ -341,7 +349,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
         departmentResponsibles: defaultResponsibles
       }));
     }
-  }, [defaultResponsibles]);
+  }, [defaultResponsibles, assignmentData.departmentResponsibles]);
 
   // Dropdown'ların dışına tıklandığında kapatma
   useEffect(() => {
@@ -358,13 +366,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
   }, [openDropdowns]);
-
-  const handleInputChange = (field: keyof DenetimAssignmentData, value: string) => {
-    setAssignmentData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
 
   // Departman sorumlusu seçme fonksiyonu
   const handleResponsibleSelect = (department: string, person: string) => {
@@ -449,7 +450,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     }
   };
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
+  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -465,11 +466,17 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
   return (
     <>
       {createPortal(
-        <div className={styles.overlay} onClick={handleOverlayClick}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
+             onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
+             onClick={(e) => {e.preventDefault();handleOverlayClick(e);}}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideInRight : styles.slideOutRight) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Atama</h2>
-              <button className={styles.closeButton} onClick={onClose}>
+              <button className={styles.closeButton} 
+                      onTouchStart={(e) => {e.preventDefault();}}
+                      onMouseDown={(e) => {e.preventDefault();}}
+                      onClick={(e) => {e.preventDefault();onClose();}}>
                 ×
               </button>
             </div>
@@ -495,8 +502,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
 
                     {/* Departman ve Combobox Listesi */}
                     {departments.map((department, index) => {
-                      const selectedResponsible = assignmentData.departmentResponsibles[department];
-                      
                       return (
                         <div 
                           key={index}
@@ -511,7 +516,9 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                           <div className={assignmentStyles.comboboxContainer} data-combobox>
                             <div
                               ref={(el) => { comboboxRefs.current[department] = el; }}
-                              onClick={() => toggleDropdown(department)}
+                              onTouchStart={(e) => {e.preventDefault();}}
+                              onMouseDown={(e) => {e.preventDefault();}}
+                              onClick={(e) => {e.preventDefault();toggleDropdown(department);}}
                               className={`${assignmentStyles.combobox} ${openDropdowns[department] ? assignmentStyles.open : ''}`}
                             >
                               <span>
@@ -532,7 +539,9 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                   <button
                     type="button"
                     className={styles.cancelButton}
-                    onClick={onClose}
+                    onTouchStart={(e) => {e.preventDefault();}}
+                    onMouseDown={(e) => {e.preventDefault();}}
+                    onClick={(e) => {e.preventDefault();onClose();}}
                   >
                     İptal
                   </button>
@@ -540,14 +549,18 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                     <button
                       type="button"
                       className={styles.cancelButton}
-                      onClick={onBack}
+                      onTouchStart={(e) => {e.preventDefault();}}
+                      onMouseDown={(e) => {e.preventDefault();}}
+                      onClick={(e) => {e.preventDefault();onBack();}}
                     >
                       Geri
                     </button>
                     <button
                       type="submit"
                       className={styles.deleteConfirmButton}
-                      onClick={onClose}
+                      onTouchStart={(e) => {e.preventDefault();}}
+                      onMouseDown={(e) => {e.preventDefault();}}
+                      onClick={(e) => {e.preventDefault();onClose();}}
                     >
                       Kaydet
                     </button>
@@ -575,18 +588,20 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
             }}
           >
             {allPersonnel.map((person, personIndex) => (
-              <div
-                key={personIndex}
-                onClick={() => handleResponsibleSelect(department, person)}
-                className={`${assignmentStyles.dropdownItem} ${
-                  assignmentData.departmentResponsibles[department] === person 
-                    ? assignmentStyles.selected 
-                    : ''
-                }`}
-              >
-                {person}
-              </div>
-            ))}
+                <div
+                  key={personIndex}
+                  onTouchStart={(e) => {e.preventDefault();}}
+                  onMouseDown={(e) => {e.preventDefault();}}
+                  onClick={(e) => {e.preventDefault();handleResponsibleSelect(department, person);}}
+                  className={`${assignmentStyles.dropdownItem} ${
+                    assignmentData.departmentResponsibles[department] === person 
+                      ? assignmentStyles.selected 
+                      : ''
+                  }`}
+                >
+                  {person}
+                </div>
+              ))}
           </div>,
           document.body
         )
@@ -612,13 +627,6 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
 
   const [errors, setErrors] = useState<Partial<DenetimData>>({});
 
-  const handleInputChange = (field: keyof DenetimData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
-
   const validateForm = (): boolean => {
     const newErrors: Partial<DenetimData> = {};
 
@@ -634,6 +642,13 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: keyof DenetimData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -700,7 +715,7 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
     onClose();
   };
 
-  const handleOverlayClick = (e: React.MouseEvent) => {
+  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -712,11 +727,17 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
     <>
       {/* Ana Tarih Seçimi Popup'ı */}
       {!showDetailsPopup && createPortal(
-        <div className={styles.overlay} onClick={handleOverlayClick}>
+        <div className={styles.overlay} 
+             onTouchStart={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
+             onMouseDown={(e) => {e.preventDefault();if (e.target === e.currentTarget) {/* haptic feedback yok */}}}
+             onClick={(e) => {e.preventDefault();handleOverlayClick(e);}}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideOutLeft : styles.slideInLeft) : ''}`}>
             <div className={styles.header}>
               <h2 className={styles.title}>Denetim Oluştur</h2>
-              <button className={styles.closeButton} onClick={onClose}>
+              <button className={styles.closeButton} 
+                      onTouchStart={(e) => {e.preventDefault();}}
+                      onMouseDown={(e) => {e.preventDefault();}}
+                      onClick={(e) => {e.preventDefault();onClose();}}>
                 ×
               </button>
             </div>
@@ -737,7 +758,9 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
                   <button
                     type="button"
                     className={styles.cancelButton}
-                    onClick={onClose}
+                    onTouchStart={(e) => {e.preventDefault();}}
+                    onMouseDown={(e) => {e.preventDefault();}}
+                    onClick={(e) => {e.preventDefault();onClose();}}
                   >
                     İptal
                   </button>
@@ -769,4 +792,4 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
       />
     </>
   );
-} 
+}

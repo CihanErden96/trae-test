@@ -19,7 +19,7 @@ export default function CardDenetimler() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleAddDenetim = () => {
-    hapticFeedback.success();
+    hapticFeedback.action.create();
     setIsPopupOpen(true);
   };
 
@@ -79,7 +79,7 @@ export default function CardDenetimler() {
             {/* Add Button - Sağ Alt */}
             <div 
               className={`${styles.addButton}`}
-              onClick={(e) => {e.preventDefault();hapticFeedback.success();setIsPopupOpen(true);}}
+              onClick={(e) => {e.preventDefault();hapticFeedback.action.create();setIsPopupOpen(true);}}
               style={{ cursor: 'pointer' }}
             >
               +

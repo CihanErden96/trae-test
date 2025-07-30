@@ -907,6 +907,17 @@
   box-shadow: var(--button-danger-hover-shadow);
 }
 
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 /* Modern Combobox Styles */
 .comboboxContainer {
   position: relative;

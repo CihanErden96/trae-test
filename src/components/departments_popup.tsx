@@ -52,19 +52,19 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const [editedDepartmentName, setEditedDepartmentName] = useState('');
 
   const handleAddDepartment = () => {
-    hapticFeedback.light();
+    hapticFeedback.action.create();
     setIsAddDepartmentOpen(true);
   };
 
   const handleCloseAddDepartment = () => {
-    hapticFeedback.light();
+    hapticFeedback.navigation.close();
     setIsAddDepartmentOpen(false);
     setNewDepartmentName('');
   };
 
   const handleSaveDepartment = () => {
     if (newDepartmentName.trim()) {
-      hapticFeedback.success();
+      hapticFeedback.action.save();
       const newId = Math.max(...departments.map(d => d.id)) + 1;
       const newDepartment: Department = {
         id: newId,
@@ -79,19 +79,19 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       setDepartments(prevDepartments => [...prevDepartments, newDepartment]);
       handleCloseAddDepartment();
     } else {
-      hapticFeedback.error();
+      hapticFeedback.form.error();
     }
   };
 
   const handleDepartmentClick = (department: Department) => {
-    hapticFeedback.medium();
+    hapticFeedback.navigation.select();
     setSelectedDepartment(department);
     setEditedDepartmentName(department.name);
     setIsDepartmentDetailOpen(true);
   };
 
   const handleCloseDepartmentDetail = () => {
-    hapticFeedback.light();
+    hapticFeedback.navigation.close();
     setIsDepartmentDetailOpen(false);
     setSelectedDepartment(null);
     setEditedDepartmentName('');
@@ -99,7 +99,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
   const handleSaveEditDepartment = () => {
     if (selectedDepartment && editedDepartmentName.trim() && editedDepartmentName.trim() !== selectedDepartment.name) {
-      hapticFeedback.success();
+      hapticFeedback.action.save();
       setDepartments(prevDepartments => 
         prevDepartments.map(dept => 
           dept.id === selectedDepartment.id 
@@ -109,26 +109,26 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       );
       setSelectedDepartment(prev => prev ? { ...prev, name: editedDepartmentName.trim() } : null);
     } else if (editedDepartmentName.trim() === '') {
-      hapticFeedback.error();
+      hapticFeedback.form.error();
     }
     // Departman detay popup'ını kapat ve ana listeye dön
     handleCloseDepartmentDetail();
   };
 
   const handleCancelEditDepartment = () => {
-    hapticFeedback.light();
+    hapticFeedback.action.cancel();
     // İptal butonuna basıldığında detay popup'ını kapat
     handleCloseDepartmentDetail();
   };
 
   const handleDeleteDepartment = (department: Department) => {
-    hapticFeedback.warning();
+    hapticFeedback.button.danger();
     setDepartmentToDelete(department);
     setShowDeleteConfirmation(true);
   };
 
   const confirmDeleteDepartment = () => {
-    hapticFeedback.heavy();
+    hapticFeedback.action.delete();
     if (departmentToDelete) {
       setDepartments(prevDepartments => 
         prevDepartments.filter(dept => dept.id !== departmentToDelete.id)
@@ -141,7 +141,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   };
 
   const cancelDeleteDepartment = () => {
-    hapticFeedback.light();
+    hapticFeedback.action.cancel();
     setShowDeleteConfirmation(false);
     setDepartmentToDelete(null);
   };
@@ -159,7 +159,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   return createPortal(
     <>
       <div className={popupStyles.overlay} 
-           onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();handleOverlayClick(e);}}}>
+           onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();handleOverlayClick(e);}}}>
         <div 
           className={popupStyles.popup} 
           onClick={(e) => e.stopPropagation()}
@@ -168,7 +168,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
             <h2 className={popupStyles.title}>Departmanlar</h2>
             <button 
               className={popupStyles.closeButton}
-              onClick={(e) => {e.preventDefault();hapticFeedback.light();onClose();}}
+              onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();onClose();}}
               aria-label="Kapat"
             >
               ×
@@ -202,7 +202,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
               
               {/* Yeni Departman Ekle Butonu */}
               <div className={popupStyles.addDepartmentItem} 
-                   onClick={(e) => {e.preventDefault();hapticFeedback.light();handleAddDepartment();}}>
+                   onClick={(e) => {e.preventDefault();hapticFeedback.action.create();handleAddDepartment();}}>
                 <div className={popupStyles.addDepartmentContent}>
                   <div className={popupStyles.addIcon}>+</div>
                   <div className={popupStyles.addText}>
@@ -219,7 +219,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
         {/* Yeni Departman Ekleme Popup'ı */}
         {isAddDepartmentOpen && (
           <div className={popupStyles.overlay} 
-               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();handleCloseAddDepartment();}}}>
+               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();handleCloseAddDepartment();}}}>
             <div 
             className={popupStyles.popup} 
             onClick={(e) => e.stopPropagation()}
@@ -228,7 +228,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                 <h2 className={popupStyles.title}>Yeni Departman Ekle</h2>
                 <button 
                   className={popupStyles.closeButton}
-                  onClick={(e) => {e.preventDefault();hapticFeedback.light();handleCloseAddDepartment();}}
+                  onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleCloseAddDepartment();}}
                   aria-label="Kapat"
                 >
                   ×
@@ -251,13 +251,13 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                   <div className={popupStyles.formActions}>
                     <button 
                       className={popupStyles.cancelButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.light();handleCloseAddDepartment();}}
+                      onClick={(e) => {e.preventDefault();hapticFeedback.form.cancel();handleCloseAddDepartment();}}
                     >
                       İptal
                     </button>
                     <button 
                       className={popupStyles.saveButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.success();handleSaveDepartment();}}
+                      onClick={(e) => {e.preventDefault();hapticFeedback.form.submit();handleSaveDepartment();}}
                       disabled={!newDepartmentName.trim()}
                     >
                       Kaydet
@@ -272,7 +272,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
         {/* Departman Detay Popup'ı */}
         {isDepartmentDetailOpen && selectedDepartment && (
           <div className={popupStyles.overlay} 
-               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();handleCloseDepartmentDetail();}}}>
+               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();handleCloseDepartmentDetail();}}}>
             <div 
             className={popupStyles.popup} 
             onClick={(e) => e.stopPropagation()}
@@ -281,7 +281,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                 <h2 className={popupStyles.title}>Departman Detayı</h2>
                 <button 
                   className={popupStyles.closeButton}
-                  onClick={(e) => {e.preventDefault();hapticFeedback.light();handleCloseDepartmentDetail();}}
+                  onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleCloseDepartmentDetail();}}
                   aria-label="Kapat"
                 >
                   ×
@@ -313,20 +313,20 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                     <div className={popupStyles.formActions}>
                       <button 
                         className={popupStyles.deleteButton}
-                        onClick={(e) => {e.preventDefault();hapticFeedback.warning();handleDeleteDepartment(selectedDepartment);}}
+                        onClick={(e) => {e.preventDefault();hapticFeedback.button.danger();handleDeleteDepartment(selectedDepartment);}}
                       >
                         Sil
                       </button>
                       <div className={popupStyles.rightActions}>
                         <button 
                           className={popupStyles.cancelButton}
-                          onClick={(e) => {e.preventDefault();hapticFeedback.light();handleCancelEditDepartment();}}
+                          onClick={(e) => {e.preventDefault();hapticFeedback.action.cancel();handleCancelEditDepartment();}}
                         >
                           İptal
                         </button>
                         <button 
                           className={popupStyles.saveButton}
-                          onClick={(e) => {e.preventDefault();hapticFeedback.success();handleSaveEditDepartment();}}
+                          onClick={(e) => {e.preventDefault();hapticFeedback.action.save();handleSaveEditDepartment();}}
                           disabled={!editedDepartmentName.trim()}
                         >
                           Güncelle
@@ -343,7 +343,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
         {/* Silme Onay Popup'ı */}
         {showDeleteConfirmation && departmentToDelete && (
           <div className={popupStyles.overlay} 
-               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.light();cancelDeleteDepartment();}}}>
+               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();cancelDeleteDepartment();}}}>
             <div 
               className={popupStyles.popup}
               onClick={(e) => e.stopPropagation()}
@@ -363,13 +363,13 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                   <div className={popupStyles.confirmationActions}>
                     <button 
                       className={popupStyles.cancelButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.light();cancelDeleteDepartment();}}
+                      onClick={(e) => {e.preventDefault();hapticFeedback.action.cancel();cancelDeleteDepartment();}}
                     >
                       İptal
                     </button>
                     <button 
                       className={popupStyles.deleteConfirmButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.heavy();confirmDeleteDepartment();}}
+                      onClick={(e) => {e.preventDefault();hapticFeedback.action.delete();confirmDeleteDepartment();}}
                     >
                       Sil
                     </button>

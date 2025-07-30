@@ -1,4 +1,4 @@
-// Haptic Feedback Utility for PWA
+// Haptic Feedback Utility for PWA - Optimized Version
 
 // Window interface'ini genişletiyoruz
 declare global {
@@ -8,16 +8,47 @@ declare global {
   }
 }
 
+// Haptic feedback türleri ve kullanım alanları
+export enum HapticType {
+  // Temel etkileşimler
+  LIGHT = 'light',           // Hafif dokunmalar: buton hover, toggle, checkbox
+  MEDIUM = 'medium',         // Orta şiddette: buton tıklama, seçim, navigasyon
+  HEAVY = 'heavy',           // Güçlü: silme, onaylama, kritik aksiyonlar
+  
+  // Durum bildirimleri
+  SUCCESS = 'success',       // Başarılı işlemler: kaydetme, gönderme
+  ERROR = 'error',           // Hata durumları: form hatası, işlem başarısız
+  WARNING = 'warning',       // Uyarılar: dikkat gerektiren durumlar
+  
+  // Özel durumlar
+  SELECTION = 'selection',   // Öğe seçimi, liste navigasyonu
+  NOTIFICATION = 'notification', // Bildirimler, alert'ler
+  IMPACT = 'impact'          // Çarpışma, sürükle-bırak
+}
+
 // PWA için haptic feedback durumunu takip etmek
 let isHapticEnabled = false;
 let hasUserInteracted = false;
+
+// Haptic pattern'ları optimize edilmiş versiyonlar
+const HAPTIC_PATTERNS: Record<HapticType, number[]> = {
+  [HapticType.LIGHT]: [10],
+  [HapticType.MEDIUM]: [20],
+  [HapticType.HEAVY]: [40],
+  [HapticType.SUCCESS]: [10, 5, 10],
+  [HapticType.ERROR]: [30, 10, 30, 10, 30],
+  [HapticType.WARNING]: [25, 15, 25],
+  [HapticType.SELECTION]: [8],
+  [HapticType.NOTIFICATION]: [15, 10, 15],
+  [HapticType.IMPACT]: [50]
+};
 
 // Sayfa yüklendiğinde hemen haptic'i etkinleştir
 const initializeHapticImmediately = () => {
   try {
     if ('vibrate' in navigator) {
       isHapticEnabled = true;
-      hasUserInteracted = true; // Hemen user interaction olduğunu varsay
+      hasUserInteracted = true;
       console.log('Haptic feedback initialized immediately');
     } else {
       isHapticEnabled = true;
@@ -34,7 +65,6 @@ const initializeHapticImmediately = () => {
 const enableHapticOnFirstInteraction = () => {
   if (!hasUserInteracted) {
     hasUserInteracted = true;
-    // İlk user interaction'da haptic'i hemen test et (senkron)
     testHapticSupportSync();
   }
 };
@@ -42,14 +72,11 @@ const enableHapticOnFirstInteraction = () => {
 // Haptic desteğini senkron olarak test et
 const testHapticSupportSync = () => {
   try {
-    // Navigator.vibrate desteğini kontrol et
     if ('vibrate' in navigator) {
       isHapticEnabled = true;
       console.log('Haptic feedback enabled');
       return;
     }
-
-    // iOS Safari veya diğer tarayıcılar için varsayılan olarak etkinleştir
     isHapticEnabled = true;
   } catch (error) {
     console.warn('Haptic feedback test failed:', error);
@@ -60,7 +87,6 @@ const testHapticSupportSync = () => {
 // PWA için gelişmiş vibration patterns
 const vibrateWithFallback = (pattern: number | number[]) => {
   if (!isHapticEnabled) {
-    // Eğer henüz etkinleştirilmemişse, hemen etkinleştir
     initializeHapticImmediately();
   }
 
@@ -79,6 +105,29 @@ const vibrateWithFallback = (pattern: number | number[]) => {
   }
 };
 
+// iOS Safari haptic feedback desteği
+const triggerIOSHaptic = (type: string) => {
+  if ('hapticFeedback' in window && window.hapticFeedback) {
+    try {
+      window.hapticFeedback(type);
+      return true;
+    } catch (error) {
+      console.warn('iOS haptic feedback failed:', error);
+      return false;
+    }
+  }
+  return false;
+};
+
+// Ana haptic feedback fonksiyonu
+const triggerHaptic = (type: HapticType): boolean => {
+  const pattern = HAPTIC_PATTERNS[type];
+  const vibrationSuccess = vibrateWithFallback(pattern);
+  const iosSuccess = triggerIOSHaptic(type);
+  
+  return vibrationSuccess || iosSuccess;
+};
+
 export const hapticFeedback = {
   // İlk kullanıcı etkileşiminde haptic'i etkinleştir
   init: () => {
@@ -88,97 +137,49 @@ export const hapticFeedback = {
   // Haptic durumunu kontrol et
   isEnabled: () => isHapticEnabled,
 
-  // Hafif dokunma (buton tıklamaları için)
-  light: () => {
-    const success = vibrateWithFallback([15, 10, 15]);
-    
-    // iOS Safari için haptic feedback
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('light');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
+  // Temel etkileşimler
+  light: () => triggerHaptic(HapticType.LIGHT),
+  medium: () => triggerHaptic(HapticType.MEDIUM),
+  heavy: () => triggerHaptic(HapticType.HEAVY),
+
+  // Durum bildirimleri
+  success: () => triggerHaptic(HapticType.SUCCESS),
+  error: () => triggerHaptic(HapticType.ERROR),
+  warning: () => triggerHaptic(HapticType.WARNING),
+
+  // Özel durumlar
+  selection: () => triggerHaptic(HapticType.SELECTION),
+  notification: () => triggerHaptic(HapticType.NOTIFICATION),
+  impact: () => triggerHaptic(HapticType.IMPACT),
+
+  // Kontekstüel haptic feedback'ler
+  button: {
+    primary: () => triggerHaptic(HapticType.MEDIUM),
+    secondary: () => triggerHaptic(HapticType.LIGHT),
+    danger: () => triggerHaptic(HapticType.WARNING),
+    success: () => triggerHaptic(HapticType.SUCCESS)
   },
 
-  // Orta şiddette dokunma (önemli aksiyonlar için)
-  medium: () => {
-    const success = vibrateWithFallback([20, 10, 20]);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('medium');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
+  navigation: {
+    open: () => triggerHaptic(HapticType.MEDIUM),
+    close: () => triggerHaptic(HapticType.LIGHT),
+    back: () => triggerHaptic(HapticType.LIGHT),
+    select: () => triggerHaptic(HapticType.SELECTION)
   },
 
-  // Güçlü dokunma (silme, onaylama gibi kritik aksiyonlar için)
-  heavy: () => {
-    const pattern: number | number[] = [30, 10, 30];
-    
-    const success = vibrateWithFallback(pattern);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('heavy');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
+  form: {
+    submit: () => triggerHaptic(HapticType.SUCCESS),
+    cancel: () => triggerHaptic(HapticType.LIGHT),
+    error: () => triggerHaptic(HapticType.ERROR),
+    validate: () => triggerHaptic(HapticType.LIGHT)
   },
 
-  // Başarı feedback'i
-  success: () => {
-    const success = vibrateWithFallback([10, 5, 10]);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('success');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
-  },
-
-  // Hata feedback'i
-  error: () => {
-    const success = vibrateWithFallback([50, 20, 50, 20, 50]);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('error');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
-  },
-
-  // Uyarı feedback'i
-  warning: () => {
-    const success = vibrateWithFallback([30, 15, 30]);
-    
-    if ('hapticFeedback' in window && window.hapticFeedback) {
-      try {
-        window.hapticFeedback('warning');
-      } catch (error) {
-        console.warn('iOS haptic feedback failed:', error);
-      }
-    }
-    
-    return success;
+  action: {
+    create: () => triggerHaptic(HapticType.SUCCESS),
+    edit: () => triggerHaptic(HapticType.MEDIUM),
+    delete: () => triggerHaptic(HapticType.HEAVY),
+    save: () => triggerHaptic(HapticType.SUCCESS),
+    cancel: () => triggerHaptic(HapticType.LIGHT)
   }
 };
 
