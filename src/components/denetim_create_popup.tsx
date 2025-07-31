@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import calendarStyles from '../styles/calendar.module.css';
 import assignmentStyles from '../styles/denetim_assignment_popup.module.css';
+import ReusableCombobox, { ComboboxOption } from './combobox';
 
 interface DenetimPopupProps {
   isOpen: boolean;
@@ -267,11 +268,6 @@ function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChang
 // Yeni Denetim Atama Popup'ı
 function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, isSliding = false, slideDirection = 'forward' }: DenetimAssignmentPopupProps) {
   const [errors, setErrors] = useState<Partial<DenetimAssignmentData>>({});
-  
-  // Custom dropdown state'leri
-  const [openDropdowns, setOpenDropdowns] = useState<{ [department: string]: boolean }>({});
-  const [dropdownPositions, setDropdownPositions] = useState<{ [department: string]: { top: number; left: number; width: number } }>({});
-  const comboboxRefs = useRef<{ [department: string]: HTMLDivElement | null }>({});
 
   // Genel personel listesi (tüm departmanlar için aynı liste)
   const allPersonnel = [
@@ -313,6 +309,12 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Lojistik'
   ];
 
+  // Personel listesini ComboboxOption formatına çevir
+  const personnelOptions: ComboboxOption[] = allPersonnel.map(person => ({
+    value: person,
+    label: person
+  }));
+
   // Varsayılan departman sorumluları
   const defaultResponsibles = useMemo(() => {
     if (departments.length > 0 && allPersonnel.length > 0) {
@@ -343,22 +345,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     }
   }, [defaultResponsibles]);
 
-  // Dropdown'ların dışına tıklandığında kapatma
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      // Eğer tıklanan element combobox veya dropdown içinde değilse, tüm dropdown'ları kapat
-      if (!target.closest('[data-combobox]') && !target.closest('[data-dropdown]')) {
-        setOpenDropdowns({});
-      }
-    };
-
-    if (Object.values(openDropdowns).some(isOpen => isOpen)) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [openDropdowns]);
-
   const handleInputChange = (field: keyof DenetimAssignmentData, value: string) => {
     setAssignmentData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
@@ -375,43 +361,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
         [department]: person
       }
     }));
-    
-    // Dropdown'ı kapat
-    setOpenDropdowns(prev => ({ ...prev, [department]: false }));
-  };
-
-  // Dropdown toggle fonksiyonu
-  const toggleDropdown = (department: string) => {
-    const isOpening = !openDropdowns[department];
-    
-    if (isOpening) {
-      // Dropdown açılırken pozisyonu hesapla
-      const comboboxElement = comboboxRefs.current[department];
-      if (comboboxElement) {
-        const rect = comboboxElement.getBoundingClientRect();
-        setDropdownPositions(prev => ({
-          ...prev,
-          [department]: {
-            top: rect.bottom + window.scrollY,
-            left: rect.left + window.scrollX,
-            width: rect.width
-          }
-        }));
-      }
-      
-      // Diğer tüm dropdown'ları kapat ve seçileni aç
-      setOpenDropdowns(prev => {
-        const newState: { [key: string]: boolean } = {};
-        Object.keys(prev).forEach(key => {
-          newState[key] = false; // Önce hepsini kapat
-        });
-        newState[department] = true; // Seçilen departmanı aç
-        return newState;
-      });
-    } else {
-      // Dropdown kapatılıyor
-      setOpenDropdowns(prev => ({ ...prev, [department]: false }));
-    }
   };
 
   const validateAssignmentForm = (): boolean => {
@@ -495,8 +444,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
 
                     {/* Departman ve Combobox Listesi */}
                     {departments.map((department, index) => {
-                      const selectedResponsible = assignmentData.departmentResponsibles[department];
-                      
                       return (
                         <div 
                           key={index}
@@ -507,20 +454,15 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
                             {department}
                           </div>
 
-                          {/* Modern Combobox */}
-                          <div className={assignmentStyles.comboboxContainer} data-combobox>
-                            <div
-                              ref={(el) => { comboboxRefs.current[department] = el; }}
-                              onClick={() => toggleDropdown(department)}
-                              className={`${assignmentStyles.combobox} ${openDropdowns[department] ? assignmentStyles.open : ''}`}
-                            >
-                              <span>
-                                {assignmentData.departmentResponsibles[department] || 'Sorumlu seçin'}
-                              </span>
-                              <span className={`${assignmentStyles.comboboxArrow} ${openDropdowns[department] ? assignmentStyles.open : ''}`}>
-                                ▼
-                              </span>
-                            </div>
+                          {/* Reusable Combobox */}
+                          <div className={assignmentStyles.comboboxContainer}>
+                            <ReusableCombobox
+                              options={personnelOptions}
+                              selectedValue={assignmentData.departmentResponsibles[department]}
+                              placeholder="Sorumlu seçin"
+                              onSelect={(value) => handleResponsibleSelect(department, value)}
+                              id={`responsible-${department}`}
+                            />
                           </div>
                         </div>
                       );
@@ -558,38 +500,6 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
           </div>
         </div>,
         document.body
-      )}
-
-      {/* Dropdown'lar için Portal */}
-      {Object.entries(openDropdowns).map(([department, isOpen]) => 
-        isOpen && dropdownPositions[department] && createPortal(
-          <div
-            key={department}
-            data-dropdown
-            className={assignmentStyles.dropdown}
-            style={{
-              position: 'absolute',
-              top: dropdownPositions[department].top,
-              left: dropdownPositions[department].left,
-              width: dropdownPositions[department].width
-            }}
-          >
-            {allPersonnel.map((person, personIndex) => (
-              <div
-                key={personIndex}
-                onClick={() => handleResponsibleSelect(department, person)}
-                className={`${assignmentStyles.dropdownItem} ${
-                  assignmentData.departmentResponsibles[department] === person 
-                    ? assignmentStyles.selected 
-                    : ''
-                }`}
-              >
-                {person}
-              </div>
-            ))}
-          </div>,
-          document.body
-        )
       )}
     </>
   );
@@ -769,4 +679,4 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
       />
     </>
   );
-} 
+}
