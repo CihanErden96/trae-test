@@ -847,7 +847,7 @@
 
 .formError {
   display: block;
-  color: var(--button-danger);
+  color: var(--text-secondary);
   font-size: 12px;
   margin-top: 4px;
   font-weight: 500;
