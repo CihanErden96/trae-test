@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 import { hapticFeedback } from '../utils/haptic';
+import ReusableCombobox, { ComboboxOption } from './combobox';
 
 // Metin kısaltma utility fonksiyonu
 const truncateText = (text: string, maxLength: number = 100): string => {
@@ -123,6 +124,26 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
 
   // Mevcut kategorileri al
   const availableCategories = Object.keys(groupedQuestions);
+
+  // Kategorileri ComboboxOption formatına dönüştür
+  const categoryOptions: ComboboxOption[] = useMemo(() => {
+    return availableCategories.map(category => ({
+      value: category,
+      label: category
+    }));
+  }, [availableCategories]);
+
+  // Puan seçeneklerini ComboboxOption formatına dönüştür
+  const scoreOptions: ComboboxOption[] = useMemo(() => {
+    const scores = [];
+    for (let i = 0; i <= 100; i ++) {
+      scores.push({
+        value: i.toString(),
+        label: `${i}`
+      });
+    }
+    return scores;
+  }, []);
 
   const toggleCategory = (category: string) => {
     hapticFeedback.navigation.select();
@@ -370,18 +391,15 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
             
             <div className={styles.content}>
               <div className={styles.addQuestionForm}>
-                <div className={styles.formGroup}>
+                <div className={styles.comboboxFormGroup}>
                   <label className={styles.formLabel}>Kategori</label>
-                  <select 
-                    className={styles.formSelect}
-                    value={newQuestion.category}
-                    onChange={(e) => handleInputChange('category', e.target.value)}
-                  >
-                    <option value="">Kategori seçin...</option>
-                    {availableCategories.map((category) => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
+                  <ReusableCombobox
+                    options={categoryOptions}
+                    selectedValue={newQuestion.category}
+                    placeholder="Kategori seçin..."
+                    onSelect={(value) => handleInputChange('category', value)}
+                    id="category-combobox"
+                  />
                 </div>
 
                 <div className={styles.formGroup}>
@@ -413,16 +431,16 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className={styles.formGroup}>
+                  <div className={styles.comboboxFormGroup}>
                   <label className={styles.formLabel}>Puan</label>
-                  <input 
-                    type="number"
-                    className={styles.formInput}
-                    placeholder="Puan girin (0-100)"
-                    value={newQuestion.score}
-                    onChange={(e) => handleInputChange('score', e.target.value)}
-                    min="0"
-                    max="100"
+                  <ReusableCombobox
+                    options={scoreOptions}
+                    selectedValue={newQuestion.score}
+                    placeholder="Puan seçin..."
+                    onSelect={(value) => handleInputChange('score', value)}
+                    id="edit-score-combobox"
                   />
+                  </div>
                 </div>
 
                 <div className={styles.formActions}>
@@ -472,18 +490,15 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
             
             <div className={styles.content}>
               <div className={styles.addQuestionForm}>
-                <div className={styles.formGroup}>
+                <div className={styles.comboboxFormGroup}>
                   <label className={styles.formLabel}>Kategori</label>
-                  <select 
-                    className={styles.formSelect}
-                    value={newQuestion.category}
-                    onChange={(e) => handleInputChange('category', e.target.value)}
-                  >
-                    <option value="">Kategori seçin...</option>
-                    {availableCategories.map((category) => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
+                  <ReusableCombobox
+                    options={categoryOptions}
+                    selectedValue={newQuestion.category}
+                    placeholder="Kategori seçin..."
+                    onSelect={(value) => handleInputChange('category', value)}
+                    id="add-category-combobox"
+                  />
                 </div>
 
                 <div className={styles.formGroup}>
@@ -515,16 +530,16 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 <div className={styles.formGroup}>
+                  <div className={styles.comboboxFormGroup}>
                   <label className={styles.formLabel}>Puan</label>
-                  <input 
-                    type="number"
-                    className={styles.formInput}
-                    placeholder="Puan girin (0-100)"
-                    value={newQuestion.score}
-                    onChange={(e) => handleInputChange('score', e.target.value)}
-                    min="0"
-                    max="100"
+                  <ReusableCombobox
+                    options={scoreOptions}
+                    selectedValue={newQuestion.score}
+                    placeholder="Puan seçin..."
+                    onSelect={(value) => handleInputChange('score', value)}
+                    id="add-score-combobox"
                   />
+                  </div>
                 </div>
 
                 <div className={styles.formActions}>

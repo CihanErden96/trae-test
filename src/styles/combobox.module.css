@@ -3,13 +3,17 @@
 /* Combobox Container */
 .comboboxContainer {
   position: relative;
-  width: 100%;
+  overflow-y: hidden;
+  margin: 0 auto;
+  width: auto;
+  min-width: 140px;
+
 }
 
 /* Combobox */
 .combobox {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 10px 14px;
   background: var(--popup-header-gradient);
@@ -21,8 +25,9 @@
   font-family: var(--font-family);
   color: var(--popup-header-text);
   transition: all 0.2s ease;
-  min-height: 44px;
+
   box-sizing: border-box;
+  height: auto;
 }
 
 .combobox:hover {
@@ -46,9 +51,10 @@
 .comboboxText {
   flex: 1;
   text-align: left;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
 
 /* Combobox Arrow */
@@ -57,6 +63,7 @@
   color: var(--popup-header-gradient);
   font-weight: bold;
   margin-left: 8px;
+  margin-top: 2px;
   flex-shrink: 0;
 }
 
@@ -75,6 +82,7 @@
   z-index: 10000;
   overflow-y: auto;
   animation: dropdownSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: auto;
 }
 
 /* Dropdown Item */
@@ -107,7 +115,6 @@
 }
 
 .dropdownItem.selected::after {
-  content: '✓';
   position: absolute;
   right: 14px;
   top: 50%;

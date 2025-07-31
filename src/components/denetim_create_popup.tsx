@@ -294,7 +294,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Kemal Usta',
     'Sibel Taş',
     'Onur Kaya',
-    'Gamze Özdemir'
+    'Gamze Özdemir Gamze Özdemir Gamze Özdemir Gamze Özdemir'
   ];
 
   // Departman listesi

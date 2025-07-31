@@ -550,12 +550,24 @@
   margin-bottom: 24px;
 }
 
+.comboboxFormGroup {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .formLabel {
   display: block;
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 8px;
   font-size: 14px;
+  display: flex;
+  justify-content: center;
 }
 
 .formSelect,
