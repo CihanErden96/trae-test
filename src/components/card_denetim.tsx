@@ -15,6 +15,15 @@ interface Question {
   description: string;
   category: string;
   score: number;
+  actions?: Action[];
+}
+
+interface Action {
+  id: number;
+  title: string;
+  description: string;
+  status: 'pending' | 'completed';
+  dueDate?: string;
 }
 
 // Ana Denetim Departman Card Component'i
@@ -29,14 +38,39 @@ export function CardDenetimDepartman() {
       question: "Çalışma alanı düzenli mi?",
       description: "İş alanının 5S prensiplerine uygun olarak düzenlenip düzenlenmediğinin kontrolü",
       category: "Düzen",
-      score: 10
+      score: 10,
+      actions: [
+        {
+          id: 1,
+          title: "Çalışma alanını düzenle",
+          description: "5S prensiplerine uygun olarak çalışma alanını yeniden düzenle",
+          status: 'pending',
+          dueDate: '2025-01-15'
+        },
+        {
+          id: 2,
+          title: "Düzen kontrol listesi oluştur",
+          description: "Günlük düzen kontrolü için checklist hazırla",
+          status: 'pending',
+          dueDate: '2025-01-10'
+        }
+      ]
     },
     {
       id: 2,
       question: "Güvenlik ekipmanları yerinde mi?",
       description: "Kişisel koruyucu donanımların ve güvenlik ekipmanlarının yerinde olup olmadığının kontrolü",
       category: "Güvenlik",
-      score: 15
+      score: 15,
+      actions: [
+        {
+          id: 3,
+          title: "Eksik güvenlik ekipmanlarını temin et",
+          description: "Listede belirtilen eksik güvenlik ekipmanlarını satın al",
+          status: 'pending',
+          dueDate: '2025-01-20'
+        }
+      ]
     },
     {
       id: 3,
@@ -50,7 +84,23 @@ export function CardDenetimDepartman() {
       question: "Prosedürler takip ediliyor mu?",
       description: "İş prosedürlerinin çalışanlar tarafından doğru şekilde takip edilip edilmediğinin kontrolü",
       category: "Prosedür",
-      score: 20
+      score: 20,
+      actions: [
+        {
+          id: 4,
+          title: "Prosedür eğitimi düzenle",
+          description: "Çalışanlara güncel prosedürler hakkında eğitim ver",
+          status: 'pending',
+          dueDate: '2025-01-25'
+        },
+        {
+          id: 5,
+          title: "Prosedür dokümanlarını güncelle",
+          description: "Eski prosedür dokümanlarını yeni standartlara göre güncelle",
+          status: 'completed',
+          dueDate: '2025-01-05'
+        }
+      ]
     }
   ];
 
@@ -95,11 +145,22 @@ export function CardDenetimDepartman() {
 
   const handleScoreSelect = (questionId: number, score: string) => {
     hapticFeedback.navigation.select();
-    setQuestionScores(prev => ({
-      ...prev,
-      [questionId]: score
-    }));
-    console.log(`Soru ${questionId} için seçilen puan: ${score}`);
+    const question = questions.find(q => q.id === questionId);
+    
+    // Eğer soru aksiyonları varsa ve en yüksek puan seçilmezse, default olarak 0 yap
+    if (question?.actions && question.actions.length > 0 && parseInt(score) < question.score) {
+      setQuestionScores(prev => ({
+        ...prev,
+        [questionId]: '0'
+      }));
+      console.log(`Soru ${questionId} için aksiyon gerekli - puan 0 olarak ayarlandı`);
+    } else {
+      setQuestionScores(prev => ({
+        ...prev,
+        [questionId]: score
+      }));
+      console.log(`Soru ${questionId} için seçilen puan: ${score}`);
+    }
   };
 
   return (
@@ -182,25 +243,61 @@ export function CardDenetimDepartman() {
             
             <div className={popupStyles.content}>
               <div className={popupStyles.questionsContainer}>
-                {questions.map((question) => (
-                  <div 
-                    key={question.id}
-                    className={popupStyles.questionItem}
-                    onClick={(e) => {e.preventDefault();hapticFeedback.navigation.select();handleQuestionClick(question);}}
-                  >
-                    <div className={popupStyles.questionHeader}>
-                      <h3 className={popupStyles.questionTitle}>{question.question}</h3>
+                {questions.map((question) => {
+                  const selectedScore = questionScores[question.id];
+                  const shouldShowActions = question.actions && 
+                    question.actions.length > 0 && 
+                    selectedScore && 
+                    parseInt(selectedScore) < question.score;
+
+                  return (
+                    <div key={question.id}>
+                      <div 
+                        className={popupStyles.questionItem}
+                        onClick={(e) => {e.preventDefault();hapticFeedback.navigation.select();handleQuestionClick(question);}}
+                      >
+                        <div className={popupStyles.questionHeader}>
+                          <h3 className={popupStyles.questionTitle}>{question.question}</h3>
+                        </div>
+                        
+                        <p className={popupStyles.questionDescription}>{question.description}</p>
+                        <div className={popupStyles.questionScore}>
+                          <ReusableCombobox
+                            options={getScoreOptions(question.score)}
+                            selectedValue={questionScores[question.id] || ''}
+                            placeholder={`${question.score}`}
+                            onSelect={(score) => handleScoreSelect(question.id, score)}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Aksiyon Listesi */}
+                      {shouldShowActions && (
+                        <div className={popupStyles.categoryContent}>
+                          {question.actions!.map((action) => (
+                            <div 
+                              key={action.id}
+                              className={`${popupStyles.actionItem} ${action.status === 'completed' ? popupStyles.completedAction : ''}`}
+                            >
+                              <div className={popupStyles.actionHeader}>
+                                <h4 className={popupStyles.actionTitle}>{action.title}</h4>
+                                <span className={`${popupStyles.actionStatus} ${popupStyles[action.status]}`}>
+                                  {action.status === 'pending' ? 'Bekliyor' : 'Tamamlandı'}
+                                </span>
+                              </div>
+                              <p className={popupStyles.actionDescription}>{action.description}</p>
+                              {action.dueDate && (
+                                <div className={popupStyles.actionDueDate}>
+                                  Son Tarih: {new Date(action.dueDate).toLocaleDateString('tr-TR')}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    
-                    <p className={popupStyles.questionDescription}>{question.description}</p>
-                        <ReusableCombobox
-                          options={getScoreOptions(question.score)}
-                          selectedValue={questionScores[question.id] || ''}
-                          placeholder={`${question.score}`}
-                          onSelect={(score) => handleScoreSelect(question.id, score)}
-                        />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
