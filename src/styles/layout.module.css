@@ -30,14 +30,9 @@
   /* Add safe scrolling area */
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  min-height: calc(100vh - 200px); /* Minimum height to ensure scrolling */
   width: 100%;
   max-width: 430px;
-  height: 100vh;
-  height: 100dvh;
   box-sizing: border-box;
   z-index: 5;
 }

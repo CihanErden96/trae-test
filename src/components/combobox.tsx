@@ -16,6 +16,7 @@ export interface ReusableComboboxProps {
   disabled?: boolean;
   maxHeight?: number;
   id?: string;
+  style?: React.CSSProperties;
 }
 
 export default function ReusableCombobox({
@@ -26,7 +27,8 @@ export default function ReusableCombobox({
   className = '',
   disabled = false,
   maxHeight = 200,
-  id
+  id,
+  style
 }: ReusableComboboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState<{
@@ -95,6 +97,7 @@ export default function ReusableCombobox({
         className={`${styles.comboboxContainer} ${className}`} 
         data-combobox
         id={id}
+        style={style}
       >
         <div
           ref={comboboxRef}

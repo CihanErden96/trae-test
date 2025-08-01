@@ -252,14 +252,14 @@ export function CardAksiyonlarMain() {
             
             {/* Bekleyen Aksiyonlar Bilgi Alanı - Sol Alt */}
             <div 
-              className={`${styles.descriptiveData} ${styles.descriptiveDataLeft}`}
+              className={`${styles.descriptiveData} ${styles.descriptiveDataFirst}`}
             >
               Bekleyen: {totalPending}
             </div>
             
             {/* Tamamlanan Aksiyonlar Bilgi Alanı - Sağ Alt */}
             <div 
-              className={`${styles.descriptiveData} ${styles.descriptiveDataRight}`}
+              className={`${styles.descriptiveData} ${styles.descriptiveDataSecond}`}
             >
               Tamamlanan: {totalCompleted}
             </div>

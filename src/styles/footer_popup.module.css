@@ -373,6 +373,16 @@
   animation: slideDown 0.3s ease-out;
 }
 
+.questionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding-bottom: 20px;
+}
+
 .questionItem {
   padding: 16px 24px;
   border-bottom: 1px solid var(--popup-border);
@@ -427,14 +437,18 @@
 .questionScore {
   background: var(--popup-header-gradient);
   color: white;
-  font-size: 0.875rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 20px;
-  min-width: 40px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 16px;
+  min-width: 30px;
+  min-height: 24px;
   text-align: center;
   flex-shrink: 0;
   box-shadow: var(--popup-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .category {
@@ -460,6 +474,7 @@
 
 .questionDescription {
   margin: 0;
+  padding-bottom: 20px;
   font-size: 0.875rem;
   color: var(--popup-description-color);
   line-height: 1.5;
@@ -1086,6 +1101,41 @@
   }
   
 
+}
+
+/* Özel Combobox Stili - Sadece Denetim Kartı İçin */
+.questionScore :global(.comboboxContainer) {
+  min-width: 45px !important;
+  max-width: 60px !important;
+}
+
+.questionScore :global(.combobox) {
+  padding: 2px 6px !important;
+  font-size: 0.7rem !important;
+  min-height: 20px !important;
+  border-radius: 12px !important;
+  border-width: 1px !important;
+}
+
+.questionScore :global(.comboboxText) {
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+
+.questionScore :global(.comboboxArrow) {
+  margin-left: 2px !important;
+  margin-top: 0 !important;
+  font-size: 0.6rem !important;
+}
+
+.questionScore :global(.dropdown) {
+  font-size: 0.7rem !important;
+  border-width: 1px !important;
+}
+
+.questionScore :global(.dropdownItem) {
+  padding: 6px 8px !important;
+  font-size: 0.7rem !important;
 }
 
 @media (max-width: 640px) {

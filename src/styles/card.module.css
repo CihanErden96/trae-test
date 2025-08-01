@@ -15,6 +15,7 @@
   width: 100%;
   max-width: 100%;
   min-height: 160px;
+  height: 160px; /* Fixed height to prevent shrinking */
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
@@ -23,6 +24,7 @@
   border: 1px solid var(--popup-border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  flex-shrink: 0; /* Prevent flex shrinking */
 }
 
 .card:hover {
@@ -709,17 +711,21 @@
   justify-content: center;
   min-width: auto;
   height: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
-.descriptiveDataLeft {
+.descriptiveDataFirst {
   bottom: 0px;
-  left: 8px;
+  left: 0px;
 }
 
-.descriptiveDataRight {
+.descriptiveDataSecond {
   bottom: 0px;
-  right: 8px;
+  right: 0px;
 }
+
+
 
 
 
