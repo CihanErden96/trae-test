@@ -102,7 +102,7 @@
 }
 
 .dropdownItem:hover {
-  background: var(--popup-hover-bg);
+
   color: var(--text-secondary);
   transform: translateX(2px);
 }

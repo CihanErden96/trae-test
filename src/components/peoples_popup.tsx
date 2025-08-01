@@ -4,20 +4,7 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 import { hapticFeedback } from '../utils/haptic';
-
-// Metin kısaltma utility fonksiyonu
-const truncateText = (text: string, maxLength: number = 100): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-interface Person {
-  id: number;
-  name: string;
-  surname: string;
-  title: string;
-  department: string;
-}
+import { Person, peoplesData, truncateText } from './const';
 
 interface PeoplesPopupProps {
   isOpen: boolean;
@@ -25,43 +12,7 @@ interface PeoplesPopupProps {
 }
 
 export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
-  const [peoples, setPeoples] = useState<Person[]>([
-    {
-      id: 1,
-      name: "Ahmet",
-      surname: "Yılmaz",
-      title: "Yazılım Geliştirici",
-      department: "Bilgi İşlem"
-    },
-    {
-      id: 2,
-      name: "Ayşe",
-      surname: "Kaya",
-      title: "Proje Yöneticisi",
-      department: "İnsan Kaynakları"
-    },
-    {
-      id: 3,
-      name: "Mehmet",
-      surname: "Demir",
-      title: "Sistem Yöneticisi",
-      department: "Bilgi İşlem"
-    },
-    {
-      id: 4,
-      name: "Fatma",
-      surname: "Şahin",
-      title: "Muhasebe Uzmanı",
-      department: "Mali İşler"
-    },
-    {
-      id: 5,
-      name: "Ali",
-      surname: "Özkan",
-      title: "Satış Temsilcisi",
-      department: "Satış"
-    }
-  ]);
+  const [peoples, setPeoples] = useState<Person[]>(peoplesData);
 
   const [deleteConfirmation, setDeleteConfirmation] = useState<{
     isOpen: boolean;

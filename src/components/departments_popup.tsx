@@ -3,35 +3,9 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import popupStyles from '../styles/footer_popup.module.css';
-import AksiyonlarPopup, { departmentsData } from './card_aksiyonlar';
+import AksiyonlarPopup from './card_aksiyonlar';
 import { hapticFeedback } from '../utils/haptic';
-
-// Metin kısaltma utility fonksiyonu
-const truncateText = (text: string, maxLength: number = 100): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-interface Action {
-  id: number;
-  question: string;
-  description: string;
-  dueDate: string;
-  startDate: string;
-  image?: string;
-  department?: string;
-  creator?: string;
-}
-
-interface Department {
-  id: number;
-  name: string;
-  score: number;
-  completedActions: number;
-  pendingActions: number;
-  pendingActionsList: Action[];
-  completedActionsList: Action[];
-}
+import { Department, truncateText, departmentsData } from './const';
 
 interface DepartmentsPopupProps {
   isOpen: boolean;

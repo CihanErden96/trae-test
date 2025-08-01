@@ -1,0 +1,252 @@
+[
+  {
+    "TABLE_NAME": "calisan",
+    "COLUMN_NAME": "calisan_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "calisan",
+    "COLUMN_NAME": "ad_soyad",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "calisan",
+    "COLUMN_NAME": "calisan_user_id",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "calisan",
+    "COLUMN_NAME": "rol",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim",
+    "COLUMN_NAME": "denetim_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim",
+    "COLUMN_NAME": "denetim_baslangic_tarihi",
+    "DATA_TYPE": "datetime",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim",
+    "COLUMN_NAME": "denetim_bitis_tarihi",
+    "DATA_TYPE": "datetime",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim",
+    "COLUMN_NAME": "denetim_durum",
+    "DATA_TYPE": "varchar",
+    "IS_NULLABLE": "YES",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "aksiyon_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "denetim_soru_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": "FK__denetim_a__denet__6B24EA82",
+    "Referenced_Table": "denetim_soru",
+    "Referenced_Column": "denetim_soru_id"
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "aksiyon",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "foto_url",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "YES",
+    "CHARACTER_MAXIMUM_LENGTH": "500",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "aksiyon_tarihi",
+    "DATA_TYPE": "datetime",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_aksiyon",
+    "COLUMN_NAME": "aksiyon_durum",
+    "DATA_TYPE": "varchar",
+    "IS_NULLABLE": "YES",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "denetim_soru_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "denetim_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": "FK__denetim_s__denet__656C112C",
+    "Referenced_Table": "denetim",
+    "Referenced_Column": "denetim_id"
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "soru_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": "FK__denetim_s__soru___66603565",
+    "Referenced_Table": "soru",
+    "Referenced_Column": "soru_id"
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "calisan_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": "FK__denetim_s__calis__6754599E",
+    "Referenced_Table": "calisan",
+    "Referenced_Column": "calisan_id"
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "departman_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": "FK__denetim_s__depar__68487DD7",
+    "Referenced_Table": "departman",
+    "Referenced_Column": "departman_id"
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "durum",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "denetim_soru",
+    "COLUMN_NAME": "puan",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "YES",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "departman",
+    "COLUMN_NAME": "departman_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "departman",
+    "COLUMN_NAME": "departman_adi",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "255",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "soru",
+    "COLUMN_NAME": "soru_id",
+    "DATA_TYPE": "int",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": null,
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  },
+  {
+    "TABLE_NAME": "soru",
+    "COLUMN_NAME": "soru_metni",
+    "DATA_TYPE": "nvarchar",
+    "IS_NULLABLE": "NO",
+    "CHARACTER_MAXIMUM_LENGTH": "-1",
+    "FK_Name": null,
+    "Referenced_Table": null,
+    "Referenced_Column": null
+  }
+]

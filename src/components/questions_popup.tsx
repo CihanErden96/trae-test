@@ -4,21 +4,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/footer_popup.module.css';
 import { hapticFeedback } from '../utils/haptic';
-import ReusableCombobox, { ComboboxOption } from './combobox';
-
-// Metin kısaltma utility fonksiyonu
-const truncateText = (text: string, maxLength: number = 100): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-interface Question {
-  id: number;
-  question: string;
-  description: string;
-  category: string;
-  score: number;
-}
+import ReusableCombobox from './combobox';
+import { Question, ComboboxOption, questionsData, getCategoryOptions, getAllScoreOptions, truncateText } from './const';
 
 interface QuestionsPopupProps {
   isOpen: boolean;
@@ -39,78 +26,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     score: ''
   });
 
-  const [questions, setQuestions] = useState<Question[]>([
-    {
-      id: 1,
-      question: "Gereksiz malzemeleri nasıl ayıklayabilirim?",
-      description: "İş alanında kullanılmayan, bozuk veya gereksiz malzemelerin belirlenmesi ve ayrılması süreçleri. Kırmızı etiket uygulaması ve karar verme kriterleri.",
-      category: "Ayıkla",
-      score: 10
-    },
-    {
-      id: 2,
-      question: "Kırmızı etiket sistemi nasıl uygulanır?",
-      description: "Şüpheli malzemelerin işaretlenmesi, değerlendirme süreci ve karar verme mekanizmaları. Etiketleme kuralları ve takip sistemi.",
-      category: "Ayıkla",
-      score: 10
-    },
-    {
-      id: 3,
-      question: "İş alanını nasıl düzenleyebilirim?",
-      description: "Her şeyin yerinin belirlenmesi, etiketleme sistemleri ve görsel yönetim araçlarının kullanımı. Verimli çalışma alanı tasarımı.",
-      category: "Düzenle",
-      score: 10
-    },
-    {
-      id: 4,
-      question: "Araç ve malzeme yerleşimi nasıl optimize edilir?",
-      description: "Sık kullanılan malzemelerin yakın konumlandırılması, ergonomik düzenleme ve erişim kolaylığı sağlama teknikleri.",
-      category: "Düzenle",
-      score: 10
-    },
-    {
-      id: 5,
-      question: "Temizlik standartları nasıl uygulanır?",
-      description: "Günlük, haftalık ve aylık temizlik rutinleri. Temizlik kontrol listeleri ve sorumluluk alanlarının belirlenmesi.",
-      category: "Temizle",
-      score: 10
-    },
-    {
-      id: 6,
-      question: "Temizlik kontrol listeleri nasıl hazırlanır?",
-      description: "Detaylı temizlik görevlerinin listelenmesi, sorumluluk dağılımı ve kontrol mekanizmalarının oluşturulması.",
-      category: "Temizle",
-      score: 10
-    },
-    {
-      id: 7,
-      question: "Standartları nasıl oluşturup uygularım?",
-      description: "İş prosedürlerinin standartlaştırılması, görsel talimatların hazırlanması ve çalışan eğitimi süreçleri.",
-      category: "Standartlaştır",
-      score: 10
-    },
-    {
-      id: 8,
-      question: "Görsel yönetim araçları nasıl kullanılır?",
-      description: "İş talimatlarının görselleştirilmesi, renk kodlama sistemleri ve anında anlaşılabilir işaretleme teknikleri.",
-      category: "Standartlaştır",
-      score: 10
-    },
-    {
-      id: 9,
-      question: "5S uygulamalarını nasıl sürdürebilirim?",
-      description: "Sürekli iyileştirme kültürü, düzenli denetimler ve çalışan katılımının sağlanması. Motivasyon ve ödül sistemleri.",
-      category: "Sürdür",
-      score: 10
-    },
-    {
-      id: 10,
-      question: "5S denetim sistemi nasıl kurulur?",
-      description: "Düzenli denetim programları, değerlendirme kriterleri ve geri bildirim mekanizmalarının oluşturulması. Sürekli iyileştirme döngüsü.",
-      category: "Sürdür",
-      score: 10
-    }
-  ]);
+  const [questions, setQuestions] = useState<Question[]>(questionsData);
 
   // Soruları kategorilere göre gruplandır
   const groupedQuestions = questions.reduce((groups, question) => {
@@ -122,27 +38,14 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     return groups;
   }, {} as Record<string, Question[]>);
 
-  // Mevcut kategorileri al
-  const availableCategories = Object.keys(groupedQuestions);
-
   // Kategorileri ComboboxOption formatına dönüştür
   const categoryOptions: ComboboxOption[] = useMemo(() => {
-    return availableCategories.map(category => ({
-      value: category,
-      label: category
-    }));
-  }, [availableCategories]);
+    return getCategoryOptions(questions);
+  }, [questions]);
 
   // Puan seçeneklerini ComboboxOption formatına dönüştür
   const scoreOptions: ComboboxOption[] = useMemo(() => {
-    const scores = [];
-    for (let i = 0; i <= 100; i ++) {
-      scores.push({
-        value: i.toString(),
-        label: `${i}`
-      });
-    }
-    return scores;
+    return getAllScoreOptions();
   }, []);
 
   const toggleCategory = (category: string) => {

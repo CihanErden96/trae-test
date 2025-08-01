@@ -5,34 +5,7 @@ import Image from "next/image";
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
-
-// Metin kısaltma utility fonksiyonu
-const truncateText = (text: string, maxLength: number = 100): string => {
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-};
-
-interface Action {
-  id: number;
-  question: string;
-  description: string;
-  dueDate: string;
-  startDate: string;
-  completedDate?: string; // Tamamlanma tarihi (sadece tamamlanan aksiyonlar için)
-  image?: string;
-  department?: string;
-  creator?: string;
-}
-
-interface Department {
-  id: number;
-  name: string;
-  score: number;
-  completedActions: number;
-  pendingActions: number;
-  pendingActionsList: Action[];
-  completedActionsList: Action[];
-}
+import { Action, actionsData, truncateText, departmentsData, calculateTotalActions, Department } from './const';
 
 interface AksiyonlarPopupProps {
   department: Department;
@@ -42,117 +15,7 @@ interface AksiyonlarPopupProps {
   setIsCompletedActionsCollapsed: (value: boolean) => void;
 }
 
-// Tüm departman verilerini içeren merkezi veri deposu
-export const departmentsData: Department[] = [
-  {
-    id: 1,
-    name: "İnsan Kaynakları",
-    score: 85,
-    completedActions: 2,
-    pendingActions: 3,
-    pendingActionsList: [
-      { id: 1, question: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", startDate: "2024-01-01", department: "İnsan Kaynakları", creator: "Ahmet Yılmaz" },
-      { id: 2, question: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", startDate: "2024-01-05", department: "İnsan Kaynakları", creator: "Fatma Demir" },
-      { id: 3, question: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", startDate: "2024-01-10", department: "İnsan Kaynakları", creator: "Mehmet Kaya" }
-    ],
-    completedActionsList: [
-      { id: 4, question: "Bordro hazırlama", description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", startDate: "2023-12-15", completedDate: "2023-12-29", department: "İnsan Kaynakları", creator: "Ayşe Öztürk" },
-      { id: 5, question: "Sigorta işlemleri", description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", startDate: "2023-12-20", completedDate: "2023-12-27", department: "İnsan Kaynakları", creator: "Ali Çelik" }
-    ]
-  },
-  {
-    id: 2,
-    name: "Üretim",
-    score: 92,
-    completedActions: 1,
-    pendingActions: 5,
-    pendingActionsList: [
-      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "2024-01-10", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan" },
-      { id: 7, question: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", startDate: "2024-01-02", department: "Üretim", creator: "Zeynep Kılıç" },
-      { id: 8, question: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", startDate: "2024-01-08", department: "Üretim", creator: "Hasan Özkan" },
-      { id: 9, question: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", startDate: "2024-01-12", department: "Üretim", creator: "Elif Şahin" },
-      { id: 10, question: "Üretim raporu", description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", startDate: "2024-01-01", department: "Üretim", creator: "Oğuz Yıldız" }
-    ],
-    completedActionsList: [
-      { id: 11, question: "Sipariş teslimi", description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", startDate: "2023-12-20", completedDate: "2023-12-28", department: "Üretim", creator: "Ahmet Demir" }
-    ]
-  },
-  {
-    id: 3,
-    name: "Satış ve Pazarlama",
-    score: 78,
-    completedActions: 1,
-    pendingActions: 3,
-    pendingActionsList: [
-      { id: 12, question: "Kampanya hazırlığı", description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", startDate: "2023-12-20", department: "Satış ve Pazarlama", creator: "Selin Aydın" },
-      { id: 13, question: "Müşteri toplantısı", description: "B firması ile görüşme", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Satış ve Pazarlama", creator: "Burak Koç" },
-      { id: 14, question: "Pazar araştırması", description: "Rakip analizi raporu", dueDate: "2024-01-15", startDate: "2024-01-05", department: "Satış ve Pazarlama", creator: "Deniz Yılmaz" }
-    ],
-    completedActionsList: [
-      { id: 15, question: "Sosyal medya paylaşımı", description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", startDate: "2023-12-25", completedDate: "2023-12-29", department: "Satış ve Pazarlama", creator: "Ayşe Kaya" }
-    ]
-  },
-  {
-    id: 4,
-    name: "Muhasebe",
-    score: 88,
-    completedActions: 1,
-    pendingActions: 2,
-    pendingActionsList: [
-      { id: 16, question: "Mali müşavir toplantısı", description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", startDate: "2023-12-28", department: "Muhasebe", creator: "Murat Özdemir" },
-      { id: 17, question: "Fatura kontrolü", description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", startDate: "2024-01-01", department: "Muhasebe", creator: "Gülşen Aktaş" }
-    ],
-    completedActionsList: [
-      { id: 18, question: "Vergi beyannamesi", description: "KDV beyannamesi verildi", dueDate: "2023-12-25", startDate: "2023-12-20", completedDate: "2023-12-24", department: "Muhasebe", creator: "Kemal Erdoğan" }
-    ]
-  },
-  {
-    id: 5,
-    name: "Ar-Ge",
-    score: 95,
-    completedActions: 1,
-    pendingActions: 4,
-    pendingActionsList: [
-      { id: 19, question: "Prototip testi", description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", startDate: "2024-01-05", department: "Ar-Ge", creator: "Dr. Emre Yıldırım" },
-      { id: 20, question: "Patent başvurusu", description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", startDate: "2024-01-10", department: "Ar-Ge", creator: "Prof. Aylin Çetin" },
-      { id: 21, question: "Araştırma raporu", description: "Teknoloji trend analizi", dueDate: "2024-01-25", startDate: "2024-01-15", department: "Ar-Ge", creator: "Doç. Mehmet Kara" },
-      { id: 22, question: "Lab ekipmanı", description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", startDate: "2024-01-20", department: "Ar-Ge", creator: "Mühendis Seda Özkan" }
-    ],
-    completedActionsList: [
-      { id: 23, question: "Ürün geliştirme", description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", startDate: "2023-12-01", completedDate: "2023-12-27", department: "Ar-Ge", creator: "Yazılım Uzmanı Ali Vural" }
-    ]
-  },
-  {
-    id: 6,
-    name: "Lojistik",
-    score: 82,
-    completedActions: 1,
-    pendingActions: 3,
-    pendingActionsList: [
-      { id: 24, question: "Kargo takibi", description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", startDate: "2024-01-02", department: "Lojistik", creator: "Serkan Yılmaz" },
-      { id: 25, question: "Depo düzenleme", description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", startDate: "2024-01-05", department: "Lojistik", creator: "Fatma Koç" },
-      { id: 26, question: "Nakliye planlaması", description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Lojistik", creator: "Hüseyin Acar" }
-    ],
-    completedActionsList: [
-      { id: 27, question: "Envanter sayımı", description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", startDate: "2023-12-25", completedDate: "2023-12-30", department: "Lojistik", creator: "Mehmet Demir" }
-    ]
-  }
-];
 
-// Tüm departmanlardan toplam aksiyon sayılarını hesaplayan fonksiyon
-const calculateTotalActions = () => {
-  const totalCompleted = departmentsData.reduce((sum, dept) => sum + dept.completedActions, 0);
-  const totalPending = departmentsData.reduce((sum, dept) => sum + dept.pendingActions, 0);
-  const totalActions = totalCompleted + totalPending;
-  const progressPercentage = totalActions > 0 ? Math.round((totalCompleted / totalActions) * 100) : 0;
-
-  return {
-    totalCompleted,
-    totalPending,
-    totalActions,
-    progressPercentage
-  };
-};
 
 // Ana Aksiyonlar Card Component'i
 export function CardAksiyonlarMain() {

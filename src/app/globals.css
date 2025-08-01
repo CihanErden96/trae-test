@@ -178,4 +178,43 @@ textarea {
   -ms-user-select: text;
 }
 
+/* Global Popup Header Stilleri */
+.popup-header {
+  background: var(--popup-header-gradient);
+  color: var(--popup-header-text);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  flex: 1;
+  padding-right: 16px;
+}
+
+.popup-close-button {
+  background: none;
+  border: none;
+  color: var(--popup-header-text);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.popup-close-button:hover {
+  background: var(--popup-button-hover);
+  transform: scale(1.1);
+}
+
 

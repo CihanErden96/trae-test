@@ -607,6 +607,12 @@
   transform: rotate(90deg) scale(1.1);
 }
 
+  .addIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
 .addText {
   flex: 1;
   display: flex;
@@ -1156,11 +1162,7 @@
   
   .addDepartmentContent { gap: 14px; }
   
-  .addIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
+
   
   .addTitle {
     font-size: 0.9rem;
