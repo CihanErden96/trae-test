@@ -18,11 +18,6 @@ interface DenetimData {
 export default function CardDenetimler() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleAddDenetim = () => {
-    hapticFeedback.action.create();
-    setIsPopupOpen(true);
-  };
-
   const handleClosePopup = () => {
     setIsPopupOpen(false);
   };

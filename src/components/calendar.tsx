@@ -45,7 +45,7 @@ const Calendar: React.FC<CalendarProps> = ({
       const todayString = formatDateToString(today);
       setStartDate(todayString);
     }
-  }, [isStartDateDisabled]);
+  }, [isStartDateDisabled, startDate, today]);
 
   // Parent component'e değişiklikleri bildir
   useEffect(() => {

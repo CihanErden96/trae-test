@@ -9,7 +9,7 @@ import calendarStyles from '../styles/calendar.module.css';
 import { hapticFeedback } from '../utils/haptic';
 import ReusableCombobox from './combobox';
 import Calendar from './calendar';
-import { Question, ComboboxOption, denetimQuestionsData, getScoreOptions, Action } from './const';
+import { Question, denetimQuestionsData, getScoreOptions, Action } from './const';
 
 
 
@@ -48,14 +48,6 @@ export function CardDenetimDepartman() {
   };
 
   const todayString = formatDateToString(today);
-
-  // Takvim için ay ve gün isimleri
-  const monthNames = [
-    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
-  ];
-
-  const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
 
   // SVG circle için hesaplamalar
   const radius = 40;

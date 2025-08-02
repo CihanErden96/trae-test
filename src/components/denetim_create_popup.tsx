@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import assignmentStyles from '../styles/denetim_assignment_popup.module.css';
@@ -117,7 +117,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
   const [errors, setErrors] = useState<Partial<DenetimAssignmentData>>({});
 
   // Genel personel listesi (tüm departmanlar için aynı liste)
-  const allPersonnel = [
+  const allPersonnel = useMemo(() => [
     'Mehmet Kaya',
     'Ayşe Demir', 
     'Fatma Yılmaz',
@@ -142,10 +142,10 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Sibel Taş',
     'Onur Kaya',
     'Gamze Özdemir Gamze Özdemir Gamze Özdemir Gamze Özdemir'
-  ];
+  ], []);
 
   // Departman listesi
-  const departments = [
+  const departments = useMemo(() => [
     'İnsan Kaynakları',
     'Bilgi İşlem', 
     'Muhasebe',
@@ -154,13 +154,13 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     'Üretim',
     'Kalite Kontrol',
     'Lojistik'
-  ];
+  ], []);
 
   // Personel listesini ComboboxOption formatına çevir
-  const personnelOptions: ComboboxOption[] = allPersonnel.map(person => ({
+  const personnelOptions: ComboboxOption[] = useMemo(() => allPersonnel.map(person => ({
     value: person,
     label: person
-  }));
+  })), [allPersonnel]);
 
   // Varsayılan departman sorumluları
   const defaultResponsibles = useMemo(() => {
@@ -190,14 +190,9 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
         departmentResponsibles: defaultResponsibles
       }));
     }
-  }, [defaultResponsibles]);
+  }, [defaultResponsibles, assignmentData.departmentResponsibles]);
 
-  const handleInputChange = (field: keyof DenetimAssignmentData, value: string) => {
-    setAssignmentData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
-    }
-  };
+
 
   // Departman sorumlusu seçme fonksiyonu
   const handleResponsibleSelect = (department: string, person: string) => {
@@ -376,6 +371,11 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
     }
   }, [errors]);
 
+  const handleDateRangeChange = useCallback((startDate: string, endDate: string) => {
+    handleInputChange('startDate', startDate);
+    handleInputChange('endDate', endDate);
+  }, [handleInputChange]);
+
   const validateForm = (): boolean => {
     const newErrors: Partial<DenetimData> = {};
 
@@ -482,10 +482,7 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
               <form onSubmit={handleSubmit} className={styles.addQuestionForm}>
                 <div className={styles.formGroup}>
                   <DateRangePicker
-                    onDateRangeChange={useCallback((startDate, endDate) => {
-                      handleInputChange('startDate', startDate);
-                      handleInputChange('endDate', endDate);
-                    }, [handleInputChange])}
+                    onDateRangeChange={handleDateRangeChange}
                     error={errors.startDate || errors.endDate}
                   />
                 </div>

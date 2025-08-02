@@ -5,7 +5,7 @@ import Image from "next/image";
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
-import { Action, actionsData, truncateText, departmentsData, calculateTotalActions, Department } from './const';
+import { Action, truncateText, departmentsData, calculateTotalActions, Department } from './const';
 
 interface AksiyonlarPopupProps {
   department: Department;
