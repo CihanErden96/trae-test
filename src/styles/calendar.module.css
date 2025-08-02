@@ -15,6 +15,8 @@
   z-index: 1000;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  margin-bottom: 10px;
+  
 }
 
 /* Calendar Header and Navigation */
@@ -41,7 +43,7 @@
 }
 
 .calendarNavButton:hover {
-  background: var(--popup-hover-bg);
+  background: var(--button-hover-gradient);
   color: var(--primary);
   transform: scale(1.1);
 }
@@ -57,6 +59,7 @@
 /* Calendar Grid */
 .calendarGrid {
   padding: 16px 20px 20px;
+  
 }
 
 .calendarWeekdays {
@@ -79,14 +82,15 @@
 .calendarDays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0;
+  margin: 6px 0;
+  
 }
 
 /* Calendar Day Base Styles */
 .calendarDay {
   background: none;
   border: none;
-  padding: 12px 4px;
+
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
@@ -97,13 +101,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2px;
-}
-
-/* Seçili ve aralıktaki günler için margin'i kaldır */
-.calendarDay.calendarDaySelected,
-.calendarDay.calendarDayInRange {
-  margin: 4px 0; /* Sadece alt ve üstten margin */
+  margin: 6px 0;
 }
 
 /* Calendar Day States */
@@ -119,14 +117,13 @@
 }
 
 .calendarDayOtherMonth:hover:not(.calendarDayDisabled) {
-  background: var(--popup-hover-bg);
+  background:var(--button-hover-gradient);
   color: var(--primary);
   opacity: 0.8;
-  transform: scale(1.05);
 }
 
 .calendarDayToday {
-  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.1));
+  background: var(--button-hover-gradient);
   color: var(--primary);
   font-weight: 700;
   border: 2px solid rgba(var(--primary-rgb), 0.3);
@@ -139,61 +136,58 @@
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
   border-radius: 0;
-  margin: 5px;
+
   position: relative;
   z-index: 2;
-  padding: 6px 4px;
+
 }
 
-/* İlk seçilen gün (başlangıç) */
-.calendarDaySelected:first-of-type,
-.calendarDaySelected.calendarDayRangeStart {
+/* Range başlangıç günü */
+.calendarDayRangeStart {
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  background: var(--primary);
-  color: white;
-  padding: 6px 4px;
+  margin: 6px 0px 6px 0px;
+  
 }
 
-/* Son seçilen gün (bitiş) */
-.calendarDaySelected:last-of-type,
-.calendarDaySelected.calendarDayRangeEnd {
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-  background: var(--primary);
-  color: white;
-  padding: 6px 4px;
+/* Range bitiş günü */
+.calendarDayRangeEnd {
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  
 }
 
 /* Tek gün seçildiğinde */
 .calendarDaySelected.calendarDayRangeSingle {
   border-radius: 8px;
   background: var(--primary);
-  color: white;
-  padding: 6px 4px;
+  color: var(--foreground);
+  
+
 }
 
 /* Range Days */
 .calendarDayInRange {
   background: var(--primary);
-  color: white;
-  border-radius: 0;
-  margin: 0;
+  color: var(--foreground);
+  border-radius: 0px;
   position: relative;
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
   z-index: 2;
+  margin: 6px 0px 6px 0px;
 
 }
 
 .calendarDayHoverRange {
-  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+  background: var(--button-hover-gradient);
   color: var(--primary);
+  border-radius: 6;
 }
 
 /* Calendar Day Interactions */
 .calendarDay:hover:not(.calendarDayDisabled) {
-  background: var(--popup-hover-bg);
+  background: var(--button-hover-gradient);
   color: var(--primary);
   transform: scale(1.05);
 }
@@ -206,16 +200,16 @@
 
 .calendarDayDisabled:hover {
   transform: none;
-  background: none;
+  background: var(--button-hover-gradient);;
 }
 
 /* Date Range Preview */
 .dateRangePreview {
-  background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
+  background: var(--button-hover-gradient);
   border: 1px solid rgba(var(--primary-rgb), 0.2);
   border-radius: 12px;
   padding: 16px;
-  margin-top: 12px;
+
   position: relative;
   overflow: hidden;
 }
@@ -227,7 +221,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--primary), rgba(var(--primary-rgb), 0.5), var(--primary));
+  background: var(--button-hover-gradient);
 }
 
 .previewText {
@@ -250,7 +244,7 @@
   .calendarDropdown {
     position: static;
     width: 100%;
-    margin-top: 0;
+
   }
   
   .calendarHeader {
@@ -263,7 +257,7 @@
   
   .calendarDay {
     min-height: 36px;
-    padding: 8px 4px;
+
     font-size: 13px;
   }
 }

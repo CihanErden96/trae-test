@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 import styles from '../styles/card.module.css';
 import popupStyles from '../styles/footer_popup.module.css';
 import calendarStyles from '../styles/calendar.module.css';
 import { hapticFeedback } from '../utils/haptic';
 import ReusableCombobox from './combobox';
+import Calendar from './calendar';
 import { Question, ComboboxOption, denetimQuestionsData, getScoreOptions, Action } from './const';
 
 
@@ -22,14 +24,13 @@ export function CardDenetimDepartman() {
     dueDate: '',
     image: ''
   });
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<string>('');
+
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
-  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
   const [warningMessage, setWarningMessage] = useState<{[key: number]: string}>({});
   const [isActionDetailOpen, setIsActionDetailOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
+  const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
 
   // Denetim sorularını const.tsx'ten al
   const questions = denetimQuestionsData;
@@ -37,6 +38,16 @@ export function CardDenetimDepartman() {
   // Bugünün tarihi
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // Bugünün tarihini string formatında al
+  const formatDateToString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const todayString = formatDateToString(today);
 
   // Takvim için ay ve gün isimleri
   const monthNames = [
@@ -129,7 +140,8 @@ export function CardDenetimDepartman() {
       dueDate: '',
       image: ''
     });
-    setSelectedDate('');
+    setStartDate('');
+    setEndDate('');
   };
 
   const handleSaveAction = () => {
@@ -154,6 +166,18 @@ export function CardDenetimDepartman() {
     }));
   };
 
+  const handleDateRangeChange = useCallback((start: string, end: string) => {
+    setStartDate(start);
+    setEndDate(end);
+    // Eğer end date varsa, onu newAction'ın dueDate'i olarak ayarla
+    if (end) {
+      setNewAction(prev => ({
+        ...prev,
+        dueDate: end
+      }));
+    }
+  }, []);
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -166,118 +190,75 @@ export function CardDenetimDepartman() {
     }
   };
 
-  // Takvim fonksiyonları
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    hapticFeedback.navigation.select();
-    setCurrentMonth(prev => {
-      const newMonth = new Date(prev);
-      if (direction === 'prev') {
-        newMonth.setMonth(prev.getMonth() - 1);
-      } else {
-        newMonth.setMonth(prev.getMonth() + 1);
-      }
-      return newMonth;
-    });
-  };
-
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    
-    // Ayın ilk gününün haftanın hangi günü olduğunu bul (Pazartesi = 0)
-    const firstDayOfWeek = (firstDay.getDay() + 6) % 7;
-    
-    const days = [];
-    
-    // Önceki ayın son günlerini ekle
-    const prevMonth = new Date(year, month - 1, 0);
-    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
-      days.push({
-        date: new Date(year, month - 1, prevMonth.getDate() - i),
-        isCurrentMonth: false
-      });
-    }
-    
-    // Bu ayın günlerini ekle
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push({
-        date: new Date(year, month, day),
-        isCurrentMonth: true
-      });
-    }
-    
-    // Sonraki ayın ilk günlerini ekle (42 gün tamamlamak için)
-    const remainingDays = 42 - days.length;
-    for (let day = 1; day <= remainingDays; day++) {
-      days.push({
-        date: new Date(year, month + 1, day),
-        isCurrentMonth: false
-      });
-    }
-    
-    return days;
-  };
-
-  const handleDateClick = (date: Date) => {
-    if (date >= today) {
-      hapticFeedback.navigation.select();
-      const dateString = date.toISOString().split('T')[0];
+  // Gelişmiş kamera özelliği
+  const handleCameraCapture = useCallback(async () => {
+    try {
+      hapticFeedback.action.create();
       
-      if (!startDate || (startDate && endDate)) {
-        // İlk tarih seçimi veya yeniden başlama
-        setStartDate(dateString);
-        setEndDate('');
-        setSelectedDate(dateString);
-        setNewAction(prev => ({
-          ...prev,
-          dueDate: dateString
-        }));
-      } else if (startDate && !endDate) {
-        // İkinci tarih seçimi
-        const start = new Date(startDate);
-        if (date >= start) {
-          setEndDate(dateString);
-          setSelectedDate(dateString);
-          setNewAction(prev => ({
-            ...prev,
-            dueDate: dateString
-          }));
-        } else {
-          // Eğer seçilen tarih başlangıçtan önce ise, yeni başlangıç yap
-          setStartDate(dateString);
-          setEndDate('');
-          setSelectedDate(dateString);
-          setNewAction(prev => ({
-            ...prev,
-            dueDate: dateString
-          }));
+      // getUserMedia API'si ile kamera erişimi
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Arka kamera
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
         }
-      }
+      });
+
+      // Video element oluştur
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.autoplay = true;
+      video.playsInline = true;
+
+      // Canvas element oluştur
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      // Video yüklendiğinde fotoğraf çek
+      video.onloadedmetadata = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Fotoğraf çekme işlemi
+        setTimeout(() => {
+          if (context) {
+            context.drawImage(video, 0, 0);
+            
+            // Canvas'ı blob'a çevir
+            canvas.toBlob((blob) => {
+              if (blob) {
+                const imageUrl = URL.createObjectURL(blob);
+                setNewAction(prev => ({
+                  ...prev,
+                  image: imageUrl
+                }));
+              }
+              
+              // Stream'i kapat
+              stream.getTracks().forEach(track => track.stop());
+            }, 'image/jpeg', 0.9);
+          }
+        }, 100);
+      };
+
+    } catch (error) {
+      console.error('Kamera erişimi hatası:', error);
+      // Fallback olarak normal file input kullan
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.capture = 'environment';
+      fileInput.onchange = (e) => {
+        const target = e.target as HTMLInputElement;
+        if (target.files?.[0]) {
+          handleImageUpload({ target } as React.ChangeEvent<HTMLInputElement>);
+        }
+      };
+      fileInput.click();
     }
-  };
+  }, []);
 
-  const isDateSelected = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0];
-    return dateStr === startDate || dateStr === endDate;
-  };
 
-  const isDateInRange = (date: Date) => {
-    if (!startDate || !endDate) return false;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return date >= start && date <= end;
-  };
-
-  const isDateInHoverRange = (date: Date) => {
-    if (!hoveredDate || !startDate || endDate) return false;
-    const start = new Date(startDate);
-    const minDate = start < hoveredDate ? start : hoveredDate;
-    const maxDate = start > hoveredDate ? start : hoveredDate;
-    return date >= minDate && date <= maxDate;
-  };
 
   const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = 'auto';
@@ -312,6 +293,14 @@ export function CardDenetimDepartman() {
         completedDate: completedDate
       } : null);
     }
+  };
+
+  const handleCompleteAudit = () => {
+    hapticFeedback.action.save();
+    console.log('Denetim tamamlandı!');
+    // Burada gerçek uygulamada API çağrısı yapılacak
+    setShowCompleteConfirmation(false);
+    setIsPopupOpen(false);
   };
 
   return (
@@ -378,13 +367,13 @@ export function CardDenetimDepartman() {
 
       {/* Denetim Popup'ı */}
       {isPopupOpen && createPortal(
-        <div className={popupStyles.overlay} 
+        <div className={styles.overlay} 
              onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleOverlayClick(e);}}>
-          <div className={popupStyles.popup}>
-            <div className={popupStyles.header}>
-              <h2 className={popupStyles.title}>Denetim Soruları</h2>
+          <div className={styles.popup}>
+            <div className='popup-header'>
+              <h2 className='popup-title'>Denetim Soruları</h2>
               <button 
-                className={popupStyles.closeButton}
+                className='popup-close-button'
                 onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleClosePopup();}}
                 aria-label="Kapat"
               >
@@ -484,6 +473,16 @@ export function CardDenetimDepartman() {
                   );
                 })}
               </div>
+              
+              {/* Denetimi Tamamla Butonu */}
+              <div className={styles.actionButtons}>
+                <button 
+                  className={`${styles.statusToggleButton} ${styles.markCompleteButton}`}
+                  onClick={() => setShowCompleteConfirmation(true)}
+                >
+                  Denetimi Tamamla
+                </button>
+              </div>
             </div>
           </div>
         </div>,
@@ -492,15 +491,16 @@ export function CardDenetimDepartman() {
 
       {/* Add Action Popup */}
       {isAddActionOpen && createPortal(
-        <div className={popupStyles.overlay}>
-          <div className={popupStyles.popup}>
-            <div className={popupStyles.header}>
-              <h2 className={popupStyles.title}>Aksiyon Ekle</h2>
-              <button
-                onClick={handleCloseAddAction}
-                className={popupStyles.closeButton}
+        <div className={styles.overlay}>
+          <div className={styles.popup}>
+            <div className='popup-header'>
+              <h2 className='popup-title'>Aksiyon Ekle</h2>
+              <button 
+                className='popup-close-button'
+                onClick={() => handleCloseAddAction()}
+                aria-label="Kapat"
               >
-                ✕
+                ×
               </button>
             </div>
             <div className={popupStyles.content}>
@@ -548,62 +548,13 @@ export function CardDenetimDepartman() {
                       </span>
                     </div>
 
-                    {/* Takvim - Her zaman açık */}
-                    <div className={calendarStyles.calendarDropdown}>
-                      <div className={calendarStyles.calendarHeader}>
-                        <button
-                          type="button"
-                          onClick={() => navigateMonth('prev')}
-                          className={calendarStyles.calendarNavButton}
-                        >
-                          ‹
-                        </button>
-                        <h3 className={calendarStyles.calendarTitle}>
-                          {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-                        </h3>
-                        <button
-                          type="button"
-                          onClick={() => navigateMonth('next')}
-                          className={calendarStyles.calendarNavButton}
-                        >
-                          ›
-                        </button>
-                      </div>
-                      
-                      <div className={calendarStyles.calendarGrid}>
-                        <div className={calendarStyles.calendarWeekdays}>
-                          {dayNames.map(day => (
-                            <div key={day} className={calendarStyles.calendarWeekday}>
-                              {day}
-                            </div>
-                          ))}
-                        </div>
-                        <div className={calendarStyles.calendarDays}>
-                          {getDaysInMonth(currentMonth).map((day, index) => {
-                            const isToday = day.date.toDateString() === today.toDateString();
-                            const isPast = day.date < today;
-                            const isSelected = isDateSelected(day.date);
-                            const inRange = isDateInRange(day.date);
-                            const inHoverRange = isDateInHoverRange(day.date);
-                            const isStartDate = day.date.toDateString() === today.toDateString();
-                            
-                            return (
-                              <button
-                                key={index}
-                                type="button"
-                                onClick={() => !isStartDate ? handleDateClick(day.date) : null}
-                                onMouseEnter={() => setHoveredDate(day.date)}
-                                onMouseLeave={() => setHoveredDate(null)}
-                                disabled={isPast || isStartDate}
-                                className={`${calendarStyles.calendarDay} ${day.isCurrentMonth ? calendarStyles.calendarDayCurrentMonth : calendarStyles.calendarDayOtherMonth} ${isToday ? calendarStyles.calendarDayToday : ''} ${isSelected || isStartDate ? calendarStyles.calendarDaySelected : ''} ${inRange ? calendarStyles.calendarDayInRange : ''} ${inHoverRange ? calendarStyles.calendarDayHoverRange : ''} ${isPast || isStartDate ? calendarStyles.calendarDayDisabled : ''}`}
-                              >
-                                {day.date.getDate()}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
+                    {/* Takvim - Calendar Component */}
+                    <Calendar
+                      isStartDateDisabled={true}
+                      onDateRangeChange={handleDateRangeChange}
+                      initialStartDate={todayString}
+                      initialEndDate={endDate}
+                    />
                   </div>
                 </div>
 
@@ -617,17 +568,14 @@ export function CardDenetimDepartman() {
                     {/* Fotoğraf Yükleme Butonları - Sadece fotoğraf yoksa göster */}
                     {!newAction.image && (
                       <div className={styles.imageUploadButtons}>
-                        <label className={styles.imageUploadButton}>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            capture="environment"
-                            onChange={handleImageUpload}
-                            className={styles.hiddenInput}
-                          />
+                        <button
+                          type="button"
+                          className={styles.imageUploadButton}
+                          onClick={handleCameraCapture}
+                        >
                           <div className={styles.imageUploadIcon}>📷</div>
                           <p className={styles.imageUploadText}>Kamera</p>
-                        </label>
+                        </button>
                         
                         <label className={styles.imageUploadButton}>
                           <input
@@ -667,7 +615,7 @@ export function CardDenetimDepartman() {
                   <button
                     type="button"
                     onClick={handleCloseAddAction}
-                    className={styles.addActionCancelButton}
+                    className={styles.addActionButton}
                   >
                     İptal
                   </button>
@@ -675,7 +623,7 @@ export function CardDenetimDepartman() {
                     type="button"
                     onClick={handleSaveAction}
                     disabled={!newAction.title.trim() || !newAction.dueDate}
-                    className={styles.addActionSaveButton}
+                    className={styles.addActionButton}
                   >
                     Kaydet
                   </button>
@@ -694,11 +642,12 @@ export function CardDenetimDepartman() {
           <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
             <div className={styles.header}>
               <h2 className={styles.title}>Aksiyon Detayı</h2>
-              <button
+              <button 
+                className='popup-close-button'
                 onClick={handleCloseActionDetail}
-                className={styles.closeButton}
+                aria-label="Kapat"
               >
-                ✕
+                ×
               </button>
             </div>
             
@@ -737,19 +686,26 @@ export function CardDenetimDepartman() {
                   </p>
                 </div>
 
-                {/* Fotoğraf */}
-                {selectedAction.image && (
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Fotoğraf</h4>
+                {/* Fotoğraf Alanı */}
+                <div className={styles.detailSection}>
+                  <h4 className={styles.detailLabel}>Fotoğraf</h4>
+                  {selectedAction.image ? (
                     <div className={styles.imageContainer}>
-                      <img 
+                      <Image 
                         src={selectedAction.image} 
                         alt="Aksiyon fotoğrafı"
                         className={styles.actionImage}
+                        width={400}
+                        height={300}
+                        style={{ objectFit: 'cover' }}
                       />
                     </div>
-                  </div>
-                )}
+                  ) : (
+                    <div className={styles.noImageContainer}>
+                      <p className={styles.noImageText}>Fotoğraf yok</p>
+                    </div>
+                  )}
+                </div>
 
                 {/* Durum Değiştirme Butonu */}
                 <div className={styles.actionButtons}>
@@ -764,6 +720,48 @@ export function CardDenetimDepartman() {
                   </button>
                 </div>
 
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Denetimi Tamamla Onay Popup'ı */}
+      {showCompleteConfirmation && createPortal(
+        <div className={styles.overlay} onClick={() => setShowCompleteConfirmation(false)}>
+          <div 
+            className={`${popupStyles.popup} ${popupStyles.confirmationPopup}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="popup-header">
+              <h2 className="popup-title">Emin misiniz?</h2>
+              <button className="popup-close-button"onClick={() => setShowCompleteConfirmation(false)}>
+                ×
+              </button>
+            </div>
+            <div className={popupStyles.content}>
+              <div className={popupStyles.confirmationContent}>
+                <p className={popupStyles.confirmationMessage}>
+                   Denetimi tamamlamak istediğinizden emin misiniz?
+                </p>
+                <p className={popupStyles.confirmationWarning}>
+                  Tamamlanan denetimler düzenlenemez.
+                </p>
+                <div className={popupStyles.confirmationActions}>
+                  <button 
+                    className={popupStyles.cancelButton}
+                    onClick={() => setShowCompleteConfirmation(false)}
+                  >
+                    İptal
+                  </button>
+                  <button 
+                    className={popupStyles.deleteButton}
+                    onClick={handleCompleteAudit}
+                  >
+                    Tamamla
+                  </button>
+                </div>
               </div>
             </div>
           </div>

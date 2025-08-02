@@ -75,14 +75,10 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
            onTouchStart={(e) => {e.preventDefault();e.stopPropagation();}}
            onMouseDown={(e) => {e.preventDefault();e.stopPropagation();}}
            onClick={(e) => {e.preventDefault();e.stopPropagation();}}>
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <span className={styles.totalAllScore}>
-              {peoples.length} Kişi
-            </span>
-          </div>
-          <h2 className={styles.title}>Personel Listesi</h2>
-          <button className={styles.closeButton} 
+        <div className="popup-header">
+
+          <h2 className="popup-title">Personel Listesi</h2>
+          <button className="popup-close-button" 
                   onTouchStart={(e) => {e.preventDefault();hapticFeedback.light();}}
                   onMouseDown={(e) => {e.preventDefault();hapticFeedback.light();}}
                   onClick={(e) => {e.preventDefault();handleCloseButton();}}>
@@ -142,12 +138,10 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
             onMouseDown={(e) => {e.preventDefault();e.stopPropagation();}}
             onClick={(e) => {e.preventDefault();e.stopPropagation();}}
           >
-            <div className={styles.header}>
-              <h2 className={styles.title}>Emin misiniz?</h2>
-              <button className={styles.closeButton} 
-                      onTouchStart={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
-                      onMouseDown={(e) => {e.preventDefault();hapticFeedback.navigation.close();}}
-                      onClick={(e) => {e.preventDefault();handleCancelDelete();}}>
+            <div className="popup-header">
+              <h2 className="popup-title">Emin misiniz?</h2>
+              <button className="popup-close-button" 
+                      onClick={handleCancelDelete}>
                 ×
               </button>
             </div>
@@ -164,17 +158,13 @@ export default function PeoplesPopup({ isOpen, onClose }: PeoplesPopupProps) {
                 <div className={styles.confirmationActions}>
                   <button
                     className={styles.cancelButton}
-                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.action.cancel();}}
-                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.action.cancel();}}
-                    onClick={(e) => {e.preventDefault();handleCancelDelete();}}
+                    onClick={handleCancelDelete}
                   >
                     İptal
                   </button>
                   <button
                     className={styles.deleteButton}
-                    onTouchStart={(e) => {e.preventDefault();hapticFeedback.action.delete();}}
-                    onMouseDown={(e) => {e.preventDefault();hapticFeedback.action.delete();}}
-                    onClick={(e) => {e.preventDefault();handleConfirmDelete();}}
+                    onClick={handleConfirmDelete}
                   >
                     Sil
                   </button>

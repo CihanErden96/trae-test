@@ -299,35 +299,7 @@
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
-/* Responsive Design */
-@media (max-width: 768px) {
-  .categoryHeader {
-    padding: 12px;
-  }
-  
-  .categoryContent {
-    padding: 0;
-  }
-  
-  .actionItem {
-    padding: 12px 16px;
-    margin-bottom: 0;
-  }
-  
-  .categoryName {
-    font-size: 16px;
-  }
-  
-  .actionDescription {
-    font-size: 13px;
-    padding-bottom: 30px;
-  }
-  
-  .actionScore {
-    font-size: 0.75rem;
-    padding: 4px 8px;
-  }
-}
+
 
 /* Animasyonlar */
 @keyframes fadeIn {
@@ -648,6 +620,33 @@
   .loadMoreButton::after {
     right: 8px;
     font-size: 13px;
+  }
+  
+  .categoryHeader {
+    padding: 12px;
+  }
+  
+  .categoryContent {
+    padding: 0;
+  }
+  
+  .actionItem {
+    padding: 12px 16px;
+    margin-bottom: 0;
+  }
+  
+  .categoryName {
+    font-size: 16px;
+  }
+  
+  .actionDescription {
+    font-size: 13px;
+    padding-bottom: 30px;
+  }
+  
+  .actionScore {
+    font-size: 0.75rem;
+    padding: 4px 8px;
   }
 }
 
@@ -1173,7 +1172,7 @@
 
 .addActionButton {
   background: var(--primary);
-  color: white;
+  color: var(--foreground);
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -1189,7 +1188,7 @@
 }
 
 .addActionButton:hover {
-  background: var(--primary-dark);
+  color:var(--text-secondary);
   transform: translateY(-1px);
 }
 
@@ -1332,25 +1331,7 @@
   font-family: var(--font-family);
 }
 
-.addActionCloseButton {
-  background: none;
-  border: none;
-  color: var(--popup-header-text);
-  font-size: 24px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-}
 
-.addActionCloseButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
 
 .addActionPopupBody {
   padding: 24px;
@@ -1363,19 +1344,7 @@
   padding: 10px 10px 40px 10px;
 }
 
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
-.formLabel {
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0;
-  font-family: var(--font-family);
-}
 
 .formTextarea {
   width: 100%;
@@ -1433,7 +1402,7 @@
 
 .dateButton {
   background: var(--primary);
-  color: white;
+  color: var(--foreground);
   border: none;
   border-radius: 6px;
   padding: 6px 12px;
@@ -1452,6 +1421,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .imageUploadButtons {
@@ -1497,17 +1467,22 @@
 
 .imagePreview {
   position: relative;
-  display: inline-block;
+  width: 100%;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--popup-border);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .imagePreviewImg {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: contain;
   display: block;
+  width: fit-content;
 }
 
 .imageRemoveButton {
@@ -1515,7 +1490,7 @@
   top: 4px;
   right: 4px;
   background: rgba(0, 0, 0, 0.7);
-  color: white;
+  color: var(--foreground);
   border: none;
   border-radius: 50%;
   width: 24px;
@@ -1534,58 +1509,18 @@
 
 .addActionFormActions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   gap: 12px;
   padding-top: 20px;
   border-top: 1px solid var(--popup-border);
   margin-top: 8px;
   
+  
 }
 
-.addActionCancelButton {
-  background: var(--popup-background);
-  color: var(--text-secondary);
-  border: 2px solid var(--popup-border);
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: var(--font-family);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.addActionCancelButton:hover {
-  background: var(--popup-hover-bg);
-  color: var(--text-primary);
-  border-color: var(--primary);
-}
 
-.addActionSaveButton {
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-family: var(--font-family);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow);
-}
 
-.addActionSaveButton:hover {
-  background: var(--primary-hover-gradient);
-  transform: translateY(-1px);
-  box-shadow: var(--hover-shadow);
-}
-
-.addActionSaveButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  pointer-events: none;
-}
 
 /* Takvim Stilleri */
 .calendarContainer {
@@ -1683,125 +1618,13 @@
   background: none;
 }
 
-/* Action Detail Popup Stilleri */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 20px;
-}
 
-.popup {
-  background: var(--popup-background);
-  border-radius: 12px;
-  box-shadow: var(--popup-shadow);
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-
-
-.title {
-  color: var(--foreground);
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-  font-family: var(--font-family);
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  color: var(--foreground);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-}
-
-.closeButton:hover {
-  background: var(--popup-hover-bg);
-  color: var(--text-primary);
-}
-
-.content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0;
-}
-
-.actionDetailContent {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.detailSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.detailLabel {
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 0;
-  font-family: var(--font-family);
-}
-
-.detailText {
-  color: var(--text-primary);
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
-  font-family: var(--font-family);
-}
-
-.dateRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.imageContainer {
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--popup-border);
-  max-width: 300px;
-}
-
-.actionImage {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-}
 
 .actionButtons {
   display: flex;
   justify-content: center;
   padding-top: 16px;
+  padding-bottom: 16px;
   border-top: 1px solid var(--popup-border);
 }
 

@@ -186,7 +186,7 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
       element.style.height = 'auto';
       element.style.height = `${Math.max(element.scrollHeight, 40)}px`;
     });
-  }, [newQuestion.question, newQuestion.description, isAddQuestionOpen, isEditQuestionOpen]);
+  }, [isAddQuestionOpen, isEditQuestionOpen]);
 
   const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
@@ -203,13 +203,11 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
     <div className={styles.overlay} 
          onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleOverlayClick(e);}}>
       <div className={styles.popup}>
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <span className={styles.totalAllScore}>{totalAllScore}</span>
-          </div>
-          <h2 className={styles.title}>5S Soruları</h2>
+        <div className="popup-header">
+          <span className={styles.totalAllScore}>{totalAllScore}</span>
+          <h2 className="popup-title">5S Soruları</h2>
           <button 
-            className={styles.closeButton}
+            className="popup-close-button"
             onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();onClose();}}
             aria-label="Kapat"
           >
@@ -380,10 +378,10 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
         <div className={styles.overlay} 
              onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();handleCloseAddQuestion();}}}>
           <div className={styles.popup}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Yeni Soru Ekle</h2>
+            <div className="popup-header">
+              <h2 className="popup-title">Yeni Soru Ekle</h2>
               <button 
-                className={styles.closeButton}
+                className="popup-close-button"
                 onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleCloseAddQuestion();}}
                 aria-label="Kapat"
               >
@@ -473,9 +471,9 @@ const QuestionsPopup: React.FC<QuestionsPopupProps> = ({ isOpen, onClose }) => {
             className={`${styles.popup} ${styles.confirmationPopup}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.header}>
-              <h2 className={styles.title}>Emin misiniz?</h2>
-              <button className={styles.closeButton} onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();cancelDeleteQuestion();}}>
+            <div className="popup-header">
+              <h2 className="popup-title">Emin misiniz?</h2>
+              <button className="popup-close-button" onClick={cancelDeleteQuestion}>
                 ×
               </button>
             </div>

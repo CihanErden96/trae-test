@@ -153,12 +153,12 @@ export function CardAksiyonlarMain() {
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={styles.header}>
-              <h2 className={styles.title}>
+            <div className='popup-header'>
+              <h2 className={'popup-title'}>
                 Aksiyonlar
               </h2>
               <button 
-                className={styles.closeButton}
+                className='popup-close-button'
                 onTouchStart={(e) => {
                   e.preventDefault();
                 }}
@@ -445,10 +445,10 @@ export default function AksiyonlarPopup({
              onMouseDown={(e) => e.stopPropagation()}
              onClick={(e) => e.stopPropagation()}
            >
-            <div className={styles.header}>
-              <h2 className={styles.title}>Aksiyon</h2>
+            <div className='popup-header'>
+              <h2 className='popup-title'>Aksiyon</h2>
               <button 
-                className={styles.closeButton}
+                className='popup-close-button'
                 onTouchStart={(e) => {
                   e.preventDefault();
                 }}
@@ -514,7 +514,7 @@ export default function AksiyonlarPopup({
                 <div className={styles.detailSection}>
                   <h4 className={styles.detailLabel}>Fotoğraf</h4>
                   {selectedAction.image ? (
-                    <div className={styles.imageContainer}>
+                    <div className={styles.imagePreview}>
                       <Image 
                         src={selectedAction.image} 
                         alt="Aksiyon fotoğrafı"

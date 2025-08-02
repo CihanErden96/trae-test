@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
-import calendarStyles from '../styles/calendar.module.css';
 import assignmentStyles from '../styles/denetim_assignment_popup.module.css';
 import ReusableCombobox, { ComboboxOption } from './combobox';
+import Calendar from './calendar';
+import calendarStyles from '../styles/calendar.module.css';
 
 interface DenetimPopupProps {
   isOpen: boolean;
@@ -45,200 +46,46 @@ interface DenetimAssignmentData {
 // DropdownPortal bileşenini kaldırdık - artık gerekli değil
 
 interface DateRangePickerProps {
-  startDate: string;
-  endDate: string;
-  onStartDateChange: (date: string) => void;
-  onEndDateChange: (date: string) => void;
+  onDateRangeChange: (startDate: string, endDate: string) => void;
   error?: string;
 }
 
-function DateRangePicker({ startDate, endDate, onStartDateChange, onEndDateChange, error }: DateRangePickerProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+function DateRangePicker({ onDateRangeChange, error }: DateRangePickerProps) {
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
-  const formatDateForDisplay = (dateStr: string) => {
-    if (!dateStr) return '';
-    return new Date(dateStr).toLocaleDateString('tr-TR');
+  // Tarih formatı dönüştürme fonksiyonları
+  const formatDateForDisplay = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('tr-TR');
   };
 
-  const formatDateForInput = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  // Tarih aralığı değişikliklerini parent'a bildir
+  useEffect(() => {
+    onDateRangeChange(startDate, endDate);
+  }, [startDate, endDate, onDateRangeChange]);
 
-  const getDaysInMonth = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    // Pazartesi başlangıcı için: 0 (Pazar) -> 6, 1 (Pazartesi) -> 0, 2 (Salı) -> 1, vb.
-    const startingDayOfWeek = (firstDay.getDay() + 6) % 7;
-
-    const days = [];
-    
-    // Önceki ayın günleri
-    for (let i = startingDayOfWeek - 1; i >= 0; i--) {
-      const prevDate = new Date(year, month, -i);
-      days.push({ date: prevDate, isCurrentMonth: false });
-    }
-    
-    // Bu ayın günleri
-    for (let day = 1; day <= daysInMonth; day++) {
-      const currentDate = new Date(year, month, day);
-      days.push({ date: currentDate, isCurrentMonth: true });
-    }
-    
-    // Sonraki ayın günleri (42 gün tamamlamak için)
-    const remainingDays = 42 - days.length;
-    for (let day = 1; day <= remainingDays; day++) {
-      const nextDate = new Date(year, month + 1, day);
-      days.push({ date: nextDate, isCurrentMonth: false });
-    }
-    
-    return days;
-  };
-
-  const isDateInRange = (date: Date) => {
-    if (!startDate || !endDate) return false;
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    return date >= start && date <= end;
-  };
-
-  const isDateSelected = (date: Date) => {
-    const dateStr = formatDateForInput(date);
-    return dateStr === startDate || dateStr === endDate;
-  };
-
-  const isDateInHoverRange = (date: Date) => {
-    if (!hoveredDate || !startDate || endDate) return false;
-    const start = new Date(startDate);
-    const minDate = start < hoveredDate ? start : hoveredDate;
-    const maxDate = start > hoveredDate ? start : hoveredDate;
-    return date >= minDate && date <= maxDate;
-  };
-
-  const handleDateClick = (date: Date) => {
-    const dateStr = formatDateForInput(date);
-    
-    // Ay değişimi yapmadan sadece tarih seçimi yap
-    // (Ay değişimi sadece ileri/geri butonları ile yapılacak)
-    
-    if (!startDate || (startDate && endDate)) {
-      // İlk tarih seçimi veya yeniden başlama
-      onStartDateChange(dateStr);
-      onEndDateChange('');
-    } else if (startDate && !endDate) {
-      // İkinci tarih seçimi
-      const start = new Date(startDate);
-      if (date >= start) {
-        onEndDateChange(dateStr);
-      } else {
-        // Eğer seçilen tarih başlangıçtan önce ise, yeni başlangıç yap
-        onStartDateChange(dateStr);
-        onEndDateChange('');
-      }
-    }
-  };
-
-  const navigateMonth = (direction: 'prev' | 'next') => {
-    setCurrentMonth(prev => {
-      const newMonth = new Date(prev);
-      if (direction === 'prev') {
-        newMonth.setMonth(prev.getMonth() - 1);
-      } else {
-        newMonth.setMonth(prev.getMonth() + 1);
-      }
-      return newMonth;
-    });
-  };
-
-  const monthNames = [
-    'Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-    'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'
-  ];
-
-  const dayNames = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
+  // Calendar component'inden gelen tarih değişikliklerini handle et
+  const handleDateRangeChange = useCallback((start: string, end: string) => {
+    setStartDate(start);
+    setEndDate(end);
+  }, []);
 
   return (
-    <div className={calendarStyles.dateRangeContainer}>
-      <div className={calendarStyles.calendarDropdown}>
-        <div className={calendarStyles.calendarHeader}>
-          <button type="button" className={calendarStyles.calendarNavButton} onClick={() => navigateMonth('prev')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <span className={calendarStyles.calendarTitle}>
-            {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-          </span>
-          <button type="button" className={calendarStyles.calendarNavButton} onClick={() => navigateMonth('next')}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-        </div>
-
-        <div className={calendarStyles.calendarGrid}>
-          <div className={calendarStyles.calendarWeekdays}>
-            {dayNames.map(day => (
-              <div key={day} className={calendarStyles.calendarWeekday}>{day}</div>
-            ))}
-          </div>
-          
-          <div className={calendarStyles.calendarDays}>
-            {getDaysInMonth(currentMonth).map(({ date, isCurrentMonth }, index) => {
-              const isToday = date.toDateString() === today.toDateString();
-              const isSelected = isDateSelected(date);
-              const isInRange = isDateInRange(date);
-              const isInHoverRange = isDateInHoverRange(date);
-              const isDisabled = date < today; // Sadece geçmiş tarihler disabled
-              
-              // Tarih aralığı pozisyon kontrolü
-              const isRangeStart = startDate && date.toDateString() === new Date(startDate).toDateString();
-              const isRangeEnd = endDate && date.toDateString() === new Date(endDate).toDateString();
-              const isSingleDay = startDate && endDate && startDate === endDate && isSelected;
-              
-              return (
-                <button
-                  key={index}
-                  type="button"
-                  className={`${calendarStyles.calendarDay} 
-                    ${isCurrentMonth ? calendarStyles.calendarDayCurrentMonth : calendarStyles.calendarDayOtherMonth}
-                    ${isToday ? calendarStyles.calendarDayToday : ''}
-                    ${isSelected ? calendarStyles.calendarDaySelected : ''}
-                    ${isInRange ? calendarStyles.calendarDayInRange : ''}
-                    ${isInHoverRange ? calendarStyles.calendarDayHoverRange : ''}
-                    ${isDisabled ? calendarStyles.calendarDayDisabled : ''}
-                    ${isSingleDay ? calendarStyles.calendarDayRangeSingle : ''}
-                    ${isRangeStart ? calendarStyles.calendarDayRangeStart : ''}
-                    ${isRangeEnd ? calendarStyles.calendarDayRangeEnd : ''}
-                  `}
-                  onClick={() => !isDisabled && handleDateClick(date)}
-                  onMouseEnter={() => !isDisabled && setHoveredDate(date)}
-                  onMouseLeave={() => setHoveredDate(null)}
-                  disabled={isDisabled}
-                >
-                  {date.getDate()}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
+    <div>
+      <Calendar
+        isStartDateDisabled={false}
+        onDateRangeChange={handleDateRangeChange}
+        initialStartDate={startDate}
+        initialEndDate={endDate}
+      />
+      
       {error && (
         <span className={styles.formError}>{error}</span>
       )}
       
       <div className={calendarStyles.dateRangePreview}>
-        <span className={calendarStyles.previewText}>
+        <span  className={calendarStyles.previewText}>
           {startDate ? (
             startDate && endDate ? (
               <>
@@ -335,7 +182,7 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
     departmentResponsibles: {}
   });
 
-  // assignmentData'nın departmentResponsibles'ını varsayılan değerlerle güncelle
+  // assignmentData'nın departmentResponsibles'ını varsayılan değerlerle güncelle (sadece ilk render'da)
   useEffect(() => {
     if (Object.keys(defaultResponsibles).length > 0 && Object.keys(assignmentData.departmentResponsibles).length === 0) {
       setAssignmentData(prev => ({
@@ -416,9 +263,9 @@ function DenetimAssignmentPopup({ isOpen, onClose, onBack, onSave, dateRange, is
       {createPortal(
         <div className={styles.overlay} onClick={handleOverlayClick}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideInRight : styles.slideOutRight) : ''}`}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Denetim Atama</h2>
-              <button className={styles.closeButton} onClick={onClose}>
+            <div className="popup-header">
+              <h2 className="popup-title">Denetim Atama</h2>
+              <button className="popup-close-button" onClick={onClose}>
                 ×
               </button>
             </div>
@@ -522,12 +369,12 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
 
   const [errors, setErrors] = useState<Partial<DenetimData>>({});
 
-  const handleInputChange = (field: keyof DenetimData, value: string) => {
+  const handleInputChange = useCallback((field: keyof DenetimData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
-  };
+  }, [errors]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<DenetimData> = {};
@@ -624,9 +471,9 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
       {!showDetailsPopup && createPortal(
         <div className={styles.overlay} onClick={handleOverlayClick}>
           <div className={`${styles.popup} ${isSliding ? (slideDirection === 'forward' ? styles.slideOutLeft : styles.slideInLeft) : ''}`}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Denetim Oluştur</h2>
-              <button className={styles.closeButton} onClick={onClose}>
+            <div className="popup-header">
+              <h2 className="popup-title">Denetim Oluştur</h2>
+              <button className="popup-close-button" onClick={onClose}>
                 ×
               </button>
             </div>
@@ -635,10 +482,10 @@ export default function DenetimPopup({ isOpen, onClose, onSubmit }: DenetimPopup
               <form onSubmit={handleSubmit} className={styles.addQuestionForm}>
                 <div className={styles.formGroup}>
                   <DateRangePicker
-                    startDate={formData.startDate}
-                    endDate={formData.endDate}
-                    onStartDateChange={(date) => handleInputChange('startDate', date)}
-                    onEndDateChange={(date) => handleInputChange('endDate', date)}
+                    onDateRangeChange={useCallback((startDate, endDate) => {
+                      handleInputChange('startDate', startDate);
+                      handleInputChange('endDate', endDate);
+                    }, [handleInputChange])}
                     error={errors.startDate || errors.endDate}
                   />
                 </div>

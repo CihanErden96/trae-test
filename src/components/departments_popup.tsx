@@ -138,10 +138,10 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
           className={popupStyles.popup} 
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={popupStyles.header}>
-            <h2 className={popupStyles.title}>Departmanlar</h2>
+          <div className="popup-header">
+            <h2 className="popup-title">Departmanlar</h2>
             <button 
-              className={popupStyles.closeButton}
+              className="popup-close-button"
               onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();onClose();}}
               aria-label="Kapat"
             >
@@ -198,10 +198,10 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
             className={popupStyles.popup} 
             onClick={(e) => e.stopPropagation()}
           >
-              <div className={popupStyles.header}>
-                <h2 className={popupStyles.title}>Yeni Departman Ekle</h2>
+              <div className="popup-header">
+                <h2 className="popup-title">Yeni Departman Ekle</h2>
                 <button 
-                  className={popupStyles.closeButton}
+                  className="popup-close-button"
                   onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleCloseAddDepartment();}}
                   aria-label="Kapat"
                 >
@@ -251,10 +251,10 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
             className={popupStyles.popup} 
             onClick={(e) => e.stopPropagation()}
           >
-              <div className={popupStyles.header}>
-                <h2 className={popupStyles.title}>Departman Detayı</h2>
+              <div className="popup-header">
+                <h2 className="popup-title">Departman Detayı</h2>
                 <button 
-                  className={popupStyles.closeButton}
+                  className="popup-close-button"
                   onClick={(e) => {e.preventDefault();hapticFeedback.navigation.close();handleCloseDepartmentDetail();}}
                   aria-label="Kapat"
                 >
@@ -316,42 +316,44 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
 
         {/* Silme Onay Popup'ı */}
         {showDeleteConfirmation && departmentToDelete && (
-          <div className={popupStyles.overlay} 
-               onClick={(e) => {e.preventDefault();if (e.target === e.currentTarget) {hapticFeedback.navigation.close();cancelDeleteDepartment();}}}>
-            <div 
-              className={popupStyles.popup}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className={popupStyles.header}>
-                <h2 className={popupStyles.title}>Departmanı Sil</h2>
-              </div>
-              
-              <div className={popupStyles.content}>
-                <div className={popupStyles.confirmationContent}>
+          
+        <div className={popupStyles.overlay} onClick={cancelDeleteDepartment}>
+          <div 
+            className={`${popupStyles.popup} ${popupStyles.confirmationPopup}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="popup-header">
+              <h2 className="popup-title">Emin misiniz?</h2>
+              <button className="popup-close-button" onClick={cancelDeleteDepartment}>
+                ×
+              </button>
+            </div>
+            <div className={popupStyles.content}>
+              <div className={popupStyles.confirmationContent}>
                   <p className={popupStyles.confirmationMessage}>
                     <strong>{departmentToDelete.name}</strong> departmanını silmek istediğinizden emin misiniz?
                   </p>
-                  <p className={popupStyles.confirmationWarning}>
-                    Bu işlem geri alınamaz.
-                  </p>
-                  <div className={popupStyles.confirmationActions}>
-                    <button 
-                      className={popupStyles.cancelButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.action.cancel();cancelDeleteDepartment();}}
-                    >
-                      İptal
-                    </button>
-                    <button 
-                      className={popupStyles.deleteConfirmButton}
-                      onClick={(e) => {e.preventDefault();hapticFeedback.action.delete();confirmDeleteDepartment();}}
-                    >
-                      Sil
-                    </button>
-                  </div>
+                <p className={popupStyles.confirmationWarning}>
+                  Bu işlem geri alınamaz.
+                </p>
+                <div className={popupStyles.confirmationActions}>
+                  <button 
+                    className={popupStyles.cancelButton}
+                    onClick={cancelDeleteDepartment}
+                  >
+                    İptal
+                  </button>
+                  <button 
+                    className={popupStyles.deleteButton}
+                    onClick={confirmDeleteDepartment}
+                  >
+                    Sil
+                  </button>
                 </div>
               </div>
             </div>
           </div>
+        </div>
         )}
       </div>
     </>,

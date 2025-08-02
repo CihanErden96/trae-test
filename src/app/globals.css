@@ -36,6 +36,7 @@
   --button-secondary-bg: #FFF3E0;
   --button-secondary-text: #8D4E00;
   --button-secondary-hover: #F5E6A8;
+  --button-hover-gradient: linear-gradient(135deg, rgba(var(--primary-rgb), 0.1), rgba(var(--primary-rgb), 0.05));
   --button-danger-bg: #dc2626;
   --button-danger-text: #ffffff;
   --button-danger-hover: #b91c1c;
