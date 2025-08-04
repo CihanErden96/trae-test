@@ -78,7 +78,7 @@ export function CardDenetimDepartman() {
 
   const handleScoreSelect = (questionId: number, score: string) => {
     const question = questions.find(q => q.id === questionId);
-    const hasActions = question?.actions && question.actions.length > 0;
+    const hasActions = question?.actions && question.actions.some(action => action.status !== 'completed' && new Date(action.dueDate) < today);
     const isMaxScore = question && score === question.score.toString();
     
     // Eğer aksiyon varken max value seçilmeye çalışırsa uyarı ver
@@ -377,7 +377,7 @@ export function CardDenetimDepartman() {
               <div className={styles.questionsList}>
                 {questions.map((question) => {
                   const currentScore = questionScores[question.id];
-                  const hasActions = question.actions && question.actions.some(action => action.status === 'incompleted');
+                  const hasActions = question.actions && question.actions.length>0;
                   
                   // Eğer hiçbir aksiyon yoksa ve puan seçilmemişse, default olarak max value seç
                   // Eğer aksiyon varsa ve puan seçilmemişse, default olarak min value (0) seç
