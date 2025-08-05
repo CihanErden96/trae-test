@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import styles from '../styles/card.module.css';
@@ -8,24 +8,20 @@ import Calendar from './calendar';
 import { Action } from './const';
 
 interface ActionDetailPopupProps {
-  isOpen: boolean;
-  onClose: () => void;
   selectedAction: Action | null;
   isDueDateEditable?: boolean;
   isCompletedButtonEnabled?: boolean;
-  onToggleStatus?: () => void;
-  onDueDateChange?: (newDueDate: string) => void;
+  onActionUpdate?: (updatedAction: Action) => void;
 }
 
 const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
-  isOpen,
-  onClose,
   selectedAction,
   isDueDateEditable = false,
   isCompletedButtonEnabled = false,
-  onToggleStatus,
-  onDueDateChange
+  onActionUpdate
 }) => {
+  const [isOpen, setIsOpen] = useState(!!selectedAction);
+  const [currentAction, setCurrentAction] = useState<Action | null>(selectedAction);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [tempStartDate, setTempStartDate] = useState<string>('');
   const [tempEndDate, setTempEndDate] = useState<string>('');
@@ -44,9 +40,20 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
 
   const todayString = formatDateToString(today);
 
+  // selectedAction değiştiğinde state'i güncelle
+  useEffect(() => {
+    setCurrentAction(selectedAction);
+    setIsOpen(!!selectedAction);
+  }, [selectedAction]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+    setCurrentAction(null);
+  };
+
   const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      handleClose();
     }
   };
 
@@ -54,8 +61,8 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
     if (isDueDateEditable) {
       setIsCalendarOpen(true);
       // Mevcut due date'i başlangıç olarak ayarla
-      if (selectedAction?.dueDate) {
-        setTempEndDate(selectedAction.dueDate);
+      if (currentAction?.dueDate) {
+        setTempEndDate(currentAction.dueDate);
       }
       setTempStartDate(todayString);
     }
@@ -67,8 +74,12 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
   }, []);
 
   const handleCalendarSave = () => {
-    if (tempEndDate && onDueDateChange) {
-      onDueDateChange(tempEndDate);
+    if (tempEndDate && currentAction) {
+      const updatedAction = { ...currentAction, dueDate: tempEndDate };
+      setCurrentAction(updatedAction);
+      if (onActionUpdate) {
+        onActionUpdate(updatedAction);
+      }
     }
     setIsCalendarOpen(false);
   };
@@ -79,7 +90,22 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
     setTempEndDate('');
   };
 
-  if (!isOpen || !selectedAction) {
+  const handleToggleStatus = () => {
+    if (currentAction) {
+      const newStatus = currentAction.status === 'completed' ? 'incompleted' : 'completed';
+      const updatedAction = { 
+        ...currentAction, 
+        status: newStatus as 'completed' | 'incompleted',
+        completedDate: newStatus === 'completed' ? new Date().toISOString().split('T')[0] : undefined
+      };
+      setCurrentAction(updatedAction);
+      if (onActionUpdate) {
+        onActionUpdate(updatedAction);
+      }
+    }
+  };
+
+  if (!isOpen || !currentAction) {
     return null;
   }
 
@@ -115,7 +141,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             }}
             onClick={(e) => {
               e.preventDefault();
-              onClose();
+              handleClose();
             }}
             aria-label="Kapat"
           >
@@ -130,7 +156,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Soru</h4>
               <p className={styles.detailText}>
-                {selectedAction.question || selectedAction.title || 'Soru bulunmuyor'}
+                {currentAction.question || currentAction.title || 'Soru bulunmuyor'}
               </p>
             </div>
 
@@ -138,7 +164,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Açıklama</h4>
               <p className={styles.detailText}>
-                {selectedAction.description || 'Açıklama bulunmuyor'}
+                {currentAction.description || 'Açıklama bulunmuyor'}
               </p>
             </div>
 
@@ -147,7 +173,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Başlangıç Tarihi</h4>
                 <p className={styles.detailText}>
-                  {selectedAction.startDate || 'Belirtilmemiş'}
+                  {currentAction.startDate || 'Belirtilmemiş'}
                 </p>
               </div>
               <div className={styles.detailSection}>
@@ -160,10 +186,10 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                     textDecoration: isDueDateEditable ? 'underline' : 'none'
                   }}
                 >
-                  {selectedAction.dueDate ? 
-                    (typeof selectedAction.dueDate === 'string' ? 
-                      new Date(selectedAction.dueDate).toLocaleDateString('tr-TR') : 
-                      selectedAction.dueDate
+                  {currentAction.dueDate ? 
+                    (typeof currentAction.dueDate === 'string' ? 
+                      new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
+                      currentAction.dueDate
                     ) : 
                     'Belirtilmemiş'
                   }
@@ -173,7 +199,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Tamamlanma Tarihi</h4>
                 <p className={styles.detailText}>
-                  {selectedAction.completedDate || 'Tamamlanmamış'}
+                  {currentAction.completedDate || 'Tamamlanmamış'}
                 </p>
               </div>
             </div>
@@ -183,19 +209,19 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Departman</h4>
                 <p className={styles.detailText}>
-                  {selectedAction.department || 'Belirtilmemiş'}
+                  {currentAction.department || 'Belirtilmemiş'}
                 </p>
               </div>
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Oluşturan</h4>
                 <p className={styles.detailText}>
-                  {selectedAction.creator || 'Belirtilmemiş'}
+                  {currentAction.creator || 'Belirtilmemiş'}
                 </p>
               </div>
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Sorumlu</h4>
                 <p className={styles.detailText}>
-                  {selectedAction.assignedTo || 'Belirtilmemiş'}
+                  {currentAction.assignedTo || 'Belirtilmemiş'}
                 </p>
               </div>
             </div>
@@ -204,17 +230,17 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Durum</h4>
               <p className={styles.detailText}>
-                {selectedAction.status === 'completed' ? 'Tamamlandı' : 'Tamamlanmadı'}
+                {currentAction.status === 'completed' ? 'Tamamlandı' : 'Tamamlanmadı'}
               </p>
             </div>
 
             {/* Fotoğraf Alanı */}
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Fotoğraf</h4>
-              {selectedAction.image ? (
+              {currentAction.image ? (
                 <div className={styles.imagePreview} style={{ maxWidth: '100%' }}>
                   <Image 
-                    src={selectedAction.image} 
+                    src={currentAction.image} 
                     alt="Aksiyon fotoğrafı"
                     className={styles.actionImage}
                     width={400}
@@ -235,13 +261,13 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             </div>
 
             {/* Durum Değiştirme Butonu - Opsiyonel */}
-            {isCompletedButtonEnabled && onToggleStatus && (
+            {isCompletedButtonEnabled && (
               <div className={styles.actionButtons}>
                 <button
-                  onClick={onToggleStatus}
+                  onClick={handleToggleStatus}
                   className={`${styles.statusToggleButton} ${styles.markCompleteButton}`}
                 >
-                  {selectedAction.status === 'completed' 
+                  {currentAction.status === 'completed' 
                     ? 'Tamamlanmadı olarak işaretle' 
                     : 'Tamamlandı olarak işaretle'
                   }

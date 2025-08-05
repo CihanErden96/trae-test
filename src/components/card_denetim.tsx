@@ -29,7 +29,6 @@ export function CardDenetimDepartman() {
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [warningMessage, setWarningMessage] = useState<{[key: number]: string}>({});
-  const [isActionDetailOpen, setIsActionDetailOpen] = useState(false);
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
 
@@ -261,16 +260,7 @@ export function CardDenetimDepartman() {
   const handleActionClick = (action: Action) => {
     hapticFeedback.navigation.select();
     setSelectedAction(action);
-    setIsActionDetailOpen(true);
   };
-
-  const handleCloseActionDetail = () => {
-    hapticFeedback.navigation.close();
-    setIsActionDetailOpen(false);
-    setSelectedAction(null);
-  };
-
-
 
   const handleCompleteAudit = () => {
     hapticFeedback.action.save();
@@ -614,17 +604,16 @@ export function CardDenetimDepartman() {
       )}
 
       {/* Action Detail Popup */}
-      {isActionDetailOpen && selectedAction && (
+      {selectedAction && (
         <ActionDetailPopup
           selectedAction={selectedAction}
-          isOpen={isActionDetailOpen}
-          onClose={handleCloseActionDetail}
           isDueDateEditable={true}
           isCompletedButtonEnabled={true}
-          onDueDateChange={(newDate) => {
-            if (selectedAction) {
-              setSelectedAction(prev => prev ? { ...prev, dueDate: newDate } : null);
-            }
+          onActionUpdate={(updatedAction) => {
+            setSelectedAction(updatedAction);
+            // Bu durumda questions içindeki actions'ları güncellememiz gerekiyor
+            // Ancak şu an questions const olarak tanımlı, bu yüzden sadece selectedAction'ı güncelliyoruz
+            console.log('Action updated:', updatedAction);
           }}
         />
       )}

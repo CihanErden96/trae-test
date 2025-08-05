@@ -427,8 +427,6 @@ export default function AksiyonlarPopup({
       {isActionDetailOpen && selectedAction && (
         <ActionDetailPopup
           selectedAction={selectedAction}
-          isOpen={isActionDetailOpen}
-          onClose={handleCloseActionDetail}
           isDueDateEditable={true}
           isCompletedButtonEnabled={true}
 
