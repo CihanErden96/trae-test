@@ -31,6 +31,7 @@ export interface Action {
   priority?: 'low' | 'medium' | 'high';
   category?: string;
   image?: string;
+  dueDateUpdateCount?: number;
 }
 
 export interface Department {

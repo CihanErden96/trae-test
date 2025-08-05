@@ -75,7 +75,12 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
 
   const handleCalendarSave = () => {
     if (tempEndDate && currentAction) {
-      const updatedAction = { ...currentAction, dueDate: tempEndDate };
+      const currentCount = currentAction.dueDateUpdateCount || 0;
+      const updatedAction = { 
+        ...currentAction, 
+        dueDate: tempEndDate,
+        dueDateUpdateCount: currentCount + 1
+      };
       setCurrentAction(updatedAction);
       if (onActionUpdate) {
         onActionUpdate(updatedAction);
@@ -191,6 +196,9 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                       ) : 
                       'Belirsiz'
                     }
+                    {currentAction.dueDateUpdateCount && currentAction.dueDateUpdateCount > 0 && 
+                      ` (${currentAction.dueDateUpdateCount})`
+                    }
                   </button>
                 ) : (
                   <p className={styles.detailText}>
@@ -200,6 +208,9 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                         currentAction.dueDate
                       ) : 
                       'Belirsiz'
+                    }
+                    {currentAction.dueDateUpdateCount && currentAction.dueDateUpdateCount > 0 && 
+                      ` (${currentAction.dueDateUpdateCount})`
                     }
                   </p>
                 )}
