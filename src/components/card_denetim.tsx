@@ -10,6 +10,7 @@ import { hapticFeedback } from '../utils/haptic';
 import ReusableCombobox from './combobox';
 import Calendar from './calendar';
 import { Question, denetimQuestionsData, getScoreOptions, Action } from './const';
+import ActionDetailPopup from './actionDetail_popup';
 
 
 
@@ -629,94 +630,20 @@ export function CardDenetimDepartman() {
       )}
 
       {/* Action Detail Popup */}
-      {isActionDetailOpen && selectedAction && createPortal(
-        <div className={styles.overlay} onClick={handleCloseActionDetail}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.header}>
-              <h2 className={styles.title}>Aksiyon Detayı</h2>
-              <button 
-                className='popup-close-button'
-                onClick={handleCloseActionDetail}
-                aria-label="Kapat"
-              >
-                ×
-              </button>
-            </div>
-            
-            <div className={styles.content}>
-              <div className={styles.actionDetailContent}>
-                
-                {/* Başlık */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Başlık</h4>
-                  <p className={styles.detailText}>{selectedAction.title}</p>
-                </div>
-
-                {/* Açıklama */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Açıklama</h4>
-                  <p className={styles.detailText}>{selectedAction.description || 'Açıklama bulunmuyor'}</p>
-                </div>
-
-                {/* Tarihler */}
-                <div className={styles.dateRow}>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Başlangıç Tarihi</h4>
-                    <p className={styles.detailText}>{selectedAction.startDate || 'Belirtilmemiş'}</p>
-                  </div>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Termin Tarihi</h4>
-                    <p className={styles.detailText}>{new Date(selectedAction.dueDate).toLocaleDateString('tr-TR')}</p>
-                  </div>
-                </div>
-
-                {/* Durum */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Durum</h4>
-                  <p className={styles.detailText}>
-                    {selectedAction.status === 'completed' ? 'Tamamlandı' : 'Tamamlanmadı'}
-                  </p>
-                </div>
-
-                {/* Fotoğraf Alanı */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Fotoğraf</h4>
-                  {selectedAction.image ? (
-                    <div className={styles.imageContainer}>
-                      <Image 
-                        src={selectedAction.image} 
-                        alt="Aksiyon fotoğrafı"
-                        className={styles.actionImage}
-                        width={400}
-                        height={300}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className={styles.noImageContainer}>
-                      <p className={styles.noImageText}>Fotoğraf yok</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Durum Değiştirme Butonu */}
-                <div className={styles.actionButtons}>
-                  <button
-                    onClick={handleToggleActionStatus}
-                    className={`${styles.statusToggleButton} ${styles.markCompleteButton}`}
-                  >
-                    {selectedAction.status === 'completed' 
-                      ? 'Tamamlanmadı olarak işaretle' 
-                      : 'Tamamlandı olarak işaretle'
-                    }
-                  </button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>,
-        document.body
+      {isActionDetailOpen && selectedAction && (
+        <ActionDetailPopup
+          selectedAction={selectedAction}
+          isOpen={isActionDetailOpen}
+          onClose={handleCloseActionDetail}
+          isDueDateEditable={true}
+          isCompletedButtonEnabled={true}
+          onToggleStatus={handleToggleActionStatus}
+          onDueDateChange={(newDate) => {
+            if (selectedAction) {
+              setSelectedAction(prev => prev ? { ...prev, dueDate: newDate } : null);
+            }
+          }}
+        />
       )}
 
       {/* Denetimi Tamamla Onay Popup'ı */}

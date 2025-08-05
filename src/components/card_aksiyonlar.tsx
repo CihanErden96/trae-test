@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
 import { Action, truncateText, departmentsData, calculateTotalActions, Department } from './const';
+import ActionDetailPopup from './actionDetail_popup';
 
 interface AksiyonlarPopupProps {
   department: Department;
@@ -423,119 +424,14 @@ export default function AksiyonlarPopup({
       </div>
 
       {/* Aksiyon Detay Popup'ı */}
-      {isActionDetailOpen && selectedAction && createPortal(
-        <div 
-          className={styles.overlay} 
-          onTouchStart={(e) => {
-            e.preventDefault();
-          }}
-          onMouseDown={(e) => {
-            e.preventDefault();
-          }}
-          onClick={(e) => {
-            e.preventDefault();
-            if (e.target === e.currentTarget) {
-              handleCloseActionDetail();
-            }
-          }}
-        >
-          <div 
-             className={styles.popup} 
-             onTouchStart={(e) => e.stopPropagation()}
-             onMouseDown={(e) => e.stopPropagation()}
-             onClick={(e) => e.stopPropagation()}
-           >
-            <div className='popup-header'>
-              <h2 className='popup-title'>Aksiyon</h2>
-              <button 
-                className='popup-close-button'
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleCloseActionDetail();
-                }}
-                aria-label="Kapat"
-              >
-                ×
-              </button>
-            </div>
-            
-            <div className={styles.content}>
-              <div className={styles.actionDetailContent}>
-                
-                {/* Soru */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Soru</h4>
-                  <p className={styles.detailText}>{selectedAction.question}</p>
-                </div>
-
-                {/* Açıklama */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Açıklama</h4>
-                  <p className={styles.detailText}>{selectedAction.description}</p>
-                </div>
-
-                {/* Tarihler - Yan Yana */}
-                <div className={styles.dateRow}>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Başlangıç Tarihi</h4>
-                    <p className={styles.detailText}>{selectedAction.startDate}</p>
-                  </div>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Termin Tarihi</h4>
-                    <p className={styles.detailText}>{selectedAction.dueDate}</p>
-                  </div>
-                  {selectedAction.completedDate && (
-                    <div className={styles.detailSection}>
-                      <h4 className={styles.detailLabel}>Tamamlanma Tarihi</h4>
-                      <p className={styles.detailText}>{selectedAction.completedDate}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Departman ve Oluşturan - Yan Yana */}
-                <div className={styles.infoRow}>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Departman</h4>
-                    <p className={styles.detailText}>{selectedAction.department || 'Belirtilmemiş'}</p>
-                  </div>
-                  <div className={styles.detailSection}>
-                    <h4 className={styles.detailLabel}>Oluşturan</h4>
-                    <p className={styles.detailText}>{selectedAction.creator || 'Belirtilmemiş'}</p>
-                  </div>
-                </div>
-
-                {/* Fotoğraf Alanı */}
-                <div className={styles.detailSection}>
-                  <h4 className={styles.detailLabel}>Fotoğraf</h4>
-                  {selectedAction.image ? (
-                    <div className={styles.imagePreview}>
-                      <Image 
-                        src={selectedAction.image} 
-                        alt="Aksiyon fotoğrafı"
-                        className={styles.actionImage}
-                        width={400}
-                        height={300}
-                        style={{ objectFit: 'cover' }}
-                      />
-                    </div>
-                  ) : (
-                    <div className={styles.noImageContainer}>
-                      <p className={styles.noImageText}>Fotoğraf yok</p>
-                    </div>
-                  )}
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>,
-        document.body
+      {isActionDetailOpen && selectedAction && (
+        <ActionDetailPopup
+          selectedAction={selectedAction}
+          isOpen={isActionDetailOpen}
+          onClose={handleCloseActionDetail}
+          isDueDateEditable={false}
+          isCompletedButtonEnabled={false}
+        />
       )}
     </>
   );
