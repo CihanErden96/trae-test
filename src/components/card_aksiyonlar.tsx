@@ -428,7 +428,7 @@ export default function AksiyonlarPopup({
         <ActionDetailPopup
           selectedAction={selectedAction}
           isDueDateEditable={true}
-          isCompletedButtonEnabled={true}
+          isCompletedButtonEnabled={false}
 
         />
       )}

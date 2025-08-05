@@ -428,7 +428,8 @@
 .detailSection {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  position: relative;
+  min-height: 80px; /* Minimum yükseklik belirle */
 }
 
 .detailLabel {
@@ -436,8 +437,11 @@
   font-size: 1rem;
   font-weight: 600;
   color: var(--popup-title-color);
-  padding-bottom: 4px;
-  border-bottom: 2px solid var(--popup-border);
+  flex: 1; /* Eşit yükseklik için flex kullan */
+  display: flex;
+  align-items: center; /* İçeriği dikeyde ortala */
+  padding: 8px 0;
+  min-height: 40px; /* Minimum yükseklik */
 }
 
 .detailText {
@@ -445,7 +449,32 @@
   font-size: 0.95rem;
   color: var(--popup-description-color);
   line-height: 1.6;
+  flex: 1; /* Eşit yükseklik için flex kullan */
+  display: flex;
+  align-items: center; /* İçeriği dikeyde ortala */
   padding: 8px 0;
+  min-height: 40px; /* Minimum yükseklik */
+}
+
+/* Border'ı section'ın ortasına yerleştir */
+.detailSection::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  background: var(--popup-border);
+  z-index: 1;
+}
+
+/* Label ve text'in arka planını ayarla ki border görünür olsun */
+.detailLabel,
+.detailText {
+  background: var(--popup-bg);
+  position: relative;
+  z-index: 2;
 }
 
 .imageContainer {

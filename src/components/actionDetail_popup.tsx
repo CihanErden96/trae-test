@@ -191,7 +191,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                       new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
                       currentAction.dueDate
                     ) : 
-                    'Belirtilmemiş'
+                    'Belirsiz'
                   }
                 </p>
               </div>
@@ -199,7 +199,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Tamamlanma Tarihi</h4>
                 <p className={styles.detailText}>
-                  {currentAction.completedDate || 'Tamamlanmamış'}
+                  {currentAction.completedDate || 'Belirsiz'}
                 </p>
               </div>
             </div>
