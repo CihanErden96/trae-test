@@ -178,22 +178,31 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               </div>
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Termin Tarihi</h4>
-                <p 
-                  className={`${styles.detailText} ${isDueDateEditable ? styles.editableDate : ''}`}
-                  onClick={handleDueDateClick}
-                  style={{ 
-                    cursor: isDueDateEditable ? 'pointer' : 'default',
-                    textDecoration: isDueDateEditable ? 'underline' : 'none'
-                  }}
-                >
-                  {currentAction.dueDate ? 
-                    (typeof currentAction.dueDate === 'string' ? 
-                      new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
-                      currentAction.dueDate
-                    ) : 
-                    'Belirsiz'
-                  }
-                </p>
+                {isDueDateEditable ? (
+                  <button 
+                    className={styles.dueDateButton}
+                    onClick={handleDueDateClick}
+                    type="button"
+                  >
+                    {currentAction.dueDate ? 
+                      (typeof currentAction.dueDate === 'string' ? 
+                        new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
+                        currentAction.dueDate
+                      ) : 
+                      'Belirsiz'
+                    }
+                  </button>
+                ) : (
+                  <p className={styles.detailText}>
+                    {currentAction.dueDate ? 
+                      (typeof currentAction.dueDate === 'string' ? 
+                        new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
+                        currentAction.dueDate
+                      ) : 
+                      'Belirsiz'
+                    }
+                  </p>
+                )}
               </div>
               {/* Tamamlanma Tarihi - Her zaman görünür */}
               <div className={styles.detailSection}>
