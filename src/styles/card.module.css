@@ -1721,3 +1721,8 @@
 .dueDateButton:active {
   transform: translateY(0);
 }
+
+/* Fotoğraf alanı için border'ı devre dışı bırak */
+.imageSection::after {
+  display: none;
+}

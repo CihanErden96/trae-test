@@ -244,7 +244,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             </div>
 
             {/* Fotoğraf Alanı */}
-            <div className={styles.detailSection}>
+            <div className={`${styles.detailSection} ${styles.imageSection}`}>
               <h4 className={styles.detailLabel}>Fotoğraf</h4>
               {currentAction.image ? (
                 <div className={styles.imagePreview} style={{ maxWidth: '100%' }}>
@@ -328,7 +328,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                 </button>
                 <button
                   onClick={handleCalendarSave}
-                  className={styles.saveButton}
+                  className={styles.deleteConfirmButton}
                   disabled={!tempEndDate}
                 >
                   Kaydet

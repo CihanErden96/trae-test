@@ -137,12 +137,12 @@ export function CardDenetimDepartman() {
   };
 
   const handleSaveAction = () => {
-    if (newAction.title.trim() && newAction.dueDate) {
+    if (newAction.title.trim()) {
       hapticFeedback.action.save();
       console.log('Yeni aksiyon kaydedildi:', {
         questionId: selectedQuestionId,
         title: newAction.title,
-        dueDate: newAction.dueDate,
+        dueDate: 'Belirsiz',
         image: newAction.image
       });
       handleCloseAddAction();
@@ -487,43 +487,7 @@ export function CardDenetimDepartman() {
                   />
                 </div>
 
-                {/* Tarih Seçimi */}
-                <div className={styles.formGroup}>
-                  
-                  <div className={styles.dateSection}>
-                    {/* Tarih Önizleme Alanı */}
-                    <div className={calendarStyles.dateRangePreview}>
-                      <span className={calendarStyles.previewText}>
-                        {today && newAction.dueDate ? (
-                          <>
-                            {today.toLocaleDateString('tr-TR')} - {new Date(newAction.dueDate).toLocaleDateString('tr-TR')}
-                            {(() => {
-                              const start = new Date(today);
-                              const end = new Date(newAction.dueDate);
-                              const diffTime = Math.abs(end.getTime() - start.getTime());
-                              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                              return ` (${diffDays} gün)`;
-                            })()}
-                          </>
-                        ) : today ? (
-                          <>
-                            Bugünkü tarih: {today.toLocaleDateString('tr-TR')} - 
-                          </>
-                        ) : (
-                          ''
-                        )}
-                      </span>
-                    </div>
 
-                    {/* Takvim - Calendar Component */}
-                    <Calendar
-                      isStartDateDisabled={true}
-                      onDateRangeChange={handleDateRangeChange}
-                      initialStartDate={todayString}
-                      initialEndDate={endDate}
-                    />
-                  </div>
-                </div>
 
                 {/* Fotoğraf Yükleme */}
                 <div className={styles.formGroup}>
