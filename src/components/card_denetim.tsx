@@ -270,23 +270,7 @@ export function CardDenetimDepartman() {
     setSelectedAction(null);
   };
 
-  const handleToggleActionStatus = () => {
-    if (selectedAction) {
-      hapticFeedback.action.save();
-      const newStatus = selectedAction.status === 'completed' ? 'incompleted' : 'completed';
-      const completedDate = newStatus === 'completed' ? new Date().toISOString().split('T')[0] : '';
-      
-      // Burada gerçek uygulamada API çağrısı yapılacak
-      console.log(`Aksiyon durumu güncellendi: ${selectedAction.id} -> ${newStatus}, completedDate: ${completedDate}`);
-      
-      // Local state'i güncelle
-      setSelectedAction(prev => prev ? { 
-        ...prev, 
-        status: newStatus,
-        completedDate: completedDate
-      } : null);
-    }
-  };
+
 
   const handleCompleteAudit = () => {
     hapticFeedback.action.save();
@@ -637,7 +621,6 @@ export function CardDenetimDepartman() {
           onClose={handleCloseActionDetail}
           isDueDateEditable={true}
           isCompletedButtonEnabled={true}
-          onToggleStatus={handleToggleActionStatus}
           onDueDateChange={(newDate) => {
             if (selectedAction) {
               setSelectedAction(prev => prev ? { ...prev, dueDate: newDate } : null);
