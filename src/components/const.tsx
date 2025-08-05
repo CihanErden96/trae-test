@@ -183,7 +183,7 @@ export const denetimQuestionsData: Question[] = [
         title: "Eksik güvenlik ekipmanlarını temin et",
         description: "Listede belirtilen eksik güvenlik ekipmanlarını satın al",
         status: 'incompleted',
-        dueDate: '2025-01-20'
+        dueDate: '2026-01-20'
       }
     ]
   },
