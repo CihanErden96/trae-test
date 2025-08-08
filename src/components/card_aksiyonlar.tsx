@@ -281,11 +281,9 @@ export default function AksiyonlarPopup({
                   onTouchStart={(e) => {
                     e.preventDefault();
                     hapticFeedback.button.primary();
-                    setSelectedAction(action);
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    setSelectedAction(action);
                     hapticFeedback.button.primary();
                   }}
 
