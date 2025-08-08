@@ -23,7 +23,7 @@ export default function CardDenetimler() {
   };
 
   const handleSubmitDenetim = (denetim: DenetimData) => {
-    console.log('Yeni denetim oluşturuldu:', denetim);
+    // API çağrısı burada yapılacak
   };
 
   return (

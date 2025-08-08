@@ -49,11 +49,11 @@ const initializeHapticImmediately = () => {
     if ('vibrate' in navigator) {
       isHapticEnabled = true;
       hasUserInteracted = true;
-      console.log('Haptic feedback initialized immediately');
+      // Haptic feedback başlatıldı
     } else {
       isHapticEnabled = true;
       hasUserInteracted = true;
-      console.log('Haptic feedback enabled for iOS Safari');
+      // iOS Safari için haptic etkinleştirildi
     }
   } catch (error) {
     console.warn('Haptic initialization failed:', error);
@@ -74,7 +74,7 @@ const testHapticSupportSync = () => {
   try {
     if ('vibrate' in navigator) {
       isHapticEnabled = true;
-      console.log('Haptic feedback enabled');
+      // Haptic feedback etkinleştirildi
       return;
     }
     isHapticEnabled = true;

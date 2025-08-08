@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { ProfileIcon } from "./icons";
 import styles from '../styles/header.module.css';
 
-export default function Header() {
+const Header = memo(function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.settingsIcon}>
@@ -18,4 +18,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+});
+
+export default Header;

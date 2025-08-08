@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import { DepartmentsIcon, PeoplesIcon, QuestionsIcon } from './icons';
 import styles from '../styles/footer.module.css';
 import QuestionsPopup from './questions_popup';
@@ -8,73 +8,68 @@ import PeoplesPopup from './peoples_popup';
 import DepartmentsPopup from './departments_popup';
 import { hapticFeedback } from '../utils/haptic';
 
-export default function Footer() {
-  const [peoplesRipples, setPeoplesRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
-  const [questionsRipples, setQuestionsRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
-  const [departmentsRipples, setDepartmentsRipples] = useState<Array<{id: number, x: number, y: number}>>([]);
-  const [isQuestionsPopupOpen, setIsQuestionsPopupOpen] = useState(false);
-  const [isPeoplesPopupOpen, setIsPeoplesPopupOpen] = useState(false);
-  const [isDepartmentsPopupOpen, setIsDepartmentsPopupOpen] = useState(false);
+const Footer = memo(function Footer() {
+  const [activeRipples, setActiveRipples] = useState<{ [key: string]: Array<{ id: number, x: number, y: number }> }>({
+    peoples: [],
+    questions: [],
+    departments: []
+  });
+  const [openPopups, setOpenPopups] = useState({
+    questions: false,
+    peoples: false,
+    departments: false
+  });
 
-  // Generic function to handle click and touch events
+  // Optimized ripple effect function
   const createRippleEffect = (
     e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>,
-    setRipples: React.Dispatch<React.SetStateAction<Array<{id: number, x: number, y: number}>>>
+    buttonType: 'peoples' | 'questions' | 'departments'
   ) => {
     const rect = e.currentTarget.getBoundingClientRect();
     let x, y;
-    
-    // Touch event için koordinatları al
+
     if ('touches' in e && e.touches.length > 0) {
       x = e.touches[0].clientX - rect.left;
       y = e.touches[0].clientY - rect.top;
     } else {
-      // Mouse event için koordinatları al
       x = (e as React.MouseEvent<HTMLButtonElement>).clientX - rect.left;
       y = (e as React.MouseEvent<HTMLButtonElement>).clientY - rect.top;
     }
-    
-    const newRipple = {
-      id: Date.now(),
-      x,
-      y
-    };
-    
-    setRipples(prev => [...prev, newRipple]);
-    
-    // Ripple'ı temizle
+
+    const newRipple = { id: Date.now(), x, y };
+
+    setActiveRipples(prev => ({
+      ...prev,
+      [buttonType]: [...prev[buttonType], newRipple]
+    }));
+
     setTimeout(() => {
-      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+      setActiveRipples(prev => ({
+        ...prev,
+        [buttonType]: prev[buttonType].filter(ripple => ripple.id !== newRipple.id)
+      }));
     }, 600);
   };
 
 
 
-  const handleCloseDepartmentsPopup = () => {
-    setIsDepartmentsPopupOpen(false);
-  };
-
-  const handleCloseQuestionsPopup = () => {
-    setIsQuestionsPopupOpen(false);
-  };
-
-  const handleClosePeoplesPopup = () => {
-    setIsPeoplesPopupOpen(false);
-  };
+  const handleClosePopup = useCallback((popupType: 'departments' | 'questions' | 'peoples') => {
+    setOpenPopups(prev => ({ ...prev, [popupType]: false }));
+  }, []);
 
 
   return (
     <footer className={styles.footer}>
-      <button 
+      <button
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.navigation.open();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setPeoplesRipples);hapticFeedback.navigation.open();}}
-        onClick={(e) => {e.preventDefault();setIsPeoplesPopupOpen(true);}}
+        onTouchStart={(e) => { e.preventDefault(); createRippleEffect(e, 'peoples'); hapticFeedback.navigation.open(); }}
+        onMouseDown={(e) => { e.preventDefault(); createRippleEffect(e, 'peoples'); hapticFeedback.navigation.open(); }}
+        onClick={(e) => { e.preventDefault(); setOpenPopups(prev => ({ ...prev, peoples: true })); }}
         type="button"
         aria-label="Peoples"
       >
         <PeoplesIcon />
-        {peoplesRipples.map(ripple => (
+        {activeRipples.peoples.map(ripple => (
           <span
             key={ripple.id}
             className={styles.ripple}
@@ -85,16 +80,16 @@ export default function Footer() {
           />
         ))}
       </button>
-      <button 
+      <button
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.navigation.open();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setDepartmentsRipples);hapticFeedback.navigation.open();}}
-        onClick={(e) => {e.preventDefault();setIsDepartmentsPopupOpen(true);}}
+        onTouchStart={(e) => { e.preventDefault(); createRippleEffect(e, 'departments'); hapticFeedback.navigation.open(); }}
+        onMouseDown={(e) => { e.preventDefault(); createRippleEffect(e, 'departments'); hapticFeedback.navigation.open(); }}
+        onClick={(e) => { e.preventDefault(); setOpenPopups(prev => ({ ...prev, departments: true })); }}
         type="button"
         aria-label="Departments"
       >
         <DepartmentsIcon />
-        {departmentsRipples.map(ripple => (
+        {activeRipples.departments.map(ripple => (
           <span
             key={ripple.id}
             className={styles.ripple}
@@ -106,16 +101,16 @@ export default function Footer() {
         ))}
       </button>
 
-      <button 
+      <button
         className={`${styles.navIcon} ${styles.footerButton}`}
-        onTouchStart={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.navigation.open();}}
-        onMouseDown={(e) => {e.preventDefault();createRippleEffect(e,setQuestionsRipples);hapticFeedback.navigation.open();}}
-        onClick={(e) => {e.preventDefault();setIsQuestionsPopupOpen(true);}}
+        onTouchStart={(e) => { e.preventDefault(); createRippleEffect(e, 'questions'); hapticFeedback.navigation.open(); }}
+        onMouseDown={(e) => { e.preventDefault(); createRippleEffect(e, 'questions'); hapticFeedback.navigation.open(); }}
+        onClick={(e) => { e.preventDefault(); setOpenPopups(prev => ({ ...prev, questions: true })); }}
         type="button"
         aria-label="Questions"
       >
         <QuestionsIcon />
-        {questionsRipples.map(ripple => (
+        {activeRipples.questions.map(ripple => (
           <span
             key={ripple.id}
             className={styles.ripple}
@@ -126,24 +121,26 @@ export default function Footer() {
           />
         ))}
       </button>
-      {isDepartmentsPopupOpen && (
-          <DepartmentsPopup 
-            isOpen={isDepartmentsPopupOpen}
-            onClose={handleCloseDepartmentsPopup} 
-          />
-        )}
-      {isQuestionsPopupOpen && (
-          <QuestionsPopup 
-            isOpen={isQuestionsPopupOpen}
-            onClose={handleCloseQuestionsPopup} 
-          />
-        )}
-      {isPeoplesPopupOpen && (
-          <PeoplesPopup 
-            isOpen={isPeoplesPopupOpen}
-            onClose={handleClosePeoplesPopup} 
-          />
-        )}
+      {openPopups.departments && (
+        <DepartmentsPopup
+          isOpen={openPopups.departments}
+          onClose={() => handleClosePopup('departments')}
+        />
+      )}
+      {openPopups.questions && (
+        <QuestionsPopup
+          isOpen={openPopups.questions}
+          onClose={() => handleClosePopup('questions')}
+        />
+      )}
+      {openPopups.peoples && (
+        <PeoplesPopup
+          isOpen={openPopups.peoples}
+          onClose={() => handleClosePopup('peoples')}
+        />
+      )}
     </footer>
   );
-}
+});
+
+export default Footer;

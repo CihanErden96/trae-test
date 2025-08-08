@@ -72,8 +72,7 @@ export function CardDenetimDepartman() {
 
   const handleQuestionClick = (question: Question) => {
     hapticFeedback.navigation.select();
-    console.log('Soru tıklandı:', question);
-    // Burada soru detay sayfasına yönlendirme veya başka bir işlem yapılabilir
+    // Soru detay sayfasına yönlendirme yapılabilir
   };
 
   const handleScoreSelect = (questionId: number, score: string) => {
@@ -114,7 +113,7 @@ export function CardDenetimDepartman() {
       return newWarnings;
     });
     
-    console.log(`Soru ${questionId} için seçilen puan: ${score}`);
+    // Puan seçimi API'ye gönderilecek
   };
 
   const handleAddAction = (questionId: number) => {
@@ -139,12 +138,7 @@ export function CardDenetimDepartman() {
   const handleSaveAction = () => {
     if (newAction.title.trim()) {
       hapticFeedback.action.save();
-      console.log('Yeni aksiyon kaydedildi:', {
-        questionId: selectedQuestionId,
-        title: newAction.title,
-        dueDate: 'Belirsiz',
-        image: newAction.image
-      });
+      // Yeni aksiyon API'ye kaydedilecek
       handleCloseAddAction();
     } else {
       hapticFeedback.form.error();
@@ -264,8 +258,7 @@ export function CardDenetimDepartman() {
 
   const handleCompleteAudit = () => {
     hapticFeedback.action.save();
-    console.log('Denetim tamamlandı!');
-    // Burada gerçek uygulamada API çağrısı yapılacak
+    // API çağrısı yapılacak
     setShowCompleteConfirmation(false);
     setIsPopupOpen(false);
   };
@@ -577,7 +570,7 @@ export function CardDenetimDepartman() {
             setSelectedAction(updatedAction);
             // Bu durumda questions içindeki actions'ları güncellememiz gerekiyor
             // Ancak şu an questions const olarak tanımlı, bu yüzden sadece selectedAction'ı güncelliyoruz
-            console.log('Action updated:', updatedAction);
+            // Action güncelleme API'ye gönderilecek
           }}
         />
       )}

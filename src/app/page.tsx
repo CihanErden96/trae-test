@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import CardDenetimler from "../components/card_denetimler";
@@ -12,9 +12,11 @@ export default function Home() {
       <Header />
 
       <main className={styles.body}>
-        <CardDenetimler />
-        <CardAksiyonlarMain />
-        <CardDenetimDepartman />
+        <Suspense fallback={<div>Yükleniyor...</div>}>
+          <CardDenetimler />
+          <CardAksiyonlarMain />
+          <CardDenetimDepartman />
+        </Suspense>
       </main>
 
       <Footer />
