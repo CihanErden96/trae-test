@@ -246,12 +246,14 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             {/* Durum */}
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Durum</h4>
-              <div className={styles.statusIndicator}>
-                <div className={styles.quarterCircle}>
-                  <div className={`${styles.quarterSegment} ${currentAction.status === 'plan' || currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
-                  <div className={`${styles.quarterSegment} ${currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
-                  <div className={`${styles.quarterSegment} ${currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
-                  <div className={`${styles.quarterSegment} ${currentAction.status === 'act' ? styles.visible : ''}`}></div>
+              <div className={styles.statusContainer}>
+                <div className={styles.statusIndicator}>
+                  <div className={styles.quarterCircle}>
+                    <div className={`${styles.quarterSegment} ${currentAction.status === 'plan' || currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                    <div className={`${styles.quarterSegment} ${currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                    <div className={`${styles.quarterSegment} ${currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                    <div className={`${styles.quarterSegment} ${currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                  </div>
                 </div>
                 <span className={styles.statusText}>
                   {currentAction.status === 'plan' && 'Plan'}
