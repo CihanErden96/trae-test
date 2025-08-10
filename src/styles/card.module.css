@@ -418,7 +418,11 @@
   margin-bottom: 20px;
 }
 
-.dateRow .detailSection,
+.dateRow .detailSection
+{
+  justify-content: center;
+  align-items: center;
+}
 .infoRow .detailSection {
   flex: 1;
   margin-bottom: 0;

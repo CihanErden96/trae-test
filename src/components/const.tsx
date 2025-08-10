@@ -178,10 +178,9 @@ export const denetimQuestionsData: Question[] = [
     actions: [
       {
         id: 3,
-
         description: "Listede belirtilen eksik güvenlik ekipmanlarını satın al",
         status: 'do',
-        dueDate: '2026-01-20'
+        dueDate: ''
       }
     ]
   },
@@ -243,7 +242,7 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 5,
     pendingActionsList: [
-      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "2024-01-10", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan", status: "act" },
+      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan", status: "act" },
       { id: 7, question: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", startDate: "2024-01-02", department: "Üretim", creator: "Zeynep Kılıç", status: "act" },
       { id: 8, question: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", startDate: "2024-01-08", department: "Üretim", creator: "Hasan Özkan", status: "act" },
       { id: 9, question: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", startDate: "2024-01-12", department: "Üretim", creator: "Elif Şahin", status: "act" },

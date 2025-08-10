@@ -183,7 +183,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Başlangıç Tarihi</h4>
                 <p className={styles.detailText}>
-                  {currentAction.startDate || 'Belirtilmemiş'}
+                  {currentAction.startDate || '-'}
                 </p>
               </div>
               <div className={styles.detailSection}>
@@ -199,7 +199,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                         new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
                         currentAction.dueDate
                       ) : 
-                      'Belirsiz'
+                      '-'
                     }
                     {currentAction.dueDateUpdateCount && currentAction.dueDateUpdateCount > 0 && 
                       ` (${currentAction.dueDateUpdateCount})`
@@ -212,7 +212,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                         new Date(currentAction.dueDate).toLocaleDateString('tr-TR') : 
                         currentAction.dueDate
                       ) : 
-                      'Belirsiz'
+                      '-'
                     }
                     {currentAction.dueDateUpdateCount && currentAction.dueDateUpdateCount > 0 && 
                       ` (${currentAction.dueDateUpdateCount})`
@@ -224,7 +224,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
               <div className={styles.detailSection}>
                 <h4 className={styles.detailLabel}>Tamamlanma Tarihi</h4>
                 <p className={styles.detailText}>
-                  {currentAction.completedDate || 'Belirsiz'}
+                  {currentAction.completedDate || '-'}
                 </p>
               </div>
             </div>
