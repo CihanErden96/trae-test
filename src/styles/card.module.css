@@ -1735,8 +1735,9 @@
 /* Çeyrek Daire Göstergesi Stilleri */
 .statusIndicator {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .quarterCircle {
@@ -1744,18 +1745,19 @@
   height: 40px;
   position: relative;
   border-radius: 50%;
-  background: var(--popup-category-bg);
-  border: 2px solid var(--popup-border);
+  background: #f0f0f0;
   overflow: hidden;
+  padding: 2px; /* Dilimler arası boşluk için padding */
 }
 
 .quarterSegment {
   position: absolute;
-  width: 50%;
-  height: 50%;
-  background: var(--primary);
+  width: calc(50% - 1px); /* Boşluk için genişliği azalt */
+  height: calc(50% - 1px); /* Boşluk için yüksekliği azalt */
+  transform-origin: 100% 100%;
   opacity: 0;
   transition: opacity 0.3s ease;
+  background: var(--text-secondary); /* Tek renk kullan */
 }
 
 .quarterSegment.visible {
@@ -1763,36 +1765,32 @@
 }
 
 .quarterSegment:nth-child(1) {
-  top: 0;
-  right: 0;
-  border-radius: 0 100% 0 0;
-  background: #4CAF50; /* Plan - Yeşil */
+  top: 1px;
+  left: 1px;
+  border-radius: 100% 0 0 0;
 }
 
 .quarterSegment:nth-child(2) {
-  top: 0;
-  left: 0;
-  border-radius: 100% 0 0 0;
-  background: #2196F3; /* Do - Mavi */
+  top: 1px;
+  right: 1px;
+  border-radius: 0 100% 0 0;
 }
 
 .quarterSegment:nth-child(3) {
-  bottom: 0;
-  left: 0;
-  border-radius: 0 0 0 100%;
-  background: #FF9800; /* Check - Turuncu */
+  bottom: 1px;
+  right: 1px;
+  border-radius: 0 0 100% 0;
 }
 
 .quarterSegment:nth-child(4) {
-  bottom: 0;
-  right: 0;
-  border-radius: 0 0 100% 0;
-  background: #F44336; /* Act - Kırmızı */
+  bottom: 1px;
+  left: 1px;
+  border-radius: 0 0 0 100%;
 }
 
 .statusText {
-  color: var(--text-primary);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-  font-family: var(--font-family);
+  color: var(--text-primary);
+  text-align: center;
 }
