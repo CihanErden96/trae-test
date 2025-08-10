@@ -12,13 +12,15 @@ interface ActionDetailPopupProps {
   isDueDateEditable?: boolean;
   isCompletedButtonEnabled?: boolean;
   onActionUpdate?: (updatedAction: Action) => void;
+  onClose?: () => void;
 }
 
 const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
   selectedAction,
   isDueDateEditable = false,
   isCompletedButtonEnabled = false,
-  onActionUpdate
+  onActionUpdate,
+  onClose
 }) => {
   const [isOpen, setIsOpen] = useState(!!selectedAction);
   const [currentAction, setCurrentAction] = useState<Action | null>(selectedAction);
@@ -49,6 +51,9 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
   const handleClose = () => {
     setIsOpen(false);
     setCurrentAction(null);
+    if (onClose) {
+      onClose();
+    }
   };
 
   const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
@@ -97,11 +102,11 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
 
   const handleToggleStatus = () => {
     if (currentAction) {
-      const newStatus = currentAction.status === 'completed' ? 'incompleted' : 'completed';
+      const newStatus = currentAction.status === 'act' ? 'plan' : 'act';
       const updatedAction = { 
         ...currentAction, 
-        status: newStatus as 'completed' | 'incompleted',
-        completedDate: newStatus === 'completed' ? new Date().toISOString().split('T')[0] : undefined
+        status: newStatus as 'plan' | 'do' | 'check' | 'act',
+        completedDate: newStatus === 'act' ? new Date().toISOString().split('T')[0] : undefined
       };
       setCurrentAction(updatedAction);
       if (onActionUpdate) {
@@ -161,7 +166,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Soru</h4>
               <p className={styles.detailText}>
-                {currentAction.question || currentAction.title || 'Soru bulunmuyor'}
+                {currentAction.question || currentAction.description || 'Soru bulunmuyor'}
               </p>
             </div>
 
@@ -250,7 +255,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Durum</h4>
               <p className={styles.detailText}>
-                {currentAction.status === 'completed' ? 'Tamamlandı' : 'Tamamlanmadı'}
+                {currentAction.status === 'act' ? 'Tamamlandı' : 'Tamamlanmadı'}
               </p>
             </div>
 
@@ -287,7 +292,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                   onClick={handleToggleStatus}
                   className={`${styles.statusToggleButton} ${styles.markCompleteButton}`}
                 >
-                  {currentAction.status === 'completed' 
+                  {currentAction.status === 'act' 
                     ? 'Tamamlanmadı olarak işaretle' 
                     : 'Tamamlandı olarak işaretle'
                   }

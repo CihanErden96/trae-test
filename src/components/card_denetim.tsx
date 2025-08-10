@@ -70,14 +70,11 @@ export function CardDenetimDepartman() {
     }
   };
 
-  const handleQuestionClick = (question: Question) => {
-    hapticFeedback.navigation.select();
-    // Soru detay sayfasına yönlendirme yapılabilir
-  };
+
 
   const handleScoreSelect = (questionId: number, score: string) => {
     const question = questions.find(q => q.id === questionId);
-    const hasActions = question?.actions && question.actions.some(action => action.status !== 'completed' && new Date(action.dueDate) < today);
+    const hasActions = question?.actions && question.actions.some(action => action.status !== 'act' && new Date(action.dueDate) < today);
     const isMaxScore = question && score === question.score.toString();
     
     // Eğer aksiyon varken max value seçilmeye çalışırsa uyarı ver
@@ -407,7 +404,7 @@ export function CardDenetimDepartman() {
                                      handleActionClick(action);
                                    }}
                                  >
-                                   <p className={styles.actionDescription}>{action.title}</p>
+                                   <p className={styles.actionDescription}>{action.description}</p>
                                    <p className={styles.actionScore}>
                                      {new Date(action.dueDate).toLocaleDateString('tr-TR')}
                                    </p>
@@ -572,6 +569,7 @@ export function CardDenetimDepartman() {
             // Ancak şu an questions const olarak tanımlı, bu yüzden sadece selectedAction'ı güncelliyoruz
             // Action güncelleme API'ye gönderilecek
           }}
+          onClose={() => setSelectedAction(null)}
         />
       )}
 

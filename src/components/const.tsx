@@ -18,18 +18,15 @@ export interface Question {
 
 export interface Action {
   id: number;
-  title?: string;
   question?: string;
   description: string;
-  status: 'completed' | 'incompleted';
+  status: 'plan' | 'do' | 'check' | 'act' ;
   dueDate: string;
   startDate?: string;
   completedDate?: string;
   department?: string;
   creator?: string;
   assignedTo?: string;
-  priority?: 'low' | 'medium' | 'high';
-  category?: string;
   image?: string;
   dueDateUpdateCount?: number;
 }
@@ -181,9 +178,9 @@ export const denetimQuestionsData: Question[] = [
     actions: [
       {
         id: 3,
-        title: "Eksik güvenlik ekipmanlarını temin et",
+
         description: "Listede belirtilen eksik güvenlik ekipmanlarını satın al",
-        status: 'incompleted',
+        status: 'do',
         dueDate: '2026-01-20'
       }
     ]
@@ -204,16 +201,14 @@ export const denetimQuestionsData: Question[] = [
     actions: [
       {
         id: 4,
-        title: "Prosedür eğitimi düzenle",
         description: "Çalışanlara güncel prosedürler hakkında eğitim ver",
-        status: 'incompleted',
+        status: 'do',
         dueDate: '2025-01-25'
       },
       {
         id: 5,
-        title: "Prosedür dokümanlarını güncelle",
         description: "Eski prosedür dokümanlarını yeni standartlara göre güncelle",
-        status: 'completed',
+        status: 'act',
         dueDate: '2025-01-05'
       }
     ]
@@ -232,13 +227,13 @@ export const departmentsData: Department[] = [
     completedActions: 2,
     pendingActions: 3,
     pendingActionsList: [
-      { id: 1, question: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", startDate: "2024-01-01", department: "İnsan Kaynakları", creator: "Ahmet Yılmaz", status: "incompleted" },
-      { id: 2, question: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", startDate: "2024-01-05", department: "İnsan Kaynakları", creator: "Fatma Demir", status: "incompleted" },
-      { id: 3, question: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", startDate: "2024-01-10", department: "İnsan Kaynakları", creator: "Mehmet Kaya", status: "incompleted" }
+      { id: 1, question: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", startDate: "2024-01-01", department: "İnsan Kaynakları", creator: "Ahmet Yılmaz", status: "act" },
+      { id: 2, question: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", startDate: "2024-01-05", department: "İnsan Kaynakları", creator: "Fatma Demir", status: "act" },
+      { id: 3, question: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", startDate: "2024-01-10", department: "İnsan Kaynakları", creator: "Mehmet Kaya", status: "act" }
     ],
     completedActionsList: [
-      { id: 4, question: "Bordro hazırlama", description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", startDate: "2023-12-15", completedDate: "2023-12-29", department: "İnsan Kaynakları", creator: "Ayşe Öztürk", status: "completed" },
-      { id: 5, question: "Sigorta işlemleri", description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", startDate: "2023-12-20", completedDate: "2023-12-27", department: "İnsan Kaynakları", creator: "Ali Çelik", status: "completed" }
+      { id: 4, question: "Bordro hazırlama", description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", startDate: "2023-12-15", completedDate: "2023-12-29", department: "İnsan Kaynakları", creator: "Ayşe Öztürk", status: "act" },
+      { id: 5, question: "Sigorta işlemleri", description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", startDate: "2023-12-20", completedDate: "2023-12-27", department: "İnsan Kaynakları", creator: "Ali Çelik", status: "act" }
     ]
   },
   {
@@ -248,14 +243,14 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 5,
     pendingActionsList: [
-      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "2024-01-10", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan", status: "incompleted" },
-      { id: 7, question: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", startDate: "2024-01-02", department: "Üretim", creator: "Zeynep Kılıç", status: "incompleted" },
-      { id: 8, question: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", startDate: "2024-01-08", department: "Üretim", creator: "Hasan Özkan", status: "incompleted" },
-      { id: 9, question: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", startDate: "2024-01-12", department: "Üretim", creator: "Elif Şahin", status: "incompleted" },
-      { id: 10, question: "Üretim raporu", description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", startDate: "2024-01-01", department: "Üretim", creator: "Oğuz Yıldız", status: "incompleted" }
+      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "2024-01-10", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan", status: "act" },
+      { id: 7, question: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", startDate: "2024-01-02", department: "Üretim", creator: "Zeynep Kılıç", status: "act" },
+      { id: 8, question: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", startDate: "2024-01-08", department: "Üretim", creator: "Hasan Özkan", status: "act" },
+      { id: 9, question: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", startDate: "2024-01-12", department: "Üretim", creator: "Elif Şahin", status: "act" },
+      { id: 10, question: "Üretim raporu", description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", startDate: "2024-01-01", department: "Üretim", creator: "Oğuz Yıldız", status: "act" }
     ],
     completedActionsList: [
-      { id: 11, question: "Sipariş teslimi", description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", startDate: "2023-12-20", completedDate: "2023-12-28", department: "Üretim", creator: "Ahmet Demir", status: "completed" }
+      { id: 11, question: "Sipariş teslimi", description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", startDate: "2023-12-20", completedDate: "2023-12-28", department: "Üretim", creator: "Ahmet Demir", status: "act" }
     ]
   },
   {
@@ -265,12 +260,12 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 3,
     pendingActionsList: [
-      { id: 12, question: "Kampanya hazırlığı", description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", startDate: "2023-12-20", department: "Satış ve Pazarlama", creator: "Selin Aydın", status: "incompleted" },
-      { id: 13, question: "Müşteri toplantısı", description: "B firması ile görüşme", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Satış ve Pazarlama", creator: "Burak Koç", status: "incompleted" },
-      { id: 14, question: "Pazar araştırması", description: "Rakip analizi raporu", dueDate: "2024-01-15", startDate: "2024-01-05", department: "Satış ve Pazarlama", creator: "Deniz Yılmaz", status: "incompleted" }
+      { id: 12, question: "Kampanya hazırlığı", description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", startDate: "2023-12-20", department: "Satış ve Pazarlama", creator: "Selin Aydın", status: "do" },
+      { id: 13, question: "Müşteri toplantısı", description: "B firması ile görüşme", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Satış ve Pazarlama", creator: "Burak Koç", status: "do" },
+      { id: 14, question: "Pazar araştırması", description: "Rakip analizi raporu", dueDate: "2024-01-15", startDate: "2024-01-05", department: "Satış ve Pazarlama", creator: "Deniz Yılmaz", status: "do" }
     ],
     completedActionsList: [
-      { id: 15, question: "Sosyal medya paylaşımı", description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", startDate: "2023-12-25", completedDate: "2023-12-29", department: "Satış ve Pazarlama", creator: "Ayşe Kaya", status: "completed" }
+      { id: 15, question: "Sosyal medya paylaşımı", description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", startDate: "2023-12-25", completedDate: "2023-12-29", department: "Satış ve Pazarlama", creator: "Ayşe Kaya", status: "act" }
     ]
   },
   {
@@ -280,11 +275,11 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 2,
     pendingActionsList: [
-      { id: 16, question: "Mali müşavir toplantısı", description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", startDate: "2023-12-28", department: "Muhasebe", creator: "Murat Özdemir", status: "incompleted" },
-      { id: 17, question: "Fatura kontrolü", description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", startDate: "2024-01-01", department: "Muhasebe", creator: "Gülşen Aktaş", status: "incompleted" }
+      { id: 16, question: "Mali müşavir toplantısı", description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", startDate: "2023-12-28", department: "Muhasebe", creator: "Murat Özdemir", status: "do" },
+      { id: 17, question: "Fatura kontrolü", description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", startDate: "2024-01-01", department: "Muhasebe", creator: "Gülşen Aktaş", status: "do" }
     ],
     completedActionsList: [
-      { id: 18, question: "Vergi beyannamesi", description: "KDV beyannamesi verildi", dueDate: "2023-12-25", startDate: "2023-12-20", completedDate: "2023-12-24", department: "Muhasebe", creator: "Kemal Erdoğan", status: "completed" }
+      { id: 18, question: "Vergi beyannamesi", description: "KDV beyannamesi verildi", dueDate: "2023-12-25", startDate: "2023-12-20", completedDate: "2023-12-24", department: "Muhasebe", creator: "Kemal Erdoğan", status: "act" }
     ]
   },
   {
@@ -294,13 +289,13 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 4,
     pendingActionsList: [
-      { id: 19, question: "Prototip testi", description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", startDate: "2024-01-05", department: "Ar-Ge", creator: "Dr. Emre Yıldırım", status: "incompleted" },
-      { id: 20, question: "Patent başvurusu", description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", startDate: "2024-01-10", department: "Ar-Ge", creator: "Prof. Aylin Çetin", status: "incompleted" },
-      { id: 21, question: "Araştırma raporu", description: "Teknoloji trend analizi", dueDate: "2024-01-25", startDate: "2024-01-15", department: "Ar-Ge", creator: "Doç. Mehmet Kara", status: "incompleted" },
-      { id: 22, question: "Lab ekipmanı", description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", startDate: "2024-01-20", department: "Ar-Ge", creator: "Mühendis Seda Özkan", status: "incompleted" }
+      { id: 19, question: "Prototip testi", description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", startDate: "2024-01-05", department: "Ar-Ge", creator: "Dr. Emre Yıldırım", status: "do" },
+      { id: 20, question: "Patent başvurusu", description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", startDate: "2024-01-10", department: "Ar-Ge", creator: "Prof. Aylin Çetin", status: "do" },
+      { id: 21, question: "Araştırma raporu", description: "Teknoloji trend analizi", dueDate: "2024-01-25", startDate: "2024-01-15", department: "Ar-Ge", creator: "Doç. Mehmet Kara", status: "do" },
+      { id: 22, question: "Lab ekipmanı", description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", startDate: "2024-01-20", department: "Ar-Ge", creator: "Mühendis Seda Özkan", status: "do" }
     ],
     completedActionsList: [
-      { id: 23, question: "Ürün geliştirme", description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", startDate: "2023-12-01", completedDate: "2023-12-27", department: "Ar-Ge", creator: "Yazılım Uzmanı Ali Vural", status: "completed" }
+      { id: 23, question: "Ürün geliştirme", description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", startDate: "2023-12-01", completedDate: "2023-12-27", department: "Ar-Ge", creator: "Yazılım Uzmanı Ali Vural", status: "act" }
     ]
   },
   {
@@ -310,12 +305,12 @@ export const departmentsData: Department[] = [
     completedActions: 1,
     pendingActions: 3,
     pendingActionsList: [
-      { id: 24, question: "Kargo takibi", description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", startDate: "2024-01-02", department: "Lojistik", creator: "Serkan Yılmaz", status: "incompleted" },
-      { id: 25, question: "Depo düzenleme", description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", startDate: "2024-01-05", department: "Lojistik", creator: "Fatma Koç", status: "incompleted" },
-      { id: 26, question: "Nakliye planlaması", description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Lojistik", creator: "Hüseyin Acar", status: "incompleted" }
+      { id: 24, question: "Kargo takibi", description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", startDate: "2024-01-02", department: "Lojistik", creator: "Serkan Yılmaz", status: "do" },
+      { id: 25, question: "Depo düzenleme", description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", startDate: "2024-01-05", department: "Lojistik", creator: "Fatma Koç", status: "do" },
+      { id: 26, question: "Nakliye planlaması", description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Lojistik", creator: "Hüseyin Acar", status: "do" }
     ],
     completedActionsList: [
-      { id: 27, question: "Envanter sayımı", description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", startDate: "2023-12-25", completedDate: "2023-12-30", department: "Lojistik", creator: "Mehmet Demir", status: "completed" }
+      { id: 27, question: "Envanter sayımı", description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", startDate: "2023-12-25", completedDate: "2023-12-30", department: "Lojistik", creator: "Mehmet Demir", status: "act" }
     ]
   }
 ];
