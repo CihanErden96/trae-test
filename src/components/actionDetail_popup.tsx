@@ -11,7 +11,6 @@ interface ActionDetailPopupProps {
   selectedAction: Action | null;
   isDueDateEditable?: boolean;
   isCompletedButtonEnabled?: boolean;
-  onActionUpdate?: (updatedAction: Action) => void;
   onClose?: () => void;
 }
 
@@ -19,7 +18,6 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
   selectedAction,
   isDueDateEditable = false,
   isCompletedButtonEnabled = false,
-  onActionUpdate,
   onClose
 }) => {
   const [isOpen, setIsOpen] = useState(!!selectedAction);
@@ -87,9 +85,6 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
         dueDateUpdateCount: currentCount + 1
       };
       setCurrentAction(updatedAction);
-      if (onActionUpdate) {
-        onActionUpdate(updatedAction);
-      }
     }
     setIsCalendarOpen(false);
   };
@@ -109,9 +104,6 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
         completedDate: newStatus === 'act' ? new Date().toISOString().split('T')[0] : undefined
       };
       setCurrentAction(updatedAction);
-      if (onActionUpdate) {
-        onActionUpdate(updatedAction);
-      }
     }
   };
 
@@ -254,9 +246,20 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             {/* Durum */}
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Durum</h4>
-              <p className={styles.detailText}>
-                {currentAction.status === 'act' ? 'Tamamlandı' : 'Tamamlanmadı'}
-              </p>
+              <div className={styles.statusIndicator}>
+                <div className={styles.quarterCircle}>
+                  <div className={`${styles.quarterSegment} ${currentAction.status === 'plan' || currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                  <div className={`${styles.quarterSegment} ${currentAction.status === 'do' || currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                  <div className={`${styles.quarterSegment} ${currentAction.status === 'check' || currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                  <div className={`${styles.quarterSegment} ${currentAction.status === 'act' ? styles.visible : ''}`}></div>
+                </div>
+                <span className={styles.statusText}>
+                  {currentAction.status === 'plan' && 'Plan'}
+                  {currentAction.status === 'do' && 'Do'}
+                  {currentAction.status === 'check' && 'Check'}
+                  {currentAction.status === 'act' && 'Act'}
+                </span>
+              </div>
             </div>
 
             {/* Fotoğraf Alanı */}

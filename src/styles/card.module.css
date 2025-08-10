@@ -1731,3 +1731,68 @@
 .imageSection::after {
   display: none;
 }
+
+/* Çeyrek Daire Göstergesi Stilleri */
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quarterCircle {
+  width: 40px;
+  height: 40px;
+  position: relative;
+  border-radius: 50%;
+  background: var(--popup-category-bg);
+  border: 2px solid var(--popup-border);
+  overflow: hidden;
+}
+
+.quarterSegment {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.quarterSegment.visible {
+  opacity: 1;
+}
+
+.quarterSegment:nth-child(1) {
+  top: 0;
+  right: 0;
+  border-radius: 0 100% 0 0;
+  background: #4CAF50; /* Plan - Yeşil */
+}
+
+.quarterSegment:nth-child(2) {
+  top: 0;
+  left: 0;
+  border-radius: 100% 0 0 0;
+  background: #2196F3; /* Do - Mavi */
+}
+
+.quarterSegment:nth-child(3) {
+  bottom: 0;
+  left: 0;
+  border-radius: 0 0 0 100%;
+  background: #FF9800; /* Check - Turuncu */
+}
+
+.quarterSegment:nth-child(4) {
+  bottom: 0;
+  right: 0;
+  border-radius: 0 0 100% 0;
+  background: #F44336; /* Act - Kırmızı */
+}
+
+.statusText {
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-family);
+}

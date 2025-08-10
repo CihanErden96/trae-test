@@ -563,12 +563,6 @@ export function CardDenetimDepartman() {
           selectedAction={selectedAction}
           isDueDateEditable={true}
           isCompletedButtonEnabled={true}
-          onActionUpdate={(updatedAction) => {
-            setSelectedAction(updatedAction);
-            // Bu durumda questions içindeki actions'ları güncellememiz gerekiyor
-            // Ancak şu an questions const olarak tanımlı, bu yüzden sadece selectedAction'ı güncelliyoruz
-            // Action güncelleme API'ye gönderilecek
-          }}
           onClose={() => setSelectedAction(null)}
         />
       )}
