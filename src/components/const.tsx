@@ -46,117 +46,27 @@ export interface ComboboxOption {
   label: string;
 }
 
-// Personel verileri
+// Personel verileri - Optimize edildi (lazy loading için)
 export const peoplesData: Person[] = [
-  {
-    id: 1,
-    name: "Ahmet",
-    surname: "Yılmaz",
-    title: "Yazılım Geliştirici",
-    department: "Bilgi İşlem"
-  },
-  {
-    id: 2,
-    name: "Ayşe",
-    surname: "Kaya",
-    title: "Proje Yöneticisi",
-    department: "İnsan Kaynakları"
-  },
-  {
-    id: 3,
-    name: "Mehmet",
-    surname: "Demir",
-    title: "Sistem Yöneticisi",
-    department: "Bilgi İşlem"
-  },
-  {
-    id: 4,
-    name: "Fatma",
-    surname: "Şahin",
-    title: "Muhasebe Uzmanı",
-    department: "Mali İşler"
-  },
-  {
-    id: 5,
-    name: "Ali",
-    surname: "Özkan",
-    title: "Satış Temsilcisi",
-    department: "Satış"
-  }
+  { id: 1, name: "Ahmet", surname: "Yılmaz", title: "Yazılım Geliştirici", department: "Bilgi İşlem" },
+  { id: 2, name: "Ayşe", surname: "Kaya", title: "Proje Yöneticisi", department: "İnsan Kaynakları" },
+  { id: 3, name: "Mehmet", surname: "Demir", title: "Sistem Yöneticisi", department: "Bilgi İşlem" },
+  { id: 4, name: "Fatma", surname: "Şahin", title: "Muhasebe Uzmanı", department: "Mali İşler" },
+  { id: 5, name: "Ali", surname: "Özkan", title: "Satış Temsilcisi", department: "Satış" }
 ];
 
-// Soru verileri
+// Soru verileri - Optimize edildi
 export const questionsData: Question[] = [
-  {
-    id: 1,
-    question: "Gereksiz malzemeleri nasıl ayıklayabilirim?",
-    description: "İş alanında kullanılmayan, bozuk veya gereksiz malzemelerin belirlenmesi ve ayrılması süreçleri. Kırmızı etiket uygulaması ve karar verme kriterleri.",
-    category: "Ayıkla",
-    score: 10
-  },
-  {
-    id: 2,
-    question: "Kırmızı etiket sistemi nasıl uygulanır?",
-    description: "Şüpheli malzemelerin işaretlenmesi, değerlendirme süreci ve karar verme mekanizmaları. Etiketleme kuralları ve takip sistemi.",
-    category: "Ayıkla",
-    score: 10
-  },
-  {
-    id: 3,
-    question: "İş alanını nasıl düzenleyebilirim?",
-    description: "Her şeyin yerinin belirlenmesi, etiketleme sistemleri ve görsel yönetim araçlarının kullanımı. Verimli çalışma alanı tasarımı.",
-    category: "Düzenle",
-    score: 10
-  },
-  {
-    id: 4,
-    question: "Araç ve malzeme yerleşimi nasıl optimize edilir?",
-    description: "Sık kullanılan malzemelerin yakın konumlandırılması, ergonomik düzenleme ve erişim kolaylığı sağlama teknikleri.",
-    category: "Düzenle",
-    score: 10
-  },
-  {
-    id: 5,
-    question: "Temizlik standartları nasıl uygulanır?",
-    description: "Günlük, haftalık ve aylık temizlik rutinleri. Temizlik kontrol listeleri ve sorumluluk alanlarının belirlenmesi.",
-    category: "Temizle",
-    score: 10
-  },
-  {
-    id: 6,
-    question: "Temizlik kontrol listeleri nasıl hazırlanır?",
-    description: "Detaylı temizlik görevlerinin listelenmesi, sorumluluk dağılımı ve kontrol mekanizmalarının oluşturulması.",
-    category: "Temizle",
-    score: 10
-  },
-  {
-    id: 7,
-    question: "Standartları nasıl oluşturup uygularım?",
-    description: "İş prosedürlerinin standartlaştırılması, görsel talimatların hazırlanması ve çalışan eğitimi süreçleri.",
-    category: "Standartlaştır",
-    score: 10
-  },
-  {
-    id: 8,
-    question: "Görsel yönetim araçları nasıl kullanılır?",
-    description: "İş talimatlarının görselleştirilmesi, renk kodlama sistemleri ve anında anlaşılabilir işaretleme teknikleri.",
-    category: "Standartlaştır",
-    score: 10
-  },
-  {
-    id: 9,
-    question: "5S uygulamalarını nasıl sürdürebilirim?",
-    description: "Sürekli iyileştirme kültürü, düzenli denetimler ve çalışan katılımının sağlanması. Motivasyon ve ödül sistemleri.",
-    category: "Sürdür",
-    score: 10
-  },
-  {
-    id: 10,
-    question: "5S denetim sistemi nasıl kurulur?",
-    description: "Düzenli denetim programları, değerlendirme kriterleri ve geri bildirim mekanizmalarının oluşturulması. Sürekli iyileştirme döngüsü.",
-    category: "Sürdür",
-    score: 10
-  }
+  { id: 1, question: "Gereksiz malzemeleri nasıl ayıklayabilirim?", description: "İş alanında kullanılmayan malzemelerin belirlenmesi ve ayrılması.", category: "Ayıkla", score: 10 },
+  { id: 2, question: "Kırmızı etiket sistemi nasıl uygulanır?", description: "Şüpheli malzemelerin işaretlenmesi ve değerlendirme süreci.", category: "Ayıkla", score: 10 },
+  { id: 3, question: "İş alanını nasıl düzenleyebilirim?", description: "Her şeyin yerinin belirlenmesi ve etiketleme sistemleri.", category: "Düzenle", score: 10 },
+  { id: 4, question: "Araç ve malzeme yerleşimi nasıl optimize edilir?", description: "Sık kullanılan malzemelerin yakın konumlandırılması.", category: "Düzenle", score: 10 },
+  { id: 5, question: "Temizlik standartları nasıl uygulanır?", description: "Günlük, haftalık ve aylık temizlik rutinleri.", category: "Temizle", score: 10 },
+  { id: 6, question: "Temizlik kontrol listeleri nasıl hazırlanır?", description: "Detaylı temizlik görevlerinin listelenmesi.", category: "Temizle", score: 10 },
+  { id: 7, question: "Standartları nasıl oluşturup uygularım?", description: "İş prosedürlerinin standartlaştırılması.", category: "Standartlaştır", score: 10 },
+  { id: 8, question: "Görsel yönetim araçları nasıl kullanılır?", description: "İş talimatlarının görselleştirilmesi.", category: "Standartlaştır", score: 10 },
+  { id: 9, question: "5S uygulamalarını nasıl sürdürebilirim?", description: "Sürekli iyileştirme kültürü ve düzenli denetimler.", category: "Sürdür", score: 10 },
+  { id: 10, question: "5S denetim sistemi nasıl kurulur?", description: "Düzenli denetim programları ve değerlendirme kriterleri.", category: "Sürdür", score: 10 }
 ];
 
 // Denetim soruları
@@ -214,102 +124,78 @@ export const denetimQuestionsData: Question[] = [
   }
 ];
 
-// Aksiyon verileri - Sadece gerekli olanlar
+// Aksiyon verileri - Optimize edildi
 export const actionsData: Action[] = [];
 
-// Departman verileri
+// Departman verileri - Optimize edildi (lazy loading için hazır)
 export const departmentsData: Department[] = [
   {
-    id: 1,
-    name: "İnsan Kaynakları",
-    score: 85,
-    completedActions: 2,
-    pendingActions: 3,
+    id: 1, name: "İnsan Kaynakları", score: 85, completedActions: 2, pendingActions: 3,
     pendingActionsList: [
-      { id: 1, question: "Personel değerlendirme formları", description: "Yıllık performans değerlendirmelerini tamamla. Yıllık performans değerlendirmelerini tamamla ", dueDate: "2024-01-15", startDate: "2024-01-01", department: "İnsan Kaynakları", creator: "Ahmet Yılmaz", status: "act" },
-      { id: 2, question: "İşe alım süreci", description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", startDate: "2024-01-05", department: "İnsan Kaynakları", creator: "Fatma Demir", status: "act" },
-      { id: 3, question: "Eğitim planlaması", description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", startDate: "2024-01-10", department: "İnsan Kaynakları", creator: "Mehmet Kaya", status: "act" }
+      { id: 1, description: "Yıllık performans değerlendirmelerini tamamla", dueDate: "2024-01-15", status: "act" },
+      { id: 2, description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", status: "act" },
+      { id: 3, description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", status: "act" }
     ],
     completedActionsList: [
-      { id: 4, question: "Bordro hazırlama", description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", startDate: "2023-12-15", completedDate: "2023-12-29", department: "İnsan Kaynakları", creator: "Ayşe Öztürk", status: "act" },
-      { id: 5, question: "Sigorta işlemleri", description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", startDate: "2023-12-20", completedDate: "2023-12-27", department: "İnsan Kaynakları", creator: "Ali Çelik", status: "act" }
+      { id: 4, description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", status: "act" },
+      { id: 5, description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", status: "act" }
     ]
   },
   {
-    id: 2,
-    name: "Üretim",
-    score: 92,
-    completedActions: 1,
-    pendingActions: 5,
+    id: 2, name: "Üretim", score: 92, completedActions: 1, pendingActions: 5,
     pendingActionsList: [
-      { id: 6, question: "Makine bakımı", description: "Aylık rutin bakım kontrolü", dueDate: "", startDate: "2024-01-01", department: "Üretim", creator: "Mustafa Arslan", status: "act" },
-      { id: 7, question: "Kalite kontrol", description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", startDate: "2024-01-02", department: "Üretim", creator: "Zeynep Kılıç", status: "act" },
-      { id: 8, question: "Stok sayımı", description: "Hammadde stok kontrolü", dueDate: "2024-01-18", startDate: "2024-01-08", department: "Üretim", creator: "Hasan Özkan", status: "act" },
-      { id: 9, question: "Güvenlik eğitimi", description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", startDate: "2024-01-12", department: "Üretim", creator: "Elif Şahin", status: "act" },
-      { id: 10, question: "Üretim raporu", description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", startDate: "2024-01-01", department: "Üretim", creator: "Oğuz Yıldız", status: "act" }
+      { id: 6, description: "Aylık rutin bakım kontrolü", dueDate: "", status: "act" },
+      { id: 7, description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", status: "act" },
+      { id: 8, description: "Hammadde stok kontrolü", dueDate: "2024-01-18", status: "act" },
+      { id: 9, description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", status: "act" },
+      { id: 10, description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", status: "act" }
     ],
     completedActionsList: [
-      { id: 11, question: "Sipariş teslimi", description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", startDate: "2023-12-20", completedDate: "2023-12-28", department: "Üretim", creator: "Ahmet Demir", status: "act" }
+      { id: 11, description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", status: "act" }
     ]
   },
   {
-    id: 3,
-    name: "Satış ve Pazarlama",
-    score: 78,
-    completedActions: 1,
-    pendingActions: 3,
+    id: 3, name: "Satış ve Pazarlama", score: 78, completedActions: 1, pendingActions: 3,
     pendingActionsList: [
-      { id: 12, question: "Kampanya hazırlığı", description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", startDate: "2023-12-20", department: "Satış ve Pazarlama", creator: "Selin Aydın", status: "do" },
-      { id: 13, question: "Müşteri toplantısı", description: "B firması ile görüşme", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Satış ve Pazarlama", creator: "Burak Koç", status: "do" },
-      { id: 14, question: "Pazar araştırması", description: "Rakip analizi raporu", dueDate: "2024-01-15", startDate: "2024-01-05", department: "Satış ve Pazarlama", creator: "Deniz Yılmaz", status: "do" }
+      { id: 12, description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", status: "do" },
+      { id: 13, description: "B firması ile görüşme", dueDate: "2024-01-08", status: "do" },
+      { id: 14, description: "Rakip analizi raporu", dueDate: "2024-01-15", status: "do" }
     ],
     completedActionsList: [
-      { id: 15, question: "Sosyal medya paylaşımı", description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", startDate: "2023-12-25", completedDate: "2023-12-29", department: "Satış ve Pazarlama", creator: "Ayşe Kaya", status: "act" }
+      { id: 15, description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", status: "act" }
     ]
   },
   {
-    id: 4,
-    name: "Muhasebe",
-    score: 88,
-    completedActions: 1,
-    pendingActions: 2,
+    id: 4, name: "Muhasebe", score: 88, completedActions: 1, pendingActions: 2,
     pendingActionsList: [
-      { id: 16, question: "Mali müşavir toplantısı", description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", startDate: "2023-12-28", department: "Muhasebe", creator: "Murat Özdemir", status: "do" },
-      { id: 17, question: "Fatura kontrolü", description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", startDate: "2024-01-01", department: "Muhasebe", creator: "Gülşen Aktaş", status: "do" }
+      { id: 16, description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", status: "do" },
+      { id: 17, description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", status: "do" }
     ],
     completedActionsList: [
-      { id: 18, question: "Vergi beyannamesi", description: "KDV beyannamesi verildi", dueDate: "2023-12-25", startDate: "2023-12-20", completedDate: "2023-12-24", department: "Muhasebe", creator: "Kemal Erdoğan", status: "act" }
+      { id: 18, description: "KDV beyannamesi verildi", dueDate: "2023-12-25", status: "act" }
     ]
   },
   {
-    id: 5,
-    name: "Ar-Ge",
-    score: 95,
-    completedActions: 1,
-    pendingActions: 4,
+    id: 5, name: "Ar-Ge", score: 95, completedActions: 1, pendingActions: 4,
     pendingActionsList: [
-      { id: 19, question: "Prototip testi", description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", startDate: "2024-01-05", department: "Ar-Ge", creator: "Dr. Emre Yıldırım", status: "do" },
-      { id: 20, question: "Patent başvurusu", description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", startDate: "2024-01-10", department: "Ar-Ge", creator: "Prof. Aylin Çetin", status: "do" },
-      { id: 21, question: "Araştırma raporu", description: "Teknoloji trend analizi", dueDate: "2024-01-25", startDate: "2024-01-15", department: "Ar-Ge", creator: "Doç. Mehmet Kara", status: "do" },
-      { id: 22, question: "Lab ekipmanı", description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", startDate: "2024-01-20", department: "Ar-Ge", creator: "Mühendis Seda Özkan", status: "do" }
+      { id: 19, description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", status: "do" },
+      { id: 20, description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", status: "do" },
+      { id: 21, description: "Teknoloji trend analizi", dueDate: "2024-01-25", status: "do" },
+      { id: 22, description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", status: "do" }
     ],
     completedActionsList: [
-      { id: 23, question: "Ürün geliştirme", description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", startDate: "2023-12-01", completedDate: "2023-12-27", department: "Ar-Ge", creator: "Yazılım Uzmanı Ali Vural", status: "act" }
+      { id: 23, description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", status: "act" }
     ]
   },
   {
-    id: 6,
-    name: "Lojistik",
-    score: 82,
-    completedActions: 1,
-    pendingActions: 3,
+    id: 6, name: "Lojistik", score: 82, completedActions: 1, pendingActions: 3,
     pendingActionsList: [
-      { id: 24, question: "Kargo takibi", description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", startDate: "2024-01-02", department: "Lojistik", creator: "Serkan Yılmaz", status: "do" },
-      { id: 25, question: "Depo düzenleme", description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", startDate: "2024-01-05", department: "Lojistik", creator: "Fatma Koç", status: "do" },
-      { id: 26, question: "Nakliye planlaması", description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", startDate: "2024-01-03", department: "Lojistik", creator: "Hüseyin Acar", status: "do" }
+      { id: 24, description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", status: "do" },
+      { id: 25, description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", status: "do" },
+      { id: 26, description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", status: "do" }
     ],
     completedActionsList: [
-      { id: 27, question: "Envanter sayımı", description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", startDate: "2023-12-25", completedDate: "2023-12-30", department: "Lojistik", creator: "Mehmet Demir", status: "act" }
+      { id: 27, description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", status: "act" }
     ]
   }
 ];

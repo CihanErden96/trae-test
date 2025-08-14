@@ -1,33 +1,27 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { createPortal } from 'react-dom';
-import Image from 'next/image';
 import styles from '../styles/card.module.css';
 import popupStyles from '../styles/footer_popup.module.css';
-import calendarStyles from '../styles/calendar.module.css';
 import { hapticFeedback } from '../utils/haptic';
 import ReusableCombobox from './combobox';
-import Calendar from './calendar';
-import { Question, denetimQuestionsData, getScoreOptions, Action } from './const';
+import { denetimQuestionsData, getScoreOptions, Action } from './const';
 import ActionDetailPopup from './actionDetail_popup';
 
 
 
 // Ana Denetim Departman Card Component'i
-export function CardDenetimDepartman() {
+const CardDenetimDepartman = memo(function CardDenetimDepartman() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [questionScores, setQuestionScores] = useState<{[key: number]: string}>({});
   const [isAddActionOpen, setIsAddActionOpen] = useState(false);
-  const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null);
   const [newAction, setNewAction] = useState({
     title: '',
     dueDate: '',
     image: ''
   });
 
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
   const [warningMessage, setWarningMessage] = useState<{[key: number]: string}>({});
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [showCompleteConfirmation, setShowCompleteConfirmation] = useState(false);
@@ -39,36 +33,26 @@ export function CardDenetimDepartman() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // Bugünün tarihini string formatında al
-  const formatDateToString = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const todayString = formatDateToString(today);
-
   // SVG circle için hesaplamalar
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (75 / 100) * circumference; // Sabit %75 değeri
 
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     hapticFeedback.navigation.select();
     setIsPopupOpen(true);
-  };
+  }, []);
 
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     hapticFeedback.navigation.close();
     setIsPopupOpen(false);
-  };
+  }, []);
 
-  const handleOverlayClick = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleOverlayClick = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     if (e.target === e.currentTarget) {
       handleClosePopup();
     }
-  };
+  }, [handleClosePopup]);
 
 
 
@@ -113,26 +97,24 @@ export function CardDenetimDepartman() {
     // Puan seçimi API'ye gönderilecek
   };
 
-  const handleAddAction = (questionId: number) => {
+  const handleAddAction = useCallback((questionId: number) => {
     hapticFeedback.action.create();
-    setSelectedQuestionId(questionId);
+    // questionId burada kullanılabilir (API çağrısı için)
+    console.log('Adding action for question:', questionId);
     setIsAddActionOpen(true);
-  };
+  }, []);
 
-  const handleCloseAddAction = () => {
+  const handleCloseAddAction = useCallback(() => {
     hapticFeedback.navigation.close();
     setIsAddActionOpen(false);
-    setSelectedQuestionId(null);
     setNewAction({
       title: '',
       dueDate: '',
       image: ''
     });
-    setStartDate('');
-    setEndDate('');
-  };
+  }, []);
 
-  const handleSaveAction = () => {
+  const handleSaveAction = useCallback(() => {
     if (newAction.title.trim()) {
       hapticFeedback.action.save();
       // Yeni aksiyon API'ye kaydedilecek
@@ -140,26 +122,16 @@ export function CardDenetimDepartman() {
     } else {
       hapticFeedback.form.error();
     }
-  };
+  }, [newAction.title, handleCloseAddAction]);
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = useCallback((field: string, value: string) => {
     setNewAction(prev => ({
       ...prev,
       [field]: value
     }));
-  };
-
-  const handleDateRangeChange = useCallback((start: string, end: string) => {
-    setStartDate(start);
-    setEndDate(end);
-    // Eğer end date varsa, onu newAction'ın dueDate'i olarak ayarla
-    if (end) {
-      setNewAction(prev => ({
-        ...prev,
-        dueDate: end
-      }));
-    }
   }, []);
+
+
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -610,4 +582,6 @@ export function CardDenetimDepartman() {
       )}
     </>
   );
-}
+});
+
+export { CardDenetimDepartman };

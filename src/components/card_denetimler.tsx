@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, memo } from "react";
 import styles from '../styles/card.module.css';
 import DenetimPopup from './denetim_create_popup';
 import { hapticFeedback } from '../utils/haptic';
@@ -15,16 +15,22 @@ interface DenetimData {
   type: 'İç Denetim' | 'Dış Denetim' | 'Uygunluk Denetimi' | 'Performans Denetimi';
 }
 
-export default function CardDenetimler() {
+const CardDenetimler = memo(function CardDenetimler() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     setIsPopupOpen(false);
-  };
+  }, []);
 
-  const handleSubmitDenetim = (denetim: DenetimData) => {
+  const handleSubmitDenetim = useCallback((_denetim: DenetimData) => {
     // API çağrısı burada yapılacak
-  };
+  }, []);
+
+  const handleOpenPopup = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    hapticFeedback.action.create();
+    setIsPopupOpen(true);
+  }, []);
 
   return (
     <>
@@ -73,8 +79,8 @@ export default function CardDenetimler() {
             
             {/* Add Button - Sağ Alt */}
             <div 
-              className={`${styles.addButton}`}
-              onClick={(e) => {e.preventDefault();hapticFeedback.action.create();setIsPopupOpen(true);}}
+              className={styles.addButton}
+              onClick={handleOpenPopup}
               style={{ cursor: 'pointer' }}
             >
               +
@@ -100,4 +106,6 @@ export default function CardDenetimler() {
       />
     </>
   );
-}
+});
+
+export default CardDenetimler;

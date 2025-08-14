@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useCallback, memo } from "react";
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
@@ -19,7 +18,7 @@ interface AksiyonlarPopupProps {
 
 
 // Ana Aksiyonlar Card Component'i
-export function CardAksiyonlarMain() {
+const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
   const { totalCompleted, totalPending, progressPercentage } = calculateTotalActions();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
@@ -31,18 +30,18 @@ export function CardAksiyonlarMain() {
   const strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
 
   // Popup'ı kapatma
-  const handleClosePopup = () => {
+  const handleClosePopup = useCallback(() => {
     hapticFeedback.navigation.close();
     setIsPopupOpen(false);
-  };
+  }, []);
 
   // Card'a tıklama - bekleyen aksiyonları göster, tamamlananları kapalı tut
-  const handleCardClick = () => {
+  const handleCardClick = useCallback(() => {
     hapticFeedback.navigation.open();
     setIsPendingActionsCollapsed(false);
     setIsCompletedActionsCollapsed(true);
     setIsPopupOpen(true);
-  };
+  }, []);
 
   // Tüm departmanları birleştirerek tek bir departman objesi oluştur
   const allActionsData: Department = {
@@ -191,10 +190,10 @@ export function CardAksiyonlarMain() {
       )}
     </>
   );
-}
+});
 
 // Aksiyonlar Popup Component'i
-export default function AksiyonlarPopup({ 
+const AksiyonlarPopup = memo(function AksiyonlarPopup({ 
   department,
   isPendingActionsCollapsed,
   setIsPendingActionsCollapsed,
@@ -210,29 +209,25 @@ export default function AksiyonlarPopup({
   
   const ITEMS_PER_PAGE = 10;
 
-  const handleActionClick = (action: Action) => {
+  const handleActionClick = useCallback((action: Action) => {
     hapticFeedback.navigation.select();
     setSelectedAction(action);
     setIsActionDetailOpen(true);
-  };
+  }, []);
 
-  const handleCloseActionDetail = () => {
-    hapticFeedback.navigation.close();
-    setIsActionDetailOpen(false);
-    setSelectedAction(null);
-  };
+
 
   // Bekleyen aksiyonlar için "daha fazla göster" fonksiyonu
-  const handleShowMorePending = () => {
+  const handleShowMorePending = useCallback(() => {
     hapticFeedback.button.secondary();
     setPendingDisplayCount(prev => prev + ITEMS_PER_PAGE);
-  };
+  }, []);
 
   // Tamamlanan aksiyonlar için "daha fazla göster" fonksiyonu
-  const handleShowMoreCompleted = () => {
+  const handleShowMoreCompleted = useCallback(() => {
     hapticFeedback.button.secondary();
     setCompletedDisplayCount(prev => prev + ITEMS_PER_PAGE);
-  };
+  }, []);
 
   // Gösterilecek aksiyonları slice ile sınırla
   const displayedPendingActions = department.pendingActionsList.slice(0, pendingDisplayCount);
@@ -435,4 +430,7 @@ export default function AksiyonlarPopup({
       )}
     </>
   );
-}
+});
+
+export default AksiyonlarPopup;
+export { CardAksiyonlarMain };

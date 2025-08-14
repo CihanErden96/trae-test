@@ -1,6 +1,6 @@
-/* Birleştirilmiş Card Stilleri - Aksiyonlar ve Denetimler */
+/* Optimized Card Styles - Main Components */
 
-/* Denetimler Card Stilleri */
+/* Base Card Styles */
 .cardContainer {
   width: 100%;
   max-width: 100%;
@@ -15,7 +15,7 @@
   width: 100%;
   max-width: 100%;
   min-height: 160px;
-  height: 160px; /* Fixed height to prevent shrinking */
+  height: 160px;
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
@@ -24,12 +24,11 @@
   border: 1px solid var(--popup-border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  flex-shrink: 0; /* Prevent flex shrinking */
+  flex-shrink: 0;
 }
 
 .card:hover {
   transform: translateY(-2px);
-
 }
 
 .cardContent {
@@ -52,6 +51,7 @@
   font-family: var(--font-family);
 }
 
+/* Progress Components */
 .circularProgress {
   width: 100px;
   height: 100px;
@@ -307,6 +307,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -418,11 +419,11 @@
   margin-bottom: 20px;
 }
 
-.dateRow .detailSection
-{
+.dateRow .detailSection {
   justify-content: center;
   align-items: center;
 }
+
 .infoRow .detailSection {
   flex: 1;
   margin-bottom: 0;
@@ -433,7 +434,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 80px; /* Minimum yükseklik belirle */
+  min-height: 80px;
+  /* Minimum yükseklik belirle */
 }
 
 .detailLabel {
@@ -441,11 +443,14 @@
   font-size: 1rem;
   font-weight: 600;
   color: var(--popup-title-color);
-  flex: 1; /* Eşit yükseklik için flex kullan */
+  flex: 1;
+  /* Eşit yükseklik için flex kullan */
   display: flex;
-  align-items: center; /* İçeriği dikeyde ortala */
+  align-items: center;
+  /* İçeriği dikeyde ortala */
   padding: 8px 0;
-  min-height: 40px; /* Minimum yükseklik */
+  min-height: 40px;
+  /* Minimum yükseklik */
 }
 
 .detailText {
@@ -453,11 +458,14 @@
   font-size: 0.95rem;
   color: var(--popup-description-color);
   line-height: 1.6;
-  flex: 1; /* Eşit yükseklik için flex kullan */
+  flex: 1;
+  /* Eşit yükseklik için flex kullan */
   display: flex;
-  align-items: center; /* İçeriği dikeyde ortala */
+  align-items: center;
+  /* İçeriği dikeyde ortala */
   padding: 8px 0;
-  min-height: 40px; /* Minimum yükseklik */
+  min-height: 40px;
+  /* Minimum yükseklik */
 }
 
 /* Border'ı section'ın ortasına yerleştir */
@@ -523,6 +531,7 @@
     opacity: 0;
     transform: scale(0.9) translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -535,6 +544,7 @@
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
     transform: translateX(-100%);
@@ -546,6 +556,7 @@
     opacity: 0;
     transform: translateX(-100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -557,6 +568,7 @@
     opacity: 0;
     transform: translateX(100%);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -568,6 +580,7 @@
     opacity: 1;
     transform: translateX(0);
   }
+
   to {
     opacity: 0;
     transform: translateX(100%);
@@ -596,87 +609,87 @@
   .overlay {
     padding: 10px;
   }
-  
+
   .popup {
     max-width: 100%;
     max-height: 95vh;
   }
-  
+
   .header {
     padding: 16px 20px;
   }
-  
+
   .title {
     font-size: 1.25rem;
   }
-  
+
   .actionDetailContent {
     padding: 20px;
     gap: 20px;
   }
-  
+
   .detailLabel {
     font-size: 0.9rem;
   }
-  
+
   .detailText {
     font-size: 0.85rem;
   }
-  
+
   /* Mobil cihazlarda tarih ve info alanları yan yana kalır, sadece gap azaltılır */
   .dateRow,
   .infoRow {
     gap: 12px;
   }
-  
+
   .actionImage {
     max-height: 200px;
   }
-  
+
   .noImageContainer {
     padding: 24px 16px;
     min-height: 60px;
   }
-  
+
   .loadMoreContainer {
     padding: 10px 0;
     margin-top: 6px;
   }
-  
+
   .loadMoreButton {
     padding: 10px 20px;
     font-size: 13px;
     border-radius: var(--border-radius-card);
     min-width: 140px;
   }
-  
+
   .loadMoreButton::after {
     right: 8px;
     font-size: 13px;
   }
-  
+
   .categoryHeader {
     padding: 12px;
   }
-  
+
   .categoryContent {
     padding: 0;
   }
-  
+
   .actionItem {
     padding: 12px 16px;
     margin-bottom: 0;
   }
-  
+
   .categoryName {
     font-size: 16px;
   }
-  
+
   .actionDescription {
     font-size: 13px;
     padding-bottom: 30px;
   }
-  
+
   .actionScore {
     font-size: 0.75rem;
     padding: 4px 8px;
@@ -685,36 +698,37 @@
 
 /* Çok küçük ekranlar için ek responsive kurallar */
 @media (max-width: 480px) {
+
   .dateRow,
   .infoRow {
     gap: 8px;
   }
-  
+
   .detailLabel {
     font-size: 0.8rem;
   }
-  
+
   .detailText {
     font-size: 0.75rem;
   }
-  
+
   .actionDetailContent {
     padding: 16px;
     gap: 16px;
   }
-  
+
   .loadMoreContainer {
     padding: 12px 0;
     margin-top: 8px;
   }
-  
+
   .loadMoreButton {
     padding: 12px 24px;
     font-size: 14px;
     border-radius: var(--border-radius-card);
     min-width: 160px;
   }
-  
+
   .loadMoreButton::after {
     right: 10px;
     font-size: 14px;
@@ -1056,6 +1070,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1221,7 +1236,7 @@
 }
 
 .addActionButton:hover {
-  color:var(--text-secondary);
+  color: var(--text-secondary);
   transform: translateY(-1px);
 }
 
@@ -1278,11 +1293,11 @@
   transform: rotate(90deg) scale(1.1);
 }
 
-  .addIcon {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
+.addIcon {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
 
 .addText {
   flex: 1;
@@ -1547,8 +1562,8 @@
   padding-top: 20px;
   border-top: 1px solid var(--popup-border);
   margin-top: 8px;
-  
-  
+
+
 }
 
 
@@ -1757,17 +1772,21 @@
   background: var(--popup-category-bg);
   border: 2px solid var(--popup-border);
   overflow: hidden;
-  padding: 3px; /* Dilimler arası boşluk için padding artırıldı */
+  padding: 3px;
+  /* Dilimler arası boşluk için padding artırıldı */
 }
 
 .quarterSegment {
   position: absolute;
-  width: calc(50% - 2px); /* Boşluk için genişliği daha da azalt */
-  height: calc(50% - 2px); /* Boşluk için yüksekliği daha da azalt */
+  width: calc(50% - 2px);
+  /* Boşluk için genişliği daha da azalt */
+  height: calc(50% - 2px);
+  /* Boşluk için yüksekliği daha da azalt */
   transform-origin: 100% 100%;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: var(--text-secondary); /* Tek renk kullan */
+  background: var(--text-secondary);
+  /* Tek renk kullan */
 }
 
 .quarterSegment.visible {
