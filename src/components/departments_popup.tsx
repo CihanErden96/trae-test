@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import popupStyles from '../styles/footer_popup.module.css';
 import AksiyonlarPopup from './card_aksiyonlar';
 import { hapticFeedback } from '../utils/haptic';
-import { Department, truncateText, departmentsData } from './const';
+import { Department, truncateText, departmentsPopUpData } from './const';
 
 interface DepartmentsPopupProps {
   isOpen: boolean;
@@ -13,7 +13,7 @@ interface DepartmentsPopupProps {
 }
 
 export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupProps) {
-  const [departments, setDepartments] = useState<Department[]>(departmentsData);
+  const [departments, setDepartments] = useState<Department[]>(departmentsPopUpData);
 
   const [isAddDepartmentOpen, setIsAddDepartmentOpen] = useState(false);
   const [newDepartmentName, setNewDepartmentName] = useState('');
@@ -21,8 +21,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
   const [isDepartmentDetailOpen, setIsDepartmentDetailOpen] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [departmentToDelete, setDepartmentToDelete] = useState<Department | null>(null);
-  const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
-  const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(true);
+
   const [editedDepartmentName, setEditedDepartmentName] = useState('');
 
   const handleAddDepartment = () => {
@@ -43,6 +42,7 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
       const newDepartment: Department = {
         id: newId,
         name: newDepartmentName.trim(),
+        responsible: '',
         score: 100,
         completedActions: 0,
         pendingActions: 0,
@@ -277,11 +277,8 @@ export default function DepartmentsPopup({ isOpen, onClose }: DepartmentsPopupPr
                     </div>
 
                     <AksiyonlarPopup 
-                      department={selectedDepartment}
-                      isPendingActionsCollapsed={isPendingActionsCollapsed}
-                      setIsPendingActionsCollapsed={setIsPendingActionsCollapsed}
-                      isCompletedActionsCollapsed={isCompletedActionsCollapsed}
-                      setIsCompletedActionsCollapsed={setIsCompletedActionsCollapsed}
+                      pendingActionsList={selectedDepartment?.pendingActionsList || []}
+                      completedActionsList={selectedDepartment?.completedActionsList || []}
                     />
 
                     <div className={popupStyles.formActions}>

@@ -158,7 +158,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
             <div className={styles.detailSection}>
               <h4 className={styles.detailLabel}>Soru</h4>
               <p className={styles.detailText}>
-                {currentAction.question || currentAction.description || 'Soru bulunmuyor'}
+                {currentAction.question  || 'Soru bulunmuyor'}
               </p>
             </div>
 
@@ -276,10 +276,7 @@ const ActionDetailPopup: React.FC<ActionDetailPopupProps> = ({
                     width={400}
                     height={0}
                     style={{ 
-                      objectFit: 'cover',
-                      height: 'auto',
-                      width: '100%',
-                      maxWidth: '100%'
+
                     }}
                   />
                 </div>

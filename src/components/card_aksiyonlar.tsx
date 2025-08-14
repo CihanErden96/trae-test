@@ -4,30 +4,25 @@ import React, { useState, useCallback, memo } from "react";
 import { createPortal } from 'react-dom';
 import styles from '../styles/card.module.css';
 import { hapticFeedback } from '../utils/haptic';
-import { Action, truncateText, departmentsData, calculateTotalActions, Department } from './const';
+import { Action, truncateText, calculatedActionsData, Department } from './const';
 import ActionDetailPopup from './actionDetail_popup';
 
-interface AksiyonlarPopupProps {
-  department: Department;
-  isPendingActionsCollapsed: boolean;
-  setIsPendingActionsCollapsed: (value: boolean) => void;
-  isCompletedActionsCollapsed: boolean;
-  setIsCompletedActionsCollapsed: (value: boolean) => void;
+interface ActionsPopupProps {
+  pendingActionsList: Action[];
+  completedActionsList: Action[];
 }
 
 
 
 // Ana Aksiyonlar Card Component'i
 const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
-  const { totalCompleted, totalPending, progressPercentage } = calculateTotalActions();
+  const {completedActions,pendingActions,completedCount,pendingCount,score} = calculatedActionsData('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
-  const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(true);
   
   // SVG circle için hesaplamalar
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progressPercentage / 100) * circumference;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
 
   // Popup'ı kapatma
   const handleClosePopup = useCallback(() => {
@@ -35,23 +30,23 @@ const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
     setIsPopupOpen(false);
   }, []);
 
-  // Card'a tıklama - bekleyen aksiyonları göster, tamamlananları kapalı tut
+  // Card'a tıklama
   const handleCardClick = useCallback(() => {
     hapticFeedback.navigation.open();
-    setIsPendingActionsCollapsed(false);
-    setIsCompletedActionsCollapsed(true);
     setIsPopupOpen(true);
   }, []);
 
-  // Tüm departmanları birleştirerek tek bir departman objesi oluştur
+  
+  // Tüm aksiyonları tek bir departman objesi olarak oluştur
   const allActionsData: Department = {
     id: 0,
     name: 'Tüm Aksiyonlar',
     score: 0,
-    completedActions: totalCompleted,
-    pendingActions: totalPending,
-    pendingActionsList: departmentsData.flatMap(dept => dept.pendingActionsList),
-    completedActionsList: departmentsData.flatMap(dept => dept.completedActionsList)
+    responsible: '',
+    completedActions: completedActions.length,
+    pendingActions: pendingActions.length,
+    pendingActionsList: pendingActions,
+    completedActionsList: completedActions
   };
 
   return (
@@ -108,7 +103,7 @@ const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
                   dy=".3em"
                   className={styles.circularProgressText}
                 >
-                  {progressPercentage}%
+                  {score}%
                 </text>
               </svg>
             </div>
@@ -117,14 +112,14 @@ const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
             <div 
               className={`${styles.descriptiveData} ${styles.descriptiveDataFirst}`}
             >
-              Bekleyen: {totalPending}
+              Bekleyen: {pendingCount}
             </div>
             
             {/* Tamamlanan Aksiyonlar Bilgi Alanı - Sağ Alt */}
             <div 
               className={`${styles.descriptiveData} ${styles.descriptiveDataSecond}`}
             >
-              Tamamlanan: {totalCompleted}
+              Tamamlanan: {completedCount}
             </div>
           </div>
         </div>
@@ -177,11 +172,8 @@ const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
             
             <div className={styles.content}>
               <AksiyonlarPopup
-                department={allActionsData}
-                isPendingActionsCollapsed={isPendingActionsCollapsed}
-                setIsPendingActionsCollapsed={setIsPendingActionsCollapsed}
-                isCompletedActionsCollapsed={isCompletedActionsCollapsed}
-                setIsCompletedActionsCollapsed={setIsCompletedActionsCollapsed}
+                pendingActionsList={pendingActions}
+                completedActionsList={completedActions}
               />
             </div>
           </div>
@@ -194,14 +186,13 @@ const CardAksiyonlarMain = memo(function CardAksiyonlarMain() {
 
 // Aksiyonlar Popup Component'i
 const AksiyonlarPopup = memo(function AksiyonlarPopup({ 
-  department,
-  isPendingActionsCollapsed,
-  setIsPendingActionsCollapsed,
-  isCompletedActionsCollapsed,
-  setIsCompletedActionsCollapsed
-}: AksiyonlarPopupProps) {
+  pendingActionsList,
+  completedActionsList
+}: ActionsPopupProps) {
   const [selectedAction, setSelectedAction] = useState<Action | null>(null);
   const [isActionDetailOpen, setIsActionDetailOpen] = useState(false);
+  const [isPendingActionsCollapsed, setIsPendingActionsCollapsed] = useState(false);
+  const [isCompletedActionsCollapsed, setIsCompletedActionsCollapsed] = useState(true);
   
   // Pagination state'leri
   const [pendingDisplayCount, setPendingDisplayCount] = useState(10);
@@ -230,12 +221,12 @@ const AksiyonlarPopup = memo(function AksiyonlarPopup({
   }, []);
 
   // Gösterilecek aksiyonları slice ile sınırla
-  const displayedPendingActions = department.pendingActionsList.slice(0, pendingDisplayCount);
-  const displayedCompletedActions = department.completedActionsList.slice(0, completedDisplayCount);
+  const displayedPendingActions = pendingActionsList.slice(0, pendingDisplayCount);
+  const displayedCompletedActions = completedActionsList.slice(0, completedDisplayCount);
 
   // Daha fazla aksiyon var mı kontrol et
-  const hasMorePendingActions = department.pendingActionsList.length > pendingDisplayCount;
-  const hasMoreCompletedActions = department.completedActionsList.length > completedDisplayCount;
+  const hasMorePendingActions = pendingActionsList.length > pendingDisplayCount;
+  const hasMoreCompletedActions = completedActionsList.length > completedDisplayCount;
 
   return (
     <>
@@ -262,12 +253,12 @@ const AksiyonlarPopup = memo(function AksiyonlarPopup({
             </span>
             <h3 className={styles.categoryName}>Bekleyen Aksiyonlar</h3>
             <div className={styles.categoryStats}>
-              <span className={styles.actionCount}>({department.pendingActionsList.length})</span>
+              <span className={styles.actionCount}>({pendingActionsList.length})</span>
             </div>
           </div>
         </div>
         {!isPendingActionsCollapsed && (
-          department.pendingActionsList.length > 0 ? (
+          pendingActionsList.length > 0 ? (
             <div className={styles.categoryContent}>
               {displayedPendingActions.map((action) => (
                 <div 
@@ -315,7 +306,7 @@ const AksiyonlarPopup = memo(function AksiyonlarPopup({
                       handleShowMorePending();
                     }}
                   >
-                    Daha Fazlası İçin Tıkla ({department.pendingActionsList.length - pendingDisplayCount} kalan)
+                    Daha Fazlası İçin Tıkla ({pendingActionsList.length - pendingDisplayCount} kalan)
                   </button>
                 </div>
               )}
@@ -351,12 +342,12 @@ const AksiyonlarPopup = memo(function AksiyonlarPopup({
             </span>
             <h3 className={styles.categoryName}>Tamamlanan Aksiyonlar</h3>
             <div className={styles.categoryStats}>
-              <span className={styles.actionCount}>({department.completedActionsList.length})</span>
+              <span className={styles.actionCount}>({completedActionsList.length})</span>
             </div>
           </div>
         </div>
         {!isCompletedActionsCollapsed && (
-          department.completedActionsList.length > 0 ? (
+          completedActionsList.length > 0 ? (
             <div className={styles.categoryContent}>
               {displayedCompletedActions.map((action) => (
                 <div 
@@ -403,7 +394,7 @@ const AksiyonlarPopup = memo(function AksiyonlarPopup({
                       handleShowMoreCompleted();
                     }}
                   >
-                    Daha Fazlası İçin Tıkla ({department.completedActionsList.length - completedDisplayCount} kalan)
+                    Daha Fazlası İçin Tıkla ({completedActionsList.length - completedDisplayCount} kalan)
                   </button>
                 </div>
               )}

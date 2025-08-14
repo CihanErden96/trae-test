@@ -20,7 +20,7 @@ export interface Action {
   id: number;
   question?: string;
   description: string;
-  status: 'plan' | 'do' | 'check' | 'act' ;
+  status: 'plan' | 'do' | 'check' | 'act';
   dueDate: string;
   startDate?: string;
   completedDate?: string;
@@ -34,11 +34,12 @@ export interface Action {
 export interface Department {
   id: number;
   name: string;
-  score: number;
-  completedActions: number;
-  pendingActions: number;
-  pendingActionsList: Action[];
-  completedActionsList: Action[];
+  responsible: string;
+  score?: number;
+  completedActions?: number;
+  pendingActions?: number;
+  pendingActionsList?: Action[];
+  completedActionsList?: Action[];
 }
 
 export interface ComboboxOption {
@@ -125,80 +126,307 @@ export const denetimQuestionsData: Question[] = [
 ];
 
 // Aksiyon verileri - Optimize edildi
-export const actionsData: Action[] = [];
-
-// Departman verileri - Optimize edildi (lazy loading için hazır)
-export const departmentsData: Department[] = [
+export const allActionsData: Action[] = [
   {
-    id: 1, name: "İnsan Kaynakları", score: 85, completedActions: 2, pendingActions: 3,
-    pendingActionsList: [
-      { id: 1, description: "Yıllık performans değerlendirmelerini tamamla", dueDate: "2024-01-15", status: "act" },
-      { id: 2, description: "Yeni yazılım geliştirici pozisyonu için mülakat", dueDate: "2024-01-20", status: "act" },
-      { id: 3, description: "Q1 çalışan eğitim programını hazırla", dueDate: "2024-01-25", status: "act" }
-    ],
-    completedActionsList: [
-      { id: 4, description: "Aralık ayı bordroları tamamlandı", dueDate: "2023-12-30", status: "act" },
-      { id: 5, description: "Yeni personel sigorta kayıtları", dueDate: "2023-12-28", status: "act" }
-    ]
+    id: 1,
+    question: "Baykuş montaj hattı kalibrasyon kontrolü",
+    description: "Baykuş montaj hattındaki tüm kalibrasyonları kontrol et ve ayarla",
+    status: 'plan',
+    dueDate: "2024-02-15",
+    startDate: "2024-02-01",
+    department: "Baykuş Montaj",
+    creator: "Ahmet Yılmaz",
+    assignedTo: "Zeynep Arslan",
+    dueDateUpdateCount: 0
   },
   {
-    id: 2, name: "Üretim", score: 92, completedActions: 1, pendingActions: 5,
-    pendingActionsList: [
-      { id: 6, description: "Aylık rutin bakım kontrolü", dueDate: "", status: "act" },
-      { id: 7, description: "Ürün kalite testlerini gerçekleştir", dueDate: "2024-01-12", status: "act" },
-      { id: 8, description: "Hammadde stok kontrolü", dueDate: "2024-01-18", status: "act" },
-      { id: 9, description: "İş güvenliği eğitimi planla", dueDate: "2024-01-22", status: "act" },
-      { id: 10, description: "Haftalık üretim raporunu hazırla", dueDate: "2024-01-08", status: "act" }
-    ],
-    completedActionsList: [
-      { id: 11, description: "A firması siparişi tamamlandı", dueDate: "2023-12-29", status: "act" }
-    ]
+    id: 2,
+    question: "Boyahane ventilasyon sistemi bakımı",
+    description: "Boyahane ventilasyon sisteminin periyodik bakımını gerçekleştir",
+    status: 'do',
+    dueDate: "2024-02-10",
+    startDate: "2024-02-05",
+    department: "Boyahane",
+    creator: "Mehmet Demir",
+    assignedTo: "Murat Kaya",
+    image: "/icons/profile.png",
+    dueDateUpdateCount: 1
   },
   {
-    id: 3, name: "Satış ve Pazarlama", score: 78, completedActions: 1, pendingActions: 3,
-    pendingActionsList: [
-      { id: 12, description: "Yeni yıl kampanyası tasarımı", dueDate: "2024-01-05", status: "do" },
-      { id: 13, description: "B firması ile görüşme", dueDate: "2024-01-08", status: "do" },
-      { id: 14, description: "Rakip analizi raporu", dueDate: "2024-01-15", status: "do" }
-    ],
-    completedActionsList: [
-      { id: 15, description: "Instagram kampanya paylaşımları", dueDate: "2023-12-30", status: "act" }
-    ]
+    id: 3,
+    question: "Elektrik pano güvenlik kontrolü",
+    description: "Elektrikhane'deki tüm elektrik panolarının güvenlik kontrollerini yap",
+    status: 'check',
+    dueDate: "2024-02-08",
+    startDate: "2024-02-01",
+    completedDate: "2024-02-07",
+    department: "Elektrikhane",
+    creator: "Ayşe Kaya",
+    assignedTo: "Elif Çelik",
+    dueDateUpdateCount: 0
   },
   {
-    id: 4, name: "Muhasebe", score: 88, completedActions: 1, pendingActions: 2,
-    pendingActionsList: [
-      { id: 16, description: "Yıl sonu kapanış işlemleri", dueDate: "2024-01-03", status: "do" },
-      { id: 17, description: "Aralık ayı fatura onayları", dueDate: "2024-01-05", status: "do" }
-    ],
-    completedActionsList: [
-      { id: 18, description: "KDV beyannamesi verildi", dueDate: "2023-12-25", status: "act" }
-    ]
+    id: 4,
+    question: "Kafa montaj kalite standardı güncelleme",
+    description: "Kafa montaj sürecindeki kalite standartlarını güncelle ve uygula",
+    status: 'act',
+    dueDate: "2024-01-30",
+    startDate: "2024-01-20",
+    completedDate: "2024-01-29",
+    department: "Kafa Montaj",
+    creator: "Fatma Şahin",
+    assignedTo: "Oğuz Taş",
+    dueDateUpdateCount: 0
   },
   {
-    id: 5, name: "Ar-Ge", score: 95, completedActions: 1, pendingActions: 4,
-    pendingActionsList: [
-      { id: 19, description: "Yeni ürün prototip testleri", dueDate: "2024-01-12", status: "do" },
-      { id: 20, description: "Yeni teknoloji patent dosyası", dueDate: "2024-01-20", status: "do" },
-      { id: 21, description: "Teknoloji trend analizi", dueDate: "2024-01-25", status: "do" },
-      { id: 22, description: "Yeni test cihazı kurulumu", dueDate: "2024-01-30", status: "do" }
-    ],
-    completedActionsList: [
-      { id: 23, description: "V2.0 yazılım tamamlandı", dueDate: "2023-12-28", status: "act" }
-    ]
+    id: 5,
+    question: "Karınca montaj hattı verimlilik analizi",
+    description: "Karınca montaj hattının verimlilik analizini yap ve iyileştirme önerileri sun",
+    status: 'plan',
+    dueDate: "2024-02-20",
+    startDate: "2024-02-10",
+    department: "Karınca Montaj",
+    creator: "Ali Özkan",
+    assignedTo: "Selin Aydın",
+    image: "/icons/departments.svg",
+    dueDateUpdateCount: 0
   },
   {
-    id: 6, name: "Lojistik", score: 82, completedActions: 1, pendingActions: 3,
-    pendingActionsList: [
-      { id: 24, description: "Müşteri siparişlerini takip et", dueDate: "2024-01-07", status: "do" },
-      { id: 25, description: "Yeni ürün yerleşim planı", dueDate: "2024-01-10", status: "do" },
-      { id: 26, description: "Haftalık sevkiyat programı", dueDate: "2024-01-08", status: "do" }
-    ],
-    completedActionsList: [
-      { id: 27, description: "Aralık ayı stok sayımı", dueDate: "2023-12-31", status: "act" }
-    ]
+    id: 6,
+    question: "Kartal montaj ekipman bakımı",
+    description: "Kartal montaj hattındaki tüm ekipmanların periyodik bakımını gerçekleştir",
+    status: 'do',
+    dueDate: "2024-02-12",
+    startDate: "2024-02-08",
+    department: "Kartal Montaj",
+    creator: "Zeynep Arslan",
+    assignedTo: "Burak Yıldız",
+    dueDateUpdateCount: 1
+  },
+  {
+    id: 7,
+    question: "Kasa imalat malzeme stok kontrolü",
+    description: "Kasa imalat için gerekli malzeme stoklarını kontrol et ve sipariş ver",
+    status: 'check',
+    dueDate: "2024-02-05",
+    startDate: "2024-02-01",
+    department: "Kasa İmalat",
+    creator: "Murat Kaya",
+    assignedTo: "Deniz Öztürk",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 8,
+    question: "Kaynak makinesi kalibrasyonu",
+    description: "Kaynakhane'deki tüm kaynak makinelerinin kalibrasyonunu yap",
+    status: 'act',
+    dueDate: "2024-01-25",
+    startDate: "2024-01-20",
+    completedDate: "2024-01-24",
+    department: "Kaynakhane",
+    creator: "Elif Çelik",
+    assignedTo: "Ahmet Yılmaz",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 9,
+    question: "Serçe montaj hattı 5S uygulaması",
+    description: "Serçe montaj hattında 5S metodolojisini uygula ve sürdür",
+    status: 'do',
+    dueDate: "2024-02-18",
+    startDate: "2024-02-10",
+    department: "Serçe Montaj",
+    creator: "Oğuz Taş",
+    assignedTo: "Mehmet Demir",
+    image: "/icons/profile.png",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 10,
+    question: "Sünger kalite kontrol prosedürü",
+    description: "Süngerhane'de kalite kontrol prosedürlerini gözden geçir ve güncelle",
+    status: 'plan',
+    dueDate: "2024-02-25",
+    department: "Süngerhane",
+    creator: "Selin Aydın",
+    assignedTo: "Ayşe Kaya",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 11,
+    question: "Talaşlı imalat takım değişimi",
+    description: "Talaşlı imalat makinelerinde takım değişimi ve keskinlik kontrolü",
+    status: 'check',
+    dueDate: "2024-02-14",
+    startDate: "2024-02-10",
+    completedDate: "2024-02-13",
+    department: "Talaşlı İmalat",
+    creator: "Burak Yıldız",
+    assignedTo: "Fatma Şahin",
+    dueDateUpdateCount: 1
+  },
+  {
+    id: 12,
+    question: "Tank imalat kaynak kalitesi kontrolü",
+    description: "Tank imalatında kaynak kalitesi kontrollerini gerçekleştir",
+    status: 'act',
+    dueDate: "2024-02-01",
+    startDate: "2024-01-25",
+    completedDate: "2024-01-31",
+    department: "Tank İmalat",
+    creator: "Deniz Öztürk",
+    assignedTo: "Ali Özkan",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 13,
+    question: "Baykuş montaj operatör eğitimi",
+    description: "Yeni operatörlere Baykuş montaj süreçleri hakkında eğitim ver",
+    status: 'do',
+    dueDate: "2024-02-22",
+    startDate: "2024-02-15",
+    department: "Baykuş Montaj",
+    creator: "Ahmet Yılmaz",
+    assignedTo: "Zeynep Arslan",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 14,
+    question: "Boyahane atık yönetimi planı",
+    description: "Boyahane atık yönetimi planını hazırla ve uygula",
+    status: 'plan',
+    dueDate: "2024-03-01",
+    department: "Boyahane",
+    creator: "Mehmet Demir",
+    assignedTo: "Murat Kaya",
+    image: "/icons/departments.svg",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 15,
+    question: "Elektrikhane acil durum prosedürü",
+    description: "Elektrikhane için acil durum prosedürlerini güncelle ve personeli bilgilendir",
+    status: 'check',
+    dueDate: "2024-02-16",
+    startDate: "2024-02-10",
+    department: "Elektrikhane",
+    creator: "Ayşe Kaya",
+    assignedTo: "Elif Çelik",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 16,
+    question: "Kafa montaj hız optimizasyonu",
+    description: "Kafa montaj hattının hızını optimize et ve cycle time'ı iyileştir",
+    status: 'act',
+    dueDate: "2024-02-05",
+    startDate: "2024-01-28",
+    completedDate: "2024-02-04",
+    department: "Kafa Montaj",
+    creator: "Fatma Şahin",
+    assignedTo: "Oğuz Taş",
+    dueDateUpdateCount: 1
+  },
+  {
+    id: 17,
+    question: "Karınca montaj hattı güvenlik denetimi",
+    description: "Karınca montaj hattında güvenlik denetimi yap ve eksiklikleri belirle",
+    status: 'do',
+    dueDate: "2024-02-28",
+    startDate: "2024-02-20",
+    department: "Karınca Montaj",
+    creator: "Ali Özkan",
+    assignedTo: "Selin Aydın",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 18,
+    question: "Kartal montaj kalite metrikleri",
+    description: "Kartal montaj hattı için kalite metriklerini belirle ve takip sistemi kur",
+    status: 'plan',
+    dueDate: "2024-03-05",
+    department: "Kartal Montaj",
+    creator: "Zeynep Arslan",
+    assignedTo: "Burak Yıldız",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 19,
+    question: "Kasa imalat üretim planlaması",
+    description: "Kasa imalat için aylık üretim planlamasını yap ve kaynak tahsisini belirle",
+    status: 'check',
+    dueDate: "2024-02-26",
+    startDate: "2024-02-20",
+    completedDate: "2024-02-25",
+    department: "Kasa İmalat",
+    creator: "Murat Kaya",
+    assignedTo: "Deniz Öztürk",
+    dueDateUpdateCount: 0
+  },
+  {
+    id: 20,
+    question: "Kaynakhane iş güvenliği eğitimi",
+    description: "Kaynakhane personeline iş güvenliği eğitimi ver ve sertifikasyon sağla",
+    status: 'act',
+    dueDate: "2024-02-10",
+    startDate: "2024-02-01",
+    completedDate: "2024-02-09",
+    department: "Kaynakhane",
+    creator: "Elif Çelik",
+    assignedTo: "Ahmet Yılmaz",
+    image: "/icons/profile.png",
+    dueDateUpdateCount: 0
   }
 ];
+
+
+const DepartmentsData: Department[] = [
+  { id: 1, name: "Baykuş Montaj", responsible: "Ahmet Yılmaz" },
+  { id: 2, name: "Boyahane", responsible: "Mehmet Demir" },
+  { id: 3, name: "Elektrikhane", responsible: "Ayşe Kaya" },
+  { id: 4, name: "Kafa Montaj", responsible: "Fatma Şahin" },
+  { id: 5, name: "Karınca Montaj", responsible: "Ali Özkan" },
+  { id: 6, name: "Kartal Montaj", responsible: "Zeynep Arslan" },
+  { id: 7, name: "Kasa İmalat", responsible: "Murat Kaya" },
+  { id: 8, name: "Kaynakhane", responsible: "Elif Çelik" },
+  { id: 9, name: "Serçe Montaj", responsible: "Oğuz Taş" },
+  { id: 10, name: "Süngerhane", responsible: "Selin Aydın" },
+  { id: 11, name: "Talaşlı İmalat", responsible: "Burak Yıldız" },
+  { id: 12, name: "Tank İmalat", responsible: "Deniz Öztürk" }
+];
+// Yardımcı fonksiyon - Departman verilerini hesapla
+export const calculatedActionsData = (departmentName: string) => {
+  const actionsData=!departmentName?allActionsData:allActionsData.filter(action => action.department === departmentName);
+  const completedActions = actionsData.filter(action => action.status === "act");
+  const pendingActions = actionsData.filter(action => action.status !== "act");
+
+  return {
+    actionsData,
+    completedActions,
+    pendingActions,
+    completedCount: completedActions.length,
+    pendingCount: pendingActions.length,
+    score: actionsData.length > 0 ? (completedActions.length / actionsData.length) * 100 : 0
+  };
+};
+
+export const departmentsPopUpData: Department[] = (() => {
+  const departments = DepartmentsData;
+  
+  return departments.map(dept => {
+    const data = calculatedActionsData(dept.name);
+    return {
+      ...dept,
+      completedActions: data.completedCount,
+      pendingActions: data.pendingCount,
+      completedActionsList: data.completedActions,
+      pendingActionsList: data.pendingActions,
+      score: data.score,
+    };
+  });
+})();
+
+
 
 // Yardımcı fonksiyonlar
 // Metin kısaltma utility fonksiyonu
@@ -207,19 +435,7 @@ export const truncateText = (text: string, maxLength: number = 100): string => {
   return text.substring(0, maxLength) + '...';
 };
 
-export const calculateTotalActions = () => {
-  const totalCompleted = departmentsData.reduce((sum, dept) => sum + dept.completedActions, 0);
-  const totalPending = departmentsData.reduce((sum, dept) => sum + dept.pendingActions, 0);
-  const totalActions = totalCompleted + totalPending;
-  const progressPercentage = totalActions > 0 ? Math.round((totalCompleted / totalActions) * 100) : 0;
 
-  return {
-    totalCompleted,
-    totalPending,
-    totalActions,
-    progressPercentage
-  };
-};
 
 // Puan seçeneklerini oluşturan fonksiyon
 export const getScoreOptions = (maxScore: number): ComboboxOption[] => {
@@ -245,7 +461,7 @@ export const getCategoryOptions = (questions: Question[]): ComboboxOption[] => {
   }, {} as Record<string, Question[]>);
 
   const availableCategories = Object.keys(groupedQuestions);
-  
+
   return availableCategories.map(category => ({
     value: category,
     label: category
